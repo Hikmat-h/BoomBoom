@@ -1,0 +1,6 @@
+framework module Pods_BoomBoom {
+  umbrella header "Pods-BoomBoom-umbrella.h"
+
+  export *
+  module * { export * }
+}

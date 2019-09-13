@@ -12,10 +12,16 @@ import Pageboy
 
 class TabBarVC: TabmanViewController {
 
+    @IBOutlet weak var tabBarView: UIView!
     private var viewControllers : [UIViewController] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //nav bar
+        let logo = UIImage(named: "logo")
+        let imageView = UIImageView(image:logo)
+        self.navigationItem.titleView = imageView
+        navigationItem.hidesBackButton = true
         
         let storyBoard = UIStoryboard(name: "Main", bundle: .main)
         let personalNewsVC = storyBoard.instantiateViewController(withIdentifier: "PersonalNewsVC")
@@ -34,20 +40,20 @@ class TabBarVC: TabmanViewController {
         // Create bar
         let bar = TMBar.TabBar()
         bar.layout.transitionStyle = .none // Customize
-        
-        bar.layout.contentInset = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 4.0, right: 16.0)
+        bar.frame = tabBarView.frame
+        bar.layout.contentInset = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
         bar.fadesContentEdges = false
-        bar.spacing = 16.0
         bar.tintColor = #colorLiteral(red: 0.9803921569, green: 0.2274509804, blue: 0.4078431373, alpha: 1)
-        
-        bar.backgroundView.style = .flat(color: #colorLiteral(red: 0.1450980392, green: 0.1450980392, blue: 0.1450980392, alpha: 1))
+
+        bar.backgroundView.style = .clear
         bar.backgroundColor = #colorLiteral(red: 0.1450980392, green: 0.1450980392, blue: 0.1450980392, alpha: 1)
         bar.buttons.customize { (button) in
+            
             button.selectedTintColor = #colorLiteral(red: 0.9803921569, green: 0.2274509804, blue: 0.4078431373, alpha: 1)
-            button.tintColor = #colorLiteral(red: 0.9803921569, green: 0.2274509804, blue: 0.4078431373, alpha: 1)
+            button.tintColor = .white
         }
         // Add to view
-        addBar(bar, dataSource: self, at: .bottom)
+        addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
         
     }
     
@@ -66,7 +72,9 @@ class TabBarVC: TabmanViewController {
 
 extension TabBarVC: PageboyViewControllerDataSource, TMBarDataSource {
     func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
-        let item = TMBarItem(image: UIImage(named: "menu_\(index)")!, badgeValue: "2")
+        let image = UIImage(named:
+            "menu_\(index)")!.withRenderingMode(.alwaysTemplate)
+        let item = TMBarItem(image:image)
         item.title = ""
         return item
     }

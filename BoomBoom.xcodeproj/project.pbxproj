@@ -18,6 +18,7 @@
 		9E7B0A88232925BE0082539F /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7B0A87232925BE0082539F /* SearchVC.swift */; };
 		9E7B0A8A232926050082539F /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7B0A89232926050082539F /* ProfileVC.swift */; };
 		9E7B0A8D232928880082539F /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7B0A8C232928880082539F /* NewsCell.swift */; };
+		9E7B5B02232A3F7F0063A676 /* ProfilePhotosCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7B5B01232A3F7F0063A676 /* ProfilePhotosCell.swift */; };
 		9E8C2EF823297A450004B5A2 /* ChatListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8C2EF723297A450004B5A2 /* ChatListCell.swift */; };
 		9E8C2EFC232986E10004B5A2 /* StarredChatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8C2EFB232986E10004B5A2 /* StarredChatsCell.swift */; };
 		9E8C2F00232988B40004B5A2 /* StarredChatsCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8C2EFF232988B40004B5A2 /* StarredChatsCollectionVC.swift */; };
@@ -34,7 +35,9 @@
 		9EAD78D323261CA200BFFAE7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD78D223261CA200BFFAE7 /* Constants.swift */; };
 		9EAD78D523261CAE00BFFAE7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD78D423261CAE00BFFAE7 /* Utils.swift */; };
 		9EAD78D8232620FE00BFFAE7 /* AuthorizationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD78D7232620FE00BFFAE7 /* AuthorizationVC.swift */; };
+		9EB5D1FA232AC21300D5905D /* NewsPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB5D1F9232AC21300D5905D /* NewsPhotoCell.swift */; };
 		9EC4F6712328F19900179C2E /* RegistrationDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F6702328F19900179C2E /* RegistrationDetailVC.swift */; };
+		9EE599F5232A896700AB56EF /* StarredNewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE599F4232A896700AB56EF /* StarredNewsCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,7 @@
 		9E7B0A87232925BE0082539F /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		9E7B0A89232926050082539F /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		9E7B0A8C232928880082539F /* NewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.swift; sourceTree = "<group>"; };
+		9E7B5B01232A3F7F0063A676 /* ProfilePhotosCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotosCell.swift; sourceTree = "<group>"; };
 		9E8C2EF723297A450004B5A2 /* ChatListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCell.swift; sourceTree = "<group>"; };
 		9E8C2EFB232986E10004B5A2 /* StarredChatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarredChatsCell.swift; sourceTree = "<group>"; };
 		9E8C2EFF232988B40004B5A2 /* StarredChatsCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarredChatsCollectionVC.swift; sourceTree = "<group>"; };
@@ -88,7 +92,9 @@
 		9EAD78D223261CA200BFFAE7 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9EAD78D423261CAE00BFFAE7 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		9EAD78D7232620FE00BFFAE7 /* AuthorizationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationVC.swift; sourceTree = "<group>"; };
+		9EB5D1F9232AC21300D5905D /* NewsPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPhotoCell.swift; sourceTree = "<group>"; };
 		9EC4F6702328F19900179C2E /* RegistrationDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationDetailVC.swift; sourceTree = "<group>"; };
+		9EE599F4232A896700AB56EF /* StarredNewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarredNewsCell.swift; sourceTree = "<group>"; };
 		A883D0EB7423364F9997D89D /* Pods-BoomBoom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoomBoom.release.xcconfig"; path = "Target Support Files/Pods-BoomBoom/Pods-BoomBoom.release.xcconfig"; sourceTree = "<group>"; };
 		C49BFEA3EFAC621B17EB91FB /* Pods-BoomBoomTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoomBoomTests.release.xcconfig"; path = "Target Support Files/Pods-BoomBoomTests/Pods-BoomBoomTests.release.xcconfig"; sourceTree = "<group>"; };
 		DC8C791562BF3E38708833DF /* Pods_BoomBoomUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BoomBoomUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,22 +134,22 @@
 		9E7B0A7E23291A0C0082539F /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				9EE599F2232A871600AB56EF /* News */,
+				9E7B5B03232A40390063A676 /* profile */,
 				9E7B0A8F23293A3D0082539F /* chat */,
 				9E7B0A8E23293A130082539F /* search */,
 				9E7B0A7F23291A830082539F /* TabBarVC.swift */,
 				9E7B0A81232925790082539F /* PersonalNewsVC.swift */,
-				9E7B0A85232925AC0082539F /* NewsVC.swift */,
-				9E7B0A89232926050082539F /* ProfileVC.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
 		};
-		9E7B0A8B232928580082539F /* NewsCell */ = {
+		9E7B0A8B232928580082539F /* PersonalNewsCell */ = {
 			isa = PBXGroup;
 			children = (
 				9E7B0A8C232928880082539F /* NewsCell.swift */,
 			);
-			path = NewsCell;
+			path = PersonalNewsCell;
 			sourceTree = "<group>";
 		};
 		9E7B0A8E23293A130082539F /* search */ = {
@@ -161,6 +167,22 @@
 				9E8C2EFF232988B40004B5A2 /* StarredChatsCollectionVC.swift */,
 			);
 			path = chat;
+			sourceTree = "<group>";
+		};
+		9E7B5B00232A3F480063A676 /* profilePhotosCell */ = {
+			isa = PBXGroup;
+			children = (
+				9E7B5B01232A3F7F0063A676 /* ProfilePhotosCell.swift */,
+			);
+			path = profilePhotosCell;
+			sourceTree = "<group>";
+		};
+		9E7B5B03232A40390063A676 /* profile */ = {
+			isa = PBXGroup;
+			children = (
+				9E7B0A89232926050082539F /* ProfileVC.swift */,
+			);
+			path = profile;
 			sourceTree = "<group>";
 		};
 		9E8C2EF623297A250004B5A2 /* ChatListCell */ = {
@@ -274,8 +296,10 @@
 		9EAD78C823261ACD00BFFAE7 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				9EE599F3232A894200AB56EF /* NewsCell */,
+				9E7B5B00232A3F480063A676 /* profilePhotosCell */,
 				9E8C2EF623297A250004B5A2 /* ChatListCell */,
-				9E7B0A8B232928580082539F /* NewsCell */,
+				9E7B0A8B232928580082539F /* PersonalNewsCell */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -314,6 +338,23 @@
 				9E7B0A7C232912C60082539F /* SmsVC.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		9EE599F2232A871600AB56EF /* News */ = {
+			isa = PBXGroup;
+			children = (
+				9E7B0A85232925AC0082539F /* NewsVC.swift */,
+			);
+			path = News;
+			sourceTree = "<group>";
+		};
+		9EE599F3232A894200AB56EF /* NewsCell */ = {
+			isa = PBXGroup;
+			children = (
+				9EE599F4232A896700AB56EF /* StarredNewsCell.swift */,
+				9EB5D1F9232AC21300D5905D /* NewsPhotoCell.swift */,
+			);
+			path = NewsCell;
 			sourceTree = "<group>";
 		};
 		9FBDCC03808B996A87064677 /* Frameworks */ = {
@@ -564,8 +605,11 @@
 				9EAD7899232611DF00BFFAE7 /* BoomBoom.xcdatamodeld in Sources */,
 				9EAD78CC23261B7C00BFFAE7 /* RegistrationVC.swift in Sources */,
 				9E7B0A86232925AC0082539F /* NewsVC.swift in Sources */,
+				9EE599F5232A896700AB56EF /* StarredNewsCell.swift in Sources */,
+				9EB5D1FA232AC21300D5905D /* NewsPhotoCell.swift in Sources */,
 				9E8C2EF823297A450004B5A2 /* ChatListCell.swift in Sources */,
 				9E7B0A8A232926050082539F /* ProfileVC.swift in Sources */,
+				9E7B5B02232A3F7F0063A676 /* ProfilePhotosCell.swift in Sources */,
 				9EAD78D8232620FE00BFFAE7 /* AuthorizationVC.swift in Sources */,
 				9EAD78CE23261C2000BFFAE7 /* UIViewController.swift in Sources */,
 				9E8C2EFC232986E10004B5A2 /* StarredChatsCell.swift in Sources */,

@@ -43,6 +43,9 @@ public class Constants {
         static let NEWS_CELL = "newsCell"
         static let CHAT_LIST_CELL = "chatListCell"
         static let STARRED_CHATS_CELL = "starredChatsCell"
+        static let PROFILE_PHOTO_CELL = "profilePhotoCell"
+        static let STARRED_NEWS_CELL = "starredNewsCell"
+        static let NEWS_PHOTO_CELL = "newsPhotoCell"
     }
     
     public class TAG_ACTION {

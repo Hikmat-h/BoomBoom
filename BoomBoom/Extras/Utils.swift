@@ -29,11 +29,11 @@ class Utils {
     static let current = Utils()
     private init(){}
     
-    func setButtonStyle(btn: UIButton) -> UIButton {
+    func setButtonStyle(btn: UIButton, cornerRadius: Int = 30) -> UIButton {
         btn.layer.borderWidth = 2
         btn.layer.borderColor = #colorLiteral(red: 0.8980392157, green: 0.1019607843, blue: 0.2941176471, alpha: 1)
         btn.backgroundColor = .clear
-        btn.layer.cornerRadius = 30
+        btn.layer.cornerRadius = CGFloat(cornerRadius)
         return btn
     }
     

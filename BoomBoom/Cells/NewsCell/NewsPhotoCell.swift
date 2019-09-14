@@ -11,4 +11,7 @@ import UIKit
 class NewsPhotoCell: UICollectionViewCell {
     @IBOutlet weak var photoImgView: UIImageView!
     
+    override func prepareForReuse() {
+        //photoImgView.frame.size = CGSize (width: 125, height: 125)
+    }
 }

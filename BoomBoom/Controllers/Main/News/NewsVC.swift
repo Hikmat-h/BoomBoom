@@ -8,17 +8,19 @@
 
 import UIKit
 
-class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     
     @IBOutlet weak var starredCollectionV: UICollectionView!
     @IBOutlet weak var photoCollectionV: UICollectionView!
-    let cellSize = UIScreen.main.bounds.size.width/3-1
+    let cellWidth = UIScreen.main.bounds.size.width/3
     override func viewDidLoad() {
         super.viewDidLoad()
         starredCollectionV.delegate = self
         starredCollectionV.dataSource = self
         photoCollectionV.delegate = self
         photoCollectionV.dataSource = self
+        
+        photoCollectionV.collectionViewLayout = MosaicLayout()
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -29,7 +31,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         if collectionView == starredCollectionV {
             return 5
         } else {
-            return 18
+            return 16
         }
     }
     
@@ -38,23 +40,31 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.STARRED_NEWS_CELL, for: indexPath)
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.NEWS_PHOTO_CELL, for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.NEWS_PHOTO_CELL, for: indexPath) as! NewsPhotoCell
+            if (indexPath.row == 0) {
+                cell.photoImgView.frame.size = CGSize(width: cellWidth*2, height: cellWidth*2)
+            } else {
+                cell.photoImgView.frame.size = CGSize(width: cellWidth, height: cellWidth)
+            }
+            cell.backgroundColor = .red
             return cell
         }
         
     }
     
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if (collectionView == photoCollectionV) {
-            
-            let height = cellSize+1
-            
-            return CGSize(width: cellSize, height: height)
-        } else {
-            return CGSize(width: 111, height: 113)
-        }
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        if (collectionView == photoCollectionV) {
+//            let height = cellWidth+1
+//            if (indexPath.row == 0) {
+//                return CGSize(width: cellWidth*2, height: height*2)
+//            }
+//
+//            return CGSize(width: cellWidth, height: height)
+//        } else {
+//            return CGSize(width: 81, height: 113)
+//        }
+//    }
     
     /*
     // MARK: - Navigation
@@ -66,4 +76,5 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     }
     */
 
+    
 }

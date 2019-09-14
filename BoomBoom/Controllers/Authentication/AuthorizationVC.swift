@@ -44,6 +44,7 @@ class AuthorizationVC: UIViewController, UIScrollViewDelegate, UITextFieldDelega
         loginBtn = Utils.current.setButtonStyle(btn: loginBtn)
         loginBtn2 = Utils.current.setButtonStyle(btn: loginBtn2)
         
+        stickView.layer.cornerRadius = 2
         //segmentedControl
         segmentWidth = Double(stickScrollView.frame.size.width)
         stickScrollView.contentSize = CGSize(width: segmentWidth, height: 4)

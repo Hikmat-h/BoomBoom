@@ -15,12 +15,22 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     let cellWidth = UIScreen.main.bounds.size.width/3
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        photoCollectionV.frame.size.height = photoCollectionV.frame.size.height + (self.navigationController?.navigationBar.frame.height ?? 0) + UIApplication.shared.statusBarFrame.size.height
         starredCollectionV.delegate = self
         starredCollectionV.dataSource = self
         photoCollectionV.delegate = self
         photoCollectionV.dataSource = self
         
         photoCollectionV.collectionViewLayout = MosaicLayout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {

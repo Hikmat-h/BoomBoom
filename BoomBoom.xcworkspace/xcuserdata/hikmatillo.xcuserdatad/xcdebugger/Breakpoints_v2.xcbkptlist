@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BoomBoom/Controllers/Main/News/Mosaiclayout.swift"
-            timestampString = "590152178.821028"
+            filePath = "BoomBoom/Controllers/Main/News/NewsVC.swift"
+            timestampString = "590231276.056607"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "prepare()"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,12 +25,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BoomBoom/Controllers/Main/News/NewsVC.swift"
-            timestampString = "590152178.82154"
+            filePath = "BoomBoom/Controllers/Main/search/SearchVC.swift"
+            timestampString = "590262429.9379539"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
             landmarkName = "unknown"
             landmarkType = "0">
          </BreakpointContent>

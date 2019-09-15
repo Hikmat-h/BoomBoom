@@ -18,6 +18,7 @@ class ProfileVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     @IBOutlet weak var photosCollectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         photosCollectionView.dataSource = self
         photosCollectionView.delegate = self
         

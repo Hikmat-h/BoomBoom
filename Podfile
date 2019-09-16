@@ -8,6 +8,9 @@ target 'BoomBoom' do
   pod 'Alamofire'
   pod 'Tabman', '~> 2.4'
   pod 'IQKeyboardManagerSwift'
+  pod 'RangeSeekSlider'
+  source 'https://github.com/CocoaPods/Specs.git'
+  pod 'PeekPop', '~> 1.0'
 
   target 'BoomBoomTests' do
     inherit! :search_paths

@@ -13,12 +13,7 @@ class TabBarVC: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //nav bar
-        let logo = UIImage(named: "logo")
-        let imageView = UIImageView(image:logo)
-        self.navigationItem.titleView = imageView
-        navigationItem.hidesBackButton = true
-        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
 

@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1725490196, alpha: 1)
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        
+        UINavigationBar.appearance().frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UINavigationBar.appearance().frame.width, height: 400))
         let subViewWindow = UIApplication.shared.value(forKey: "statusBarWindow") as? UIView
         subViewWindow?.subviews[0].backgroundColor = .black
         

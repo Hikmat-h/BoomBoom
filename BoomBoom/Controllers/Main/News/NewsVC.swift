@@ -7,22 +7,30 @@
 //
 
 import UIKit
+import PeekPop
 
-class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
+class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, PeekPopPreviewingDelegate {
+    
+    var peekPop: PeekPop?
     
     @IBOutlet weak var starredCollectionV: UICollectionView!
     @IBOutlet weak var photoCollectionV: UICollectionView!
     let cellWidth = UIScreen.main.bounds.size.width/3
+    let screenWidth = UIScreen.main.bounds.width
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        photoCollectionV.frame.size.height = photoCollectionV.frame.size.height + (self.navigationController?.navigationBar.frame.height ?? 0) + UIApplication.shared.statusBarFrame.size.height
+        
         starredCollectionV.delegate = self
         starredCollectionV.dataSource = self
         photoCollectionV.delegate = self
         photoCollectionV.dataSource = self
         
         photoCollectionV.collectionViewLayout = MosaicLayout()
+        
+        peekPop = PeekPop(viewController: self)
+        peekPop?.registerForPreviewingWithDelegate(self, sourceView: photoCollectionV)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -33,6 +41,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
+    //collectionView delegate
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -52,14 +61,37 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.NEWS_PHOTO_CELL, for: indexPath) as! NewsPhotoCell
             if (indexPath.row == 0) {
-                cell.photoImgView.frame.size = CGSize(width: cellWidth*2, height: cellWidth*2)
+                cell.photoImgView.frame.size = CGSize(width: cellWidth*2 + 1, height: cellWidth*2 + 1)
             } else {
-                cell.photoImgView.frame.size = CGSize(width: cellWidth, height: cellWidth)
+                cell.photoImgView.frame.size = CGSize(width: cellWidth + 1, height: cellWidth + 1)
             }
             cell.backgroundColor = .red
             return cell
         }
         
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView == starredCollectionV {
+            return CGSize(width: screenWidth/5, height: 120.0)
+        } else {
+            return (collectionView.cellForItem(at: indexPath)?.frame.size)!
+        }
+    }
+    
+    
+    //Force touch
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "TestVC") as! TestVC
+        let cell = photoCollectionV.cellForItem(at: IndexPath(item: 0, section: 0)) as? NewsPhotoCell
+        controller.image = cell?.photoImgView.image
+        return controller
+    }
+    
+    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
+        print("wachach")
     }
     
     

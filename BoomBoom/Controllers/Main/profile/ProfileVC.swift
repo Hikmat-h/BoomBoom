@@ -16,8 +16,17 @@ class ProfileVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     @IBOutlet weak var blanketBtn: UIButton!
     @IBOutlet weak var subscriptionBtn: UIButton!
     @IBOutlet weak var photosCollectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //nav bar
+        let logo = UIImage(named: "logo")
+        let imageView = UIImageView(image:logo)
+        self.navigationItem.titleView = imageView
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.barTintColor = .black
+        navigationItem.hidesBackButton = true
         
         photosCollectionView.dataSource = self
         photosCollectionView.delegate = self

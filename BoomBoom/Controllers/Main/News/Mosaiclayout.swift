@@ -45,7 +45,8 @@ class MosaicLayout: UICollectionViewLayout {
         let cvWidth = collectionView.bounds.size.width
         
         while currentIndex < count {
-            let segmentFrame = CGRect(x: 0, y: lastFrame.maxY + 1.0, width: cvWidth, height: 250.0)
+            let segmentFrame = CGRect(x: 0, y: lastFrame.maxY + 1.0, width: cvWidth, height: cvWidth/3*2)   //UIScreen.main.bounds.width/3
+            
             
             var segmentRects = [CGRect]()
             switch segment {
@@ -57,8 +58,13 @@ class MosaicLayout: UICollectionViewLayout {
                 segmentRects = [horizontalSlices.first, horizontalSlices.second]
                 
             case .twoThirdsOneThird:
-                let horizontalSlices = segmentFrame.dividedIntegral(fraction: (2.0 / 3.0), from: .minXEdge)
-                let verticalSlices = horizontalSlices.second.dividedIntegral(fraction: 0.5, from: .minYEdge)
+                var horizontalSlices = segmentFrame.dividedIntegral(fraction: (2.0 / 3.0), from: .minXEdge)
+                horizontalSlices.first = CGRect(origin: horizontalSlices.first.origin, size: CGSize(width: horizontalSlices.first.width + 1, height: horizontalSlices.first.height))
+                var verticalSlices = horizontalSlices.second.dividedIntegral(fraction: 0.5, from: .minYEdge)
+                // to correct the 1 point mismatch for big cell
+                verticalSlices.first = CGRect(x: verticalSlices.first.minX + 1, y: verticalSlices.first.minY, width: verticalSlices.first.width - 1, height: verticalSlices.first.height)
+                verticalSlices.second = CGRect(x: verticalSlices.second.minX + 1, y: verticalSlices.second.minY, width: verticalSlices.second.width - 1, height: verticalSlices.second.height)
+                
                 segmentRects = [horizontalSlices.first, verticalSlices.first, verticalSlices.second]
                 
             case .oneThirdTwoThirds:

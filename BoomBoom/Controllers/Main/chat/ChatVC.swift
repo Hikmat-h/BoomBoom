@@ -13,7 +13,9 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
-    var some:StarredChatsCollectionVC?
+    var vc:StarredChatsCollectionVC?
+    lazy var searchBar: UISearchBar? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,10 +23,33 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         tableView.delegate = self
         tableView.rowHeight = 100
         
-        some = StarredChatsCollectionVC()
-        collectionView.dataSource = some
-        collectionView.delegate = some
+        vc = StarredChatsCollectionVC()
+        collectionView.dataSource = vc
+        collectionView.delegate = vc
 
+        //search bar
+        searchBar = UISearchBar()
+        searchBar?.sizeToFit()
+        searchBar?.backgroundColor = .clear
+        searchBar?.placeholder = "Поиск"
+        searchBar?.barTintColor = .clear
+        searchBar?.tintColor = .clear
+        searchBar?.setTextFieldColor(color: .clear)
+        searchBar?.setTextColor(color: .white)
+        searchBar?.setPlaceholderTextColor(color: #colorLiteral(red: 0.8784313725, green: 0.8784313725, blue: 0.8784313725, alpha: 1))
+        navigationItem.titleView = searchBar
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        self.view.addGestureRecognizer(tapGesture)
+        
+        let starBtn = UIBarButtonItem(image: UIImage(named: "star"), style: .plain, target: self, action: #selector(onStar))
+        navigationItem.rightBarButtonItem = starBtn
+    }
+    
+    @objc func onStar() {
+        print("star is clicked")
+    }
+    @objc func viewTapped() {
+        searchBar?.resignFirstResponder()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

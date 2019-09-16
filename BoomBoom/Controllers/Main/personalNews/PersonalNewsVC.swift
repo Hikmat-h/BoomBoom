@@ -18,6 +18,12 @@ class PersonalNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 80
+        
+        //nav bar
+        let logo = UIImage(named: "logo")
+        let imageView = UIImageView(image:logo)
+        self.navigationItem.titleView = imageView
+        navigationItem.hidesBackButton = true
 
     }
     

@@ -11,6 +11,8 @@ target 'BoomBoom' do
   pod 'RangeSeekSlider'
   source 'https://github.com/CocoaPods/Specs.git'
   pod 'PeekPop', '~> 1.0'
+  pod 'Firebase/Analytics'
+  pod 'MessageKit', '~>3.0.0-swift5'
 
   target 'BoomBoomTests' do
     inherit! :search_paths

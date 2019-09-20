@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>344373859994-69kb0hbsda04i4ojjgne482bspl8onah.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.344373859994-69kb0hbsda04i4ojjgne482bspl8onah</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDq6RYjfbiAqkWsNXSFi23mOxdCWQRmBPw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>344373859994</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.era.boomboom</string>
+	<key>PROJECT_ID</key>
+	<string>boomboom-6090a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>boomboom-6090a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:344373859994:ios:7afcdb128a66cbc9543123</string>
+	<key>DATABASE_URL</key>
+	<string>https://boomboom-6090a.firebaseio.com</string>
+</dict>
+</plist>

@@ -15,10 +15,10 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!
     var vc:StarredChatsCollectionVC?
     lazy var searchBar: UISearchBar? = nil
-    
+    private var searchController: UISearchController!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        searchController = UISearchController(searchResultsController: self)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 100
@@ -37,8 +37,26 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         searchBar?.setTextFieldColor(color: .clear)
         searchBar?.setTextColor(color: .white)
         searchBar?.setPlaceholderTextColor(color: #colorLiteral(red: 0.8784313725, green: 0.8784313725, blue: 0.8784313725, alpha: 1))
+        
+//        searchController.title = "Поиск"
+//        if #available(iOS 11.0, *) {
+//            searchController.delegate = self
+//            searchController.obscuresBackgroundDuringPresentation = false
+//            searchController.searchBar.placeholder = "Поиск"
+//            searchController.searchBar.delegate = self
+//            definesPresentationContext = true
+//
+//            searchController.hidesNavigationBarDuringPresentation = true
+//            navigationItem.hidesSearchBarWhenScrolling = false
+//            searchController.searchBar.heightAnchor.constraint(equalToConstant: 56).isActive = true
+//            navigationItem.searchController = searchController
+//        } else {
+//            navigationItem.titleView = searchBar
+//            // Fallback on earlier versions
+//        }
         navigationItem.titleView = searchBar
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        tapGesture.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGesture)
         
         let starBtn = UIBarButtonItem(image: UIImage(named: "star"), style: .plain, target: self, action: #selector(onStar))
@@ -64,6 +82,12 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.NAME_CELL.CHAT_LIST_CELL)!
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "MessagingVC") else { return }
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -74,4 +98,10 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     */
 
+}
+
+extension ChatVC: UISearchControllerDelegate, UISearchBarDelegate {
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        
+    }
 }

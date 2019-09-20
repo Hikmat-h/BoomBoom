@@ -17,6 +17,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     @IBOutlet weak var photoCollectionV: UICollectionView!
     let cellWidth = UIScreen.main.bounds.size.width/3
     let screenWidth = UIScreen.main.bounds.width
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,6 +72,14 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row != 0 {
+            guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
+            show(detailVC, sender: self)
+        }
+    }
+    
+    //for starred CollectionVeiw
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == starredCollectionV {
             return CGSize(width: screenWidth/5, height: 120.0)
@@ -83,15 +92,21 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     //Force touch
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "TestVC") as! TestVC
-        let cell = photoCollectionV.cellForItem(at: IndexPath(item: 0, section: 0)) as? NewsPhotoCell
-        controller.image = cell?.photoImgView.image
-        return controller
+        guard let indexPath = photoCollectionV?.indexPathForItem(at: location) else { return nil }
+        if indexPath == IndexPath(item: 0, section: 0) {
+            return nil
+        }
+        guard let cell = photoCollectionV?.cellForItem(at: indexPath) as? NewsPhotoCell else { return nil }
+        guard let preview = storyboard?.instantiateViewController(withIdentifier: "PreviewVC") as? PreviewVC else { return nil }
+        previewingContext.sourceRect = cell.frame
+        preview.img = cell.photoImgView.image
+        
+        return preview
     }
     
     func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
-        print("wachach")
+         guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
+        show(detailVC, sender: self)
     }
     
     

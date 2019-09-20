@@ -24,7 +24,7 @@ class PersonalNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSour
         let imageView = UIImageView(image:logo)
         self.navigationItem.titleView = imageView
         navigationItem.hidesBackButton = true
-
+//        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

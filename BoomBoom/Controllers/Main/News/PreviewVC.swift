@@ -1,21 +1,21 @@
 //
-//  TestVC.swift
+//  PreviewVC.swift
 //  BoomBoom
 //
-//  Created by Hikmatillo Habibullaev on 9/16/19.
+//  Created by Hikmatillo Habibullaev on 9/17/19.
 //  Copyright © 2019 Hikmatillo Habibullaev. All rights reserved.
 //
 
 import UIKit
 
-class TestVC: UIViewController {
-    
-    @IBOutlet weak var imageV: UIImageView!
-    var image: UIImage? = nil
+class PreviewVC: UIViewController {
+
+    @IBOutlet weak var previewImgV: UIImageView!
+    var img: UIImage? = nil
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.imageV.image = image
-        // Do any additional setup after loading the view.
+        previewImgV.layer.cornerRadius = 8
+        previewImgV.image = img
     }
     
 

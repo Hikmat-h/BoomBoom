@@ -14,8 +14,8 @@ class TabBarVC: UITabBarController {
         super.viewDidLoad()
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.tabBarController?.hidesBottomBarWhenPushed = true
     }
-    
 
     /*
     // MARK: - Navigation

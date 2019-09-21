@@ -93,7 +93,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
-            return screenSize.height - (self.navigationController?.navigationBar.frame.height ?? 0)
+            return tableView.frame.height
         } else if indexPath.row > 0 && indexPath.row < 5 {
             return 180
         } else {

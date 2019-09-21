@@ -39,6 +39,11 @@ class ProfileVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        //nav bar
+        self.navigationController?.navigationBar.barTintColor = .black
+    }
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }

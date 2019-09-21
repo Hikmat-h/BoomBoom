@@ -46,6 +46,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     var aim:[String] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //collection view
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -97,6 +98,11 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         presentedView.layer.cornerRadius = 8
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        //nav bar
+        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1725490196, alpha: 1)
+    }
+    
     //alert methods
     @objc func onOrientation() {
         let alert = UIAlertController(title: "", message: "Ориентация", preferredStyle: .actionSheet)
@@ -125,8 +131,8 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         })
         alert.addAction(UIAlertAction(title: "ok", style: .default, handler: {
             (action) in
-            let weight = Int(alert.textFields?[0].text ?? "0")
-            if weight!>=0 && weight!<=230 {
+            let weight = Int(alert.textFields?[0].text ?? "0") ?? 0
+            if weight>=0 && weight<=230 {
              self.weightLbl.text = "\(alert.textFields?[0].text ?? "") кг"
             }
         }))
@@ -143,8 +149,8 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         })
         alert.addAction(UIAlertAction(title: "ok", style: .default, handler: {
             (action) in
-            let height = Int(alert.textFields?[0].text ?? "0")
-            if height!>=0 && height!<=250 {
+            let height = Int(alert.textFields?[0].text ?? "0") ?? 0
+            if height>=0 && height<=250 {
                 self.heightLbl.text = "\(alert.textFields?[0].text ?? "") см."
             }
         }))
@@ -183,8 +189,8 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         })
         alert.addAction(UIAlertAction(title: "ok", style: .default, handler: {
             (action) in
-            let height = Int(alert.textFields?[0].text ?? "0")
-            if height!>=1 && height!<=6 {
+            let height = Int(alert.textFields?[0].text ?? "0") ?? 0
+            if height>=1 && height<=6 {
                 self.boobSize.text = "\(alert.textFields?[0].text ?? "")"
             }
         }))

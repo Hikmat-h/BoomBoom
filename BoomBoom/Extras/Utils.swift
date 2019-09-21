@@ -28,7 +28,7 @@ extension UINavigationItem{
         backItem.title = ""
         
         /*Changing color*/
-        backItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+        backItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.yellow], for: .normal)
         
         self.backBarButtonItem = backItem
     }

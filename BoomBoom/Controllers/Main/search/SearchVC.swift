@@ -8,6 +8,7 @@
 
 import UIKit
 import RangeSeekSlider
+import iOSDropDown
 
 class SearchVC: UIViewController {
 
@@ -26,6 +27,8 @@ class SearchVC: UIViewController {
     @IBOutlet weak var heightLbl: UILabel!
     @IBOutlet weak var ageRange: RangeSeekSlider!
     @IBOutlet weak var ageLbl: UILabel!
+    @IBOutlet weak var countryField: DropDown!
+    @IBOutlet weak var cityField: DropDown!
     
     var minAge:Int?
     var maxAge:Int?
@@ -83,6 +86,23 @@ class SearchVC: UIViewController {
         
         let okButton = UIBarButtonItem(image: UIImage(named: "tick"), style: .plain, target: self, action: #selector(search))
         self.navigationItem.rightBarButtonItem = okButton
+        
+        //country and city
+        countryField.layer.borderWidth = 1
+        countryField.layer.borderColor = UIColor.white.cgColor
+        countryField.layer.cornerRadius = 5
+        cityField.layer.borderWidth = 1
+        cityField.layer.cornerRadius = 5
+        cityField.layer.borderColor = UIColor.white.cgColor
+        countryField.optionArray = ["Uzbekistan", "Russia", "USA", "Germany"]
+        cityField.optionArray = ["Tashkent", "Moscow", "New York"]
+        //        cityField.didSelect{(selectedText , index ,id) in
+        //            self.cityField.text = "\(selectedText) \n index: \(index)"
+        //        }
+        self.countryField.inputView = UIView()
+        self.countryField.inputAccessoryView = UIView()
+        self.cityField.inputView = UIView()
+        self.cityField.inputAccessoryView = UIView()
     }
     
     @objc func search () {
@@ -192,15 +212,5 @@ class SearchVC: UIViewController {
         let selected = sender as? UIButton
         selected?.setImage(UIImage(named: "selected"), for: .normal)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

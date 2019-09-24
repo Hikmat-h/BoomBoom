@@ -57,14 +57,16 @@ class ProfileVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
         return cell
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "takeUpSegue" {
+            let vc = segue.destination as? ExtendSubscriptionVC
+            vc?.info = "Анкета будет поднята наверх в течении 5 минут!"
+            vc?.up = true
+        } else {
+            let vc = segue.destination as? ExtendSubscriptionVC
+            vc?.info = "Оформив подписку, вы получаете возможность общения в чатах с другими пользователями."
+            vc?.up = false
+        }
     }
-    */
 
 }

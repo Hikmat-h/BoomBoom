@@ -11,6 +11,9 @@
 		81038B25B0A5CD782E755892 /* Pods_BoomBoom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44D46CB1E343C593DA88C376 /* Pods_BoomBoom.framework */; };
 		8FC0F875C04767C1CA6A95B7 /* Pods_BoomBoomUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8C791562BF3E38708833DF /* Pods_BoomBoomUITests.framework */; };
 		9E06C23B2330BEF0007F0E86 /* PreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E06C23A2330BEF0007F0E86 /* PreviewVC.swift */; };
+		9E0B7E112338CEFE00A6FE1A /* WaysToPayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B7E102338CEFE00A6FE1A /* WaysToPayVC.swift */; };
+		9E0B7E132338D59B00A6FE1A /* ExtendSubscriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B7E122338D59B00A6FE1A /* ExtendSubscriptionVC.swift */; };
+		9E0B7E152338E67600A6FE1A /* PageRateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0B7E142338E67600A6FE1A /* PageRateVC.swift */; };
 		9E20A513232B7FB8002CFA94 /* Mosaiclayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E20A512232B7FB8002CFA94 /* Mosaiclayout.swift */; };
 		9E29CD9B2336283F00AB7D0A /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E29CD9A2336283F00AB7D0A /* SettingsVC.swift */; };
 		9E29CD9D233628AD00AB7D0A /* AccountSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E29CD9C233628AD00AB7D0A /* AccountSettings.swift */; };
@@ -65,6 +68,12 @@
 		9EAD78D523261CAE00BFFAE7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD78D423261CAE00BFFAE7 /* Utils.swift */; };
 		9EAD78D8232620FE00BFFAE7 /* AuthorizationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD78D7232620FE00BFFAE7 /* AuthorizationVC.swift */; };
 		9EB5D1FA232AC21300D5905D /* NewsPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB5D1F9232AC21300D5905D /* NewsPhotoCell.swift */; };
+		9EB6C44F23389BF000456C03 /* DeletionReasonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB6C44E23389BF000456C03 /* DeletionReasonVC.swift */; };
+		9EB6C45123389DD700456C03 /* DeletionSuccessVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB6C45023389DD700456C03 /* DeletionSuccessVC.swift */; };
+		9EB6C4542338A01000456C03 /* PushNotificationSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB6C4532338A01000456C03 /* PushNotificationSettingsVC.swift */; };
+		9EB6C4572338B69000456C03 /* VerificationIntoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB6C4562338B69000456C03 /* VerificationIntoVC.swift */; };
+		9EB6C4592338B6AF00456C03 /* TakePhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB6C4582338B6AF00456C03 /* TakePhotoVC.swift */; };
+		9EB6C45B2338B6C300456C03 /* CheckPhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB6C45A2338B6C300456C03 /* CheckPhotoVC.swift */; };
 		9EC4F6712328F19900179C2E /* RegistrationDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC4F6702328F19900179C2E /* RegistrationDetailVC.swift */; };
 		9EC6EE7F233115DD000F7F9E /* MessagingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC6EE7E233115DD000F7F9E /* MessagingVC.swift */; };
 		9EC6EE8223311654000F7F9E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC6EE8123311654000F7F9E /* Message.swift */; };
@@ -102,6 +111,9 @@
 		44D46CB1E343C593DA88C376 /* Pods_BoomBoom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BoomBoom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F225785DDC4AD4141E6E07F /* Pods-BoomBoomUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoomBoomUITests.debug.xcconfig"; path = "Target Support Files/Pods-BoomBoomUITests/Pods-BoomBoomUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		9E06C23A2330BEF0007F0E86 /* PreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewVC.swift; sourceTree = "<group>"; };
+		9E0B7E102338CEFE00A6FE1A /* WaysToPayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaysToPayVC.swift; sourceTree = "<group>"; };
+		9E0B7E122338D59B00A6FE1A /* ExtendSubscriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendSubscriptionVC.swift; sourceTree = "<group>"; };
+		9E0B7E142338E67600A6FE1A /* PageRateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageRateVC.swift; sourceTree = "<group>"; };
 		9E20A512232B7FB8002CFA94 /* Mosaiclayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mosaiclayout.swift; sourceTree = "<group>"; };
 		9E29CD9A2336283F00AB7D0A /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		9E29CD9C233628AD00AB7D0A /* AccountSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettings.swift; sourceTree = "<group>"; };
@@ -162,6 +174,12 @@
 		9EAD78D423261CAE00BFFAE7 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		9EAD78D7232620FE00BFFAE7 /* AuthorizationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationVC.swift; sourceTree = "<group>"; };
 		9EB5D1F9232AC21300D5905D /* NewsPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPhotoCell.swift; sourceTree = "<group>"; };
+		9EB6C44E23389BF000456C03 /* DeletionReasonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionReasonVC.swift; sourceTree = "<group>"; };
+		9EB6C45023389DD700456C03 /* DeletionSuccessVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionSuccessVC.swift; sourceTree = "<group>"; };
+		9EB6C4532338A01000456C03 /* PushNotificationSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationSettingsVC.swift; sourceTree = "<group>"; };
+		9EB6C4562338B69000456C03 /* VerificationIntoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationIntoVC.swift; sourceTree = "<group>"; };
+		9EB6C4582338B6AF00456C03 /* TakePhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePhotoVC.swift; sourceTree = "<group>"; };
+		9EB6C45A2338B6C300456C03 /* CheckPhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPhotoVC.swift; sourceTree = "<group>"; };
 		9EC4F6702328F19900179C2E /* RegistrationDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationDetailVC.swift; sourceTree = "<group>"; };
 		9EC6EE7E233115DD000F7F9E /* MessagingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingVC.swift; sourceTree = "<group>"; };
 		9EC6EE8123311654000F7F9E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -211,17 +229,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E0B7E0F2338CEE000A6FE1A /* payment */ = {
+			isa = PBXGroup;
+			children = (
+				9E0B7E102338CEFE00A6FE1A /* WaysToPayVC.swift */,
+				9E0B7E122338D59B00A6FE1A /* ExtendSubscriptionVC.swift */,
+				9E0B7E142338E67600A6FE1A /* PageRateVC.swift */,
+			);
+			path = payment;
+			sourceTree = "<group>";
+		};
 		9E29CD982336280D00AB7D0A /* settings */ = {
 			isa = PBXGroup;
 			children = (
+				9EB6C4552338B67400456C03 /* verification */,
+				9EB6C45223389FE800456C03 /* account parameters */,
+				9EB6C44D23389B7800456C03 /* deletion */,
 				9E29CD9A2336283F00AB7D0A /* SettingsVC.swift */,
 				9E29CD9C233628AD00AB7D0A /* AccountSettings.swift */,
-				9E29CD9E233628F200AB7D0A /* AccountParameters.swift */,
 				9E29CDA02336290900AB7D0A /* HelpVC.swift */,
 				9E29CDA22336291900AB7D0A /* AboutVC.swift */,
 				9E29CDA42336292C00AB7D0A /* BlockedUsersVC.swift */,
 				9E29CDA62336293800AB7D0A /* LanguageVC.swift */,
-				9E29CDAE23364E8300AB7D0A /* DeleteAccountVC.swift */,
 			);
 			path = settings;
 			sourceTree = "<group>";
@@ -301,6 +330,7 @@
 		9E7B5B03232A40390063A676 /* profile */ = {
 			isa = PBXGroup;
 			children = (
+				9E0B7E0F2338CEE000A6FE1A /* payment */,
 				9E29CD992336281600AB7D0A /* edit account */,
 				9E29CD982336280D00AB7D0A /* settings */,
 				9E7B0A89232926050082539F /* ProfileVC.swift */,
@@ -492,6 +522,35 @@
 				9E7B0A7C232912C60082539F /* SmsVC.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		9EB6C44D23389B7800456C03 /* deletion */ = {
+			isa = PBXGroup;
+			children = (
+				9E29CDAE23364E8300AB7D0A /* DeleteAccountVC.swift */,
+				9EB6C44E23389BF000456C03 /* DeletionReasonVC.swift */,
+				9EB6C45023389DD700456C03 /* DeletionSuccessVC.swift */,
+			);
+			path = deletion;
+			sourceTree = "<group>";
+		};
+		9EB6C45223389FE800456C03 /* account parameters */ = {
+			isa = PBXGroup;
+			children = (
+				9E29CD9E233628F200AB7D0A /* AccountParameters.swift */,
+				9EB6C4532338A01000456C03 /* PushNotificationSettingsVC.swift */,
+			);
+			path = "account parameters";
+			sourceTree = "<group>";
+		};
+		9EB6C4552338B67400456C03 /* verification */ = {
+			isa = PBXGroup;
+			children = (
+				9EB6C4562338B69000456C03 /* VerificationIntoVC.swift */,
+				9EB6C4582338B6AF00456C03 /* TakePhotoVC.swift */,
+				9EB6C45A2338B6C300456C03 /* CheckPhotoVC.swift */,
+			);
+			path = verification;
 			sourceTree = "<group>";
 		};
 		9EC6EE802331163E000F7F9E /* chat */ = {
@@ -806,6 +865,7 @@
 			files = (
 				9E7B0A7D232912C60082539F /* SmsVC.swift in Sources */,
 				9EAD7899232611DF00BFFAE7 /* BoomBoom.xcdatamodeld in Sources */,
+				9EB6C45B2338B6C300456C03 /* CheckPhotoVC.swift in Sources */,
 				9E29CDA72336293800AB7D0A /* LanguageVC.swift in Sources */,
 				9EAD78CC23261B7C00BFFAE7 /* RegistrationVC.swift in Sources */,
 				9E7B0A86232925AC0082539F /* NewsVC.swift in Sources */,
@@ -813,9 +873,12 @@
 				9EC6EE7F233115DD000F7F9E /* MessagingVC.swift in Sources */,
 				9EE599F5232A896700AB56EF /* StarredNewsCell.swift in Sources */,
 				9E29FD7F232FCEC700A119DF /* LikePhotoVC.swift in Sources */,
+				9EB6C4572338B69000456C03 /* VerificationIntoVC.swift in Sources */,
 				9E29CDAF23364E8300AB7D0A /* DeleteAccountVC.swift in Sources */,
 				9ED5AC642335E88100594245 /* MainEditVC.swift in Sources */,
+				9E0B7E152338E67600A6FE1A /* PageRateVC.swift in Sources */,
 				9E20A513232B7FB8002CFA94 /* Mosaiclayout.swift in Sources */,
+				9EB6C45123389DD700456C03 /* DeletionSuccessVC.swift in Sources */,
 				9EB5D1FA232AC21300D5905D /* NewsPhotoCell.swift in Sources */,
 				9ED78CC1232D69500083D44D /* TabBarVC.swift in Sources */,
 				9E29CD9F233628F200AB7D0A /* AccountParameters.swift in Sources */,
@@ -826,6 +889,9 @@
 				9E7B5B02232A3F7F0063A676 /* ProfilePhotosCell.swift in Sources */,
 				9EAD78D8232620FE00BFFAE7 /* AuthorizationVC.swift in Sources */,
 				9E29CD9B2336283F00AB7D0A /* SettingsVC.swift in Sources */,
+				9EB6C4592338B6AF00456C03 /* TakePhotoVC.swift in Sources */,
+				9EB6C44F23389BF000456C03 /* DeletionReasonVC.swift in Sources */,
+				9E0B7E132338D59B00A6FE1A /* ExtendSubscriptionVC.swift in Sources */,
 				9EAD78CE23261C2000BFFAE7 /* UIViewController.swift in Sources */,
 				9E8C2EFC232986E10004B5A2 /* StarredChatsCell.swift in Sources */,
 				9E7B0A88232925BE0082539F /* SearchVC.swift in Sources */,
@@ -835,6 +901,7 @@
 				9E29CD9D233628AD00AB7D0A /* AccountSettings.swift in Sources */,
 				9EF6BDFF2333A15700311A99 /* EditProfileVC.swift in Sources */,
 				9EAD78D523261CAE00BFFAE7 /* Utils.swift in Sources */,
+				9EB6C4542338A01000456C03 /* PushNotificationSettingsVC.swift in Sources */,
 				9EAD78D023261C5F00BFFAE7 /* ActionResultDelegate.swift in Sources */,
 				9E8C2F00232988B40004B5A2 /* StarredChatsCollectionVC.swift in Sources */,
 				9E29CDA12336290900AB7D0A /* HelpVC.swift in Sources */,
@@ -842,6 +909,7 @@
 				9EAD7891232611DF00BFFAE7 /* AppDelegate.swift in Sources */,
 				9EF6BDF62333756B00311A99 /* ActionsCell.swift in Sources */,
 				9E7B0A84232925930082539F /* ChatVC.swift in Sources */,
+				9E0B7E112338CEFE00A6FE1A /* WaysToPayVC.swift in Sources */,
 				9E29CDAD2336360500AB7D0A /* BLockedUsersCell.swift in Sources */,
 				9EAD78D323261CA200BFFAE7 /* Constants.swift in Sources */,
 				9E29CDA32336291900AB7D0A /* AboutVC.swift in Sources */,

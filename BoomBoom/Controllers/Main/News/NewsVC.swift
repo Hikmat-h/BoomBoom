@@ -66,7 +66,6 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
             } else {
                 cell.photoImgView.frame.size = CGSize(width: cellWidth + 1, height: cellWidth + 1)
             }
-            cell.backgroundColor = .red
             return cell
         }
         

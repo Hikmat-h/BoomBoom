@@ -14,5 +14,4 @@ class SettingsVC: UIViewController {
         super.viewDidLoad()
         
     }
-
 }

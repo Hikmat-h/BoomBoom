@@ -226,9 +226,8 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
     //aim Button Actions
     @IBAction func onCancel(_ sender: Any) {
-        UIView.transition(with: backgroundView, duration: 0.3, options: .transitionCurlDown, animations: {
-            self.backgroundView.isHidden = true
-            self.presentedView.isHidden = true
+        UIView.transition(with: backgroundView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.backgroundView.alpha = 0
         }, completion: nil)
     }
     
@@ -240,17 +239,15 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         aimTextView.text = aimTextView.text! + (travelS.isOn ? (", " + aim[3]) : "")
         aimTextView.text = aimTextView.text! + (friendshipS.isOn ? (", " + aim[4]) : "")
         
-        UIView.transition(with: backgroundView, duration: 0.3, options: .transitionFlipFromBottom, animations: {
-            self.backgroundView.isHidden = true
-            self.presentedView.isHidden = true
+        UIView.transition(with: backgroundView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.backgroundView.alpha = 0
         }, completion: nil)
     }
     //------
     
     @objc func onAim() {
         UIView.transition(with: backgroundView, duration: 0.3, options: .transitionCrossDissolve, animations: {
-            self.backgroundView.isHidden = false
-            self.presentedView.isHidden = false
+            self.backgroundView.alpha = 1
         }, completion: nil)
     }
     //-------

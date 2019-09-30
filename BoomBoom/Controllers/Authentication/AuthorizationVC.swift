@@ -35,6 +35,9 @@ class AuthorizationVC: UIViewController, UIScrollViewDelegate, UITextFieldDelega
     let scrollWidth = Int(UIScreen.main.bounds.width-32)
     var segmentWidth: Double = 0.0
     
+    var loadingView: UIView = UIView()
+    var spinner = UIActivityIndicatorView(style: .whiteLarge)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -126,20 +129,67 @@ class AuthorizationVC: UIViewController, UIScrollViewDelegate, UITextFieldDelega
     }
 
     @IBAction func onRegByMail(_ sender: Any) {
-        self.performSegue(withIdentifier: Constants.NAME_SEGUE.AUTH_TO_MAIN, sender: self)
+        if (emailField.text ?? "") != "" &&
+            (passwordField.text ?? "") != "" {
+            authorizationAction(mail:emailField.text ?? "", password:passwordField.text ?? "")
+        } else {
+            showErrorWindow(errorMessage: Constants.MESSAGE.ERROR_NOT_ALL_FILLED)
+        }
     }
     
     @IBAction func onRegByPhone(_ sender: Any) {
-         self.performSegue(withIdentifier: Constants.NAME_SEGUE.AUTH_TO_MAIN, sender: self)
+        if !(phoneField.text?.isEmpty ?? true) {
+            authByPhoneAction(phone: phoneField.text ?? "")
+        }
     }
-    /*
-    // MARK: - Navigation
+    
+    func authByPhoneAction(phone:String) {
+        self.showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        AuthorizationService.current.authorizationUserByPhone(phone: phone) { (answerDic, error) in
+            if(error != nil) {
+                DispatchQueue.main.async {
+                    self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            }
+            if let answerDic = answerDic {
+                DispatchQueue.main.async {
+                    UserDefaults.standard.setValue(self.phoneField.text, forKey: "mobilePhone")
+                    self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                    self.performSegue(withIdentifier: "showSmsVC", sender: answerDic["object"])
+                }
+            }
+        }
+    }
+    
+    func authorizationAction(mail:String, password:String) {
+        self.showActivityIndicator(loadingView: loadingView, spinner: self.spinner)
+        AuthorizationService.current.authorizationUser(mail: mail, password: password)
+        { (generalAnswer, error) in
+            if (error != nil) {
+                DispatchQueue.main.async {
+                    self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            }
+            if let generalAnswer = generalAnswer {
+                DispatchQueue.main.async {
+                     self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                     UserDefaults.standard.set(generalAnswer.accessToken, forKey: "token")
+                    UserDefaults.standard.set(mail, forKey: "email")
+                    UserDefaults.standard.synchronize()
+                    self.performSegue(withIdentifier: "showMain", sender: self)
+                    self.setNewRootController(nameController: "MainVC")
+                }
+            }
+        }
+        
+    }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "showSmsVC" {
+            let vc = segue.destination as? SmsVC
+            vc?.code = sender as? String
+        }
     }
-    */
-
 }

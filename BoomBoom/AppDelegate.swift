@@ -11,6 +11,17 @@ import CoreData
 import IQKeyboardManagerSwift
 import Firebase
 
+extension AppDelegate {
+    static var shared: AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
+//    var rootViewController: RootViewController {
+//        return window!.rootViewController as! RootViewController
+//    }
+}
+
+//let appDelegate = AppDelegate.shared
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -18,6 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        //make keyboard look dark
+        UITextField.appearance().keyboardAppearance = .dark
         
         //push notification
         FirebaseApp.configure()
@@ -38,8 +52,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1725490196, alpha: 1)
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        let subViewWindow = UIApplication.shared.value(forKey: "statusBarWindow") as? UIView
-        subViewWindow?.subviews[0].backgroundColor = .black
+//        let subViewWindow = UIApplication.shared.value(forKey: "statusBarWindow") as? UIView
+//        subViewWindow?.subviews[0].backgroundColor = .black
+        
+        //set root vc
+//        window = UIWindow(frame: UIScreen.main.bounds)
+//        window?.rootViewController = FirstVC()
+//        window?.makeKeyAndVisible()
         
         return true
     }

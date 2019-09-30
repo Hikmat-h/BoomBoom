@@ -32,6 +32,10 @@ class RegistrationVC: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     @IBOutlet weak var authSegmentedControl: UISegmentedControl!
     @IBOutlet weak var verticalScrollView: UIScrollView!
     
+    // activity indicator
+    var loadingView: UIView = UIView()
+    var spinner = UIActivityIndicatorView(style: .whiteLarge)
+    
     var lastContentOffset: CGFloat = 0
     let regular: CGPoint = CGPoint(x: 0, y: 0)
     let scrollWidth = Int(UIScreen.main.bounds.width-32)
@@ -130,24 +134,82 @@ class RegistrationVC: UIViewController, UIScrollViewDelegate, UITextFieldDelegat
     }
     
     @IBAction func onRegByMail(_ sender: Any) {
-        self.performSegue(withIdentifier: Constants.NAME_SEGUE.REG_TO_REG_DETAIL, sender: self)
+        if (emailField.text?.isEmpty ?? true) || (passwordField.text?.isEmpty ?? true) || (password2Field.text?.isEmpty ?? true){
+            showErrorWindow(errorMessage: "not all fields are filled")
+        } else if (!isValidEmail(emailStr: emailField.text ?? "")) {
+            showErrorWindow(errorMessage: "please enter valid email")
+        } else if passwordField.text != password2Field.text {
+            showErrorWindow(errorMessage: "passwords don't match")
+        } else if !switch1.isOn {
+            showErrorWindow(errorMessage: "you should agree to terms and conditions")
+        } else {
+            actionRegByMail(mail: emailField.text ?? "", password: passwordField.text ?? "")
+        }
     }
     
     @IBAction func onRegByPhone(_ sender: Any) {
-        self.performSegue(withIdentifier: Constants.NAME_SEGUE.REG_TO_SMS, sender: self)
+        if (phoneField.text?.isEmpty ?? true) {
+            showErrorWindow(errorMessage: "enter your phone number")
+        } else if !switch2.isOn {
+            showErrorWindow(errorMessage: "you should agree to terms and conditions")
+        } else {
+            actionRegByPhone(phone: phoneField.text ?? "")
+        }
     }
     
     @IBAction func onBack(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func actionRegByPhone(phone:String) {
+        showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        AuthorizationService.current.authorizationUserByPhone(phone: phone) { (answerDic, error) in
+            DispatchQueue.main.async {
+                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                if error != nil {
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                } else {
+                    if ((answerDic?["status"] as? String) == "reg") {
+                        UserDefaults.standard.setValue(self.phoneField.text, forKey: "mobilePhone")
+                        let code = answerDic?["object"]
+                        self.performSegue(withIdentifier: "showSmsVC", sender: code)
+                    } else {
+                        self.showErrorWindow(errorMessage: "phone number is already in use")
+                    }
+                }
+            }
+        }
     }
-    */
-
+    
+    func actionRegByMail(mail:String, password:String) {
+        showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        RegistrationService.current.registrationByEmail(mail: mail, password: password) { (model, error) in
+            DispatchQueue.main.async {
+                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                if error != nil {
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                } else {
+                    UserDefaults.standard.setValue(self.emailField.text, forKey: "email")
+                    UserDefaults.standard.setValue(model?.accessToken, forKey: "token")
+                    self.performSegue(withIdentifier: "showRegDetail", sender: self)
+                }
+            }
+        }
+    }
+    
+    //проверка почты на корректность
+    func isValidEmail(emailStr:String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: emailStr)
+    }
+    
+    //set code and bool isReg
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showSmsVC" {
+            let vc = segue.destination as? SmsVC
+            vc?.code = sender as? String
+            vc?.isReg = true
+        }
+    }
 }

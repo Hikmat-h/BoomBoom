@@ -8,7 +8,7 @@
 
 import UIKit
 import RangeSeekSlider
-import iOSDropDown
+import SearchTextField
 
 class SearchVC: UIViewController {
 
@@ -27,8 +27,9 @@ class SearchVC: UIViewController {
     @IBOutlet weak var heightLbl: UILabel!
     @IBOutlet weak var ageRange: RangeSeekSlider!
     @IBOutlet weak var ageLbl: UILabel!
-    @IBOutlet weak var countryField: DropDown!
-    @IBOutlet weak var cityField: DropDown!
+    
+    @IBOutlet weak var countryField: SearchTextField!
+    @IBOutlet weak var cityField: SearchTextField!
     
     var minAge:Int?
     var maxAge:Int?
@@ -94,15 +95,13 @@ class SearchVC: UIViewController {
         cityField.layer.borderWidth = 1
         cityField.layer.cornerRadius = 5
         cityField.layer.borderColor = UIColor.white.cgColor
-        countryField.optionArray = ["Uzbekistan", "Russia", "USA", "Germany"]
-        cityField.optionArray = ["Tashkent", "Moscow", "New York"]
-        //        cityField.didSelect{(selectedText , index ,id) in
-        //            self.cityField.text = "\(selectedText) \n index: \(index)"
-        //        }
-        self.countryField.inputView = UIView()
-        self.countryField.inputAccessoryView = UIView()
-        self.cityField.inputView = UIView()
-        self.cityField.inputAccessoryView = UIView()
+        countryField.filterStrings(["Uzbekistan", "Russia", "USA", "Germany"])
+        cityField.filterStrings(["Tashkent", "Moscow", "New York"])
+        
+//        self.countryField.inputView = UIView()
+//        self.countryField.inputAccessoryView = UIView()
+//        self.cityField.inputView = UIView()
+//        self.cityField.inputAccessoryView = UIView()
     }
     
     @objc func search () {

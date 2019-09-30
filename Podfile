@@ -13,7 +13,7 @@ target 'BoomBoom' do
   pod 'PeekPop', '~> 1.0'
   pod 'Firebase/Analytics'
   pod 'MessageKit', '~>3.0.0-swift5'
-  pod 'iOSDropDown'
+  pod "SearchTextField"
   
   target 'BoomBoomTests' do
     inherit! :search_paths

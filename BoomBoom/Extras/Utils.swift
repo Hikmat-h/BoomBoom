@@ -110,6 +110,34 @@ class Utils {
     static let current = Utils()
     private init(){}
     
+    func getStringErrorByCode(code: String) -> String {
+        var stringError = ""
+        
+        switch code {
+        case "100":
+            stringError = "Пользователь уже зарегистрирован"
+        case "101":
+            stringError = "Пользователь не найден"
+        case "102":
+            stringError = "Не правильный код сброса пароля/почта"
+        case "104":
+            stringError = "Неправильный логин/пароль"
+        case "106":
+            stringError = "Аккаунт не найден"
+        case "107":
+            stringError = "Доступ к ребенку уже есть"
+        case "200":
+            stringError = "Нет доступа к ребенку"
+        case "301":
+            stringError = "Нет доступа к элементу"
+            
+        default:
+            stringError = code
+        }
+        
+        return stringError
+    }
+    
     func setButtonStyle(btn: UIButton, cornerRadius: Int = 30) -> UIButton {
         btn.layer.borderWidth = 2
         btn.layer.borderColor = #colorLiteral(red: 0.8980392157, green: 0.1019607843, blue: 0.2941176471, alpha: 1)

@@ -16,7 +16,7 @@ public class Constants {
     }
     
     public class HTTP {
-        static let PATH_URL = "https://baby-tracker.ru/babyapi/"
+        static let PATH_URL = "http://46.183.163.124:8080"
     }
     
     public class MESSAGE {
@@ -36,7 +36,6 @@ public class Constants {
         static let REG_TO_REG_DETAIL = "regToRegDetail"
         static let REG_TO_SMS = "regToSms"
         static let SMS_TO_REG_DETAIL = "smsToRegDetail"
-        static let AUTH_TO_MAIN = "authToMain"
     }
     
     public class NAME_CELL {

@@ -45,7 +45,6 @@ class RegistrationDetailVC: UIViewController, UITextFieldDelegate {
     //country and city objects
     var countryListModel = CountryListAnswerModel()
     var cityListModel = CityListAnswerModel()
-    var test = NSMutableArray()
     var countryID: Int = -1
     var cityID:Int = -1
     var language:String?
@@ -130,6 +129,7 @@ class RegistrationDetailVC: UIViewController, UITextFieldDelegate {
         
     }
 
+    //MARK: - textfield delegates
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == country {
             city.isEnabled = false
@@ -207,6 +207,8 @@ class RegistrationDetailVC: UIViewController, UITextFieldDelegate {
             self.languageField.text = "russian"
             self.language = "ru"
         }))
+        //setLanguage
+        UserDefaults.standard.setValue(language, forKey: "language")
         self.present(alert, animated: true, completion: nil)
     }
     

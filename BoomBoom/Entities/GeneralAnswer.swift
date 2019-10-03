@@ -31,7 +31,34 @@ struct GenderModel: Codable {
     let title: String
 }
 
+struct HairModel: Codable {
+    let id: Int
+    let title: String
+}
+
+struct VerificationModel: Codable {
+    let id: Int
+    let pathURL: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case pathURL = "pathUrl"
+    }
+}
+
+
+struct SexualOrientationModel: Codable {
+    let id: Int
+    let title: String
+}
+
 typealias GenderListAnswer = [GenderModel]
+
+typealias HairListAnswer = [HairModel]
+
+typealias BodyTypeListAnswer = [BodyType]
+
+typealias OrientationListAnswer = [SexualOrientationModel]
 
 typealias CityListAnswerModel = [City]
 
@@ -39,21 +66,24 @@ typealias CountryListAnswerModel = [Country]
 
 
 
-// MARK: - EditUserInfo
+// MARK: - EditUserInfo  all info about user
 struct EditUserInfo: Codable {
     let id: Int
     let name, dateBirth: String
     let countries: Country
     let cities: City
     let information: String
-    let sexualOrientation, bodyType, sex: BodyType
+    let sexualOrientation: SexualOrientationModel
+    let bodyType: BodyType
+    let sex: GenderModel
     let weight, height, breastSize: Int
     let pdSponsorship, pdSpendEvening, pdPeriodicMeetings, pdTravels: Bool
     let pdFriendshipCommunication: Bool
     let hobby, favoritePlacesCity, visitedCountries, countriesWantVisit: String
     let photos: [Photo]
     let email, phone: String
-    let hairColor, verification: BodyType
+    let hairColor: HairModel
+    let verification: BodyType
 }
 
 // MARK: - BodyType

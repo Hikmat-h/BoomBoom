@@ -40,12 +40,38 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     @IBOutlet weak var orientationLbl: UILabel!
     @IBOutlet weak var aboutTextView: UITextView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var boobSizeViewHeight: NSLayoutConstraint!
+    
+    var loadingView: UIView = UIView()
+    var spinner = UIActivityIndicatorView(style: .whiteLarge)
+    
+    let token:String = UserDefaults.standard.value(forKey: "token") as! String
+    let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
+//    let token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2OCIsImlhdCI6MTU2OTk0MTA4OSwiZXhwIjoxNTcwODA1MDg5fQ.1Yt8sY90vdyJOhNz6BIP2vOrAEBG0HYSy4bqH9DBr0osSOKB45YwHT1drVlFu_mbTlAtQBmj2RrC_IkRkkfdwQ"
+    
+    var userInformation: EditUserInfo?
+    var photos:[Photo] = []
+    let baseUrl = Constants.HTTP.PATH_URL
+    
+    var bodyTypeList:[BodyType] = []
+    var genderList:[GenderModel] = []
+    var orientationList:[SexualOrientationModel] = []
+    var hairColorList:[HairModel] = []
+    
+    //chosen IDs
+    var bodyTypeID:Int = -1
+    var orientationID:Int = -1
+    var hairID:Int = -1
     
     var cellWidth: CGFloat?
     let placeHolderColor = #colorLiteral(red: 0.5490196078, green: 0.5254901961, blue: 0.5254901961, alpha: 1)
     var aim:[String] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //nav bar
+        let button = UIBarButtonItem(image: UIImage(named: "tick"), style: .plain, target: self, action: #selector(onSave))
+        self.navigationItem.rightBarButtonItem = button
         
         //collection view
         collectionView.delegate = self
@@ -72,7 +98,19 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         interestedCountriesTextView.text = "В каких странах хотели бы побывать"
         interestedCountriesTextView.textColor = .darkGray
         interestedCountriesTextView.delegate = self
-        //---
+        
+        //--- call api methods to get lists. 1 time is enough
+        showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        getBodyType(token: token, lang: language)
+        getHairColor(token: token, lang: language)
+        getOrientation(token: token, lang: language)
+        
+        //aim
+        sponsorS.isOn = userInformation?.pdSponsorship ?? false
+        nightS.isOn = userInformation?.pdSpendEvening ?? false
+        travelS.isOn = userInformation?.pdTravels ?? false
+        datingS.isOn = userInformation?.pdPeriodicMeetings ?? false
+        friendshipS.isOn = userInformation?.pdFriendshipCommunication ?? false
         
         //tap gestures
         let orGesRec = UITapGestureRecognizer(target: self, action: #selector(onOrientation))
@@ -101,23 +139,134 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     override func viewWillAppear(_ animated: Bool) {
         //nav bar
         self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1725490196, alpha: 1)
+        getUserInfo(token: token, lang: language)
+        //set aim textView texts
+        onOk(self)
     }
     
-    //alert methods
+    func updateInfoData () {
+        //put fresh data
+        self.photos = userInformation?.photos ?? []
+        self.collectionView.reloadData()
+        if !userInformation!.information.isEmpty {
+            aboutTextView.textColor = .white
+            aboutTextView.text = "\(userInformation?.information ?? "")"
+        }
+        self.orientationLbl.text = "\(userInformation?.sexualOrientation.title ?? "")"
+        if ((userInformation?.weight) != nil) {
+            weightLbl.text = "\(userInformation?.weight ?? 0)"
+        }
+        if ((userInformation?.height) != nil) {
+            heightLbl.text = "\(userInformation?.height ?? 0)"
+        }
+        self.bodyTypelbl.text = "\(userInformation?.bodyType.title ?? "")"
+        if userInformation?.sex.id == 2 {
+            boobSizeViewHeight.constant = 44
+            boobSizeView.layoutIfNeeded()
+            boobSize.text = "\(userInformation?.breastSize ?? 0)"
+        } else {
+            boobSizeViewHeight.constant = 0
+            boobSizeView.layoutIfNeeded()
+        }
+        self.hairColorlbl.text = userInformation?.hairColor.title
+        if !userInformation!.hobby.isEmpty {
+            interestsTextView.textColor = .white
+            interestsTextView.text = userInformation?.hobby
+        }
+        if !userInformation!.favoritePlacesCity.isEmpty {
+            favPlacesTextView.textColor = .white
+            favPlacesTextView.text = userInformation?.favoritePlacesCity
+        }
+        if !userInformation!.visitedCountries.isEmpty {
+            visitedCountriesTextView.textColor = .white
+            visitedCountriesTextView.text = userInformation?.visitedCountries
+        }
+        if !userInformation!.countriesWantVisit.isEmpty {
+            interestedCountriesTextView.textColor = .white
+            interestedCountriesTextView.text = userInformation?.countriesWantVisit
+        }
+    }
+    @objc func onSave() {
+        saveChanges(token: token, lang: language)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    //MARK: - API calls
+    func getBodyType(token:String, lang:String) {
+        UserDetailsSerice.current.getBodyType(token: token, lang: lang) { (model, error) in
+            if(error == nil) {
+                self.bodyTypeList = model ?? []
+            } else {
+                DispatchQueue.main.async {
+                    self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            }
+        }
+    }
+    
+    func getHairColor(token:String, lang:String) {
+        UserDetailsSerice.current.getHairColor(token: token, lang: lang) { (model, error) in
+            if(error == nil) {
+                self.hairColorList = model ?? []
+            } else {
+                DispatchQueue.main.async {
+                    self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            }
+        }
+    }
+    
+    func getOrientation(token:String, lang:String) {
+        UserDetailsSerice.current.getOrientation(token: token, lang: lang) { (model, error) in
+            DispatchQueue.main.async {
+                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+            }
+            if(error == nil) {
+                self.orientationList = model ?? []
+            } else {
+                self.showErrorWindow(errorMessage: error?.domain ?? "")
+            }
+        }
+    }
+    
+    func saveChanges(token:String, lang:String) {
+        UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: bodyTypeID, sexId: userInformation?.sex.id ?? 0, sexualOrientation: orientationID, countryId: userInformation?.countries.countryID ?? 0, cityId: userInformation?.cities.cityID ?? 0, name: userInformation?.name ?? "", dateBirth: userInformation?.dateBirth ?? "", information: aboutTextView.text, weight: Int(weightLbl.text ?? "") ?? 0, height: Int(heightLbl.text ?? "") ?? 0, breastSize: Int(boobSize.text ?? ""), pdSponsorship: sponsorS.isOn, pdSpendEvening: nightS.isOn, pdPeriodicMeetings: datingS.isOn, pdTravels: travelS.isOn, pdFriendshipCommunication: friendshipS.isOn, hobby: interestsTextView.text, favoritePlacesCity: favPlacesTextView.text, visitedCountries: interestedCountriesTextView.text, countriesWantVisit: interestedCountriesTextView.text, hairColorId: hairID) { (model, error) in
+            if (error != nil) {
+                DispatchQueue.main.async {
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            }
+        }
+    }
+    
+    // to get updated  info
+    func getUserInfo(token:String, lang:String) {
+        self.showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        UserDetailsSerice.current.getProfileDetails(token: token, lang: "en") { (userInfoModel, error) in
+            DispatchQueue.main.async {
+                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                if (error == nil) {
+                    self.userInformation = userInfoModel
+                    self.updateInfoData()
+                } else {
+                    self.showErrorWindow(errorMessage: error!.domain)
+                }
+            }
+        }
+    }
+    
+    //MARK: - presented alerts when fields are selected
     @objc func onOrientation() {
         let alert = UIAlertController(title: "", message: "Ориентация", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "гетеросексуализм", style: .default, handler: {
-            (action) -> Void in
-            self.orientationLbl.text = "гетеросексуализм"
-        }))
-        alert.addAction(UIAlertAction(title: "гомосексуализм", style: .default, handler: {
-            (action) -> Void in
-            self.orientationLbl.text = "гомосексуализм"
-        }))
-        alert.addAction(UIAlertAction(title: "бисексуальность", style: .default, handler: {
-            (action) -> Void in
-            self.orientationLbl.text = "бисексуальность"
-        }))
+        for orient in orientationList {
+            alert.addAction(UIAlertAction(title: orient.title, style: .default, handler: {
+                (action) -> Void in
+                self.orientationID = orient.id
+                self.orientationLbl.text = orient.title
+            }))
+        }
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -129,7 +278,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
             textField.placeholder = "0 - 230 кг."
             textField.keyboardType = UIKeyboardType.numberPad
         })
-        alert.addAction(UIAlertAction(title: "ok", style: .default, handler: {
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: {
             (action) in
             let weight = Int(alert.textFields?[0].text ?? "0") ?? 0
             if weight>=0 && weight<=230 {
@@ -160,22 +309,13 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
     @objc func onBodyType() {
         let alert = UIAlertController(title: "", message: "Телосложение", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "худощавое", style: .default, handler: {
-            (action) -> Void in
-            self.bodyTypelbl.text = "худощавое"
-        }))
-        alert.addAction(UIAlertAction(title: "обычное", style: .default, handler: {
-            (action) -> Void in
-            self.bodyTypelbl.text = "обычное"
-        }))
-        alert.addAction(UIAlertAction(title: "спортивное", style: .default, handler: {
-            (action) -> Void in
-            self.bodyTypelbl.text = "спортивное"
-        }))
-        alert.addAction(UIAlertAction(title: "плотное", style: .default, handler: {
-            (action) -> Void in
-            self.bodyTypelbl.text = "плотное"
-        }))
+        for body in bodyTypeList {
+            alert.addAction(UIAlertAction(title: body.title, style: .default, handler: {
+                (action) -> Void in
+                self.bodyTypeID = body.id
+                self.bodyTypelbl.text = body.title
+            }))
+        }
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -187,11 +327,11 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
             textField.placeholder = "1 - 6"
             textField.keyboardType = UIKeyboardType.numberPad
         })
-        alert.addAction(UIAlertAction(title: "ok", style: .default, handler: {
+        alert.addAction(UIAlertAction(title: "Oк", style: .default, handler: {
             (action) in
-            let height = Int(alert.textFields?[0].text ?? "0") ?? 0
-            if height>=1 && height<=6 {
-                self.boobSize.text = "\(alert.textFields?[0].text ?? "")"
+            let size = Int(alert.textFields?[0].text ?? "0") ?? 0
+            if size>=1 && size<=6 {
+                self.boobSize.text = "\(size)"
             }
         }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
@@ -200,77 +340,64 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
     @objc func onHairColor() {
         let alert = UIAlertController(title: "", message: "Цвет волос", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "блондинка(ин)", style: .default, handler: {
-            (action) -> Void in
-            self.hairColorlbl.text = "блондинка(ин)"
-        }))
-        alert.addAction(UIAlertAction(title: "брюнетка(нет)", style: .default, handler: {
-            (action) -> Void in
-            self.hairColorlbl.text = "брюнетка(нет)"
-        }))
-        alert.addAction(UIAlertAction(title: "шатенка(ен)", style: .default, handler: {
-            (action) -> Void in
-            self.hairColorlbl.text = "шатенка(ен)"
-        }))
-        alert.addAction(UIAlertAction(title: "рыжая(ый)", style: .default, handler: {
-            (action) -> Void in
-            self.hairColorlbl.text = "рыжая(ый)"
-        })) //русая(ый)
-        alert.addAction(UIAlertAction(title: "русая(ый)", style: .default, handler: {
-            (action) -> Void in
-            self.hairColorlbl.text = "русая(ый)"
-        }))
+        for hair in hairColorList {
+            alert.addAction(UIAlertAction(title: hair.title, style: .default, handler: {
+                (action) -> Void in
+                self.hairID = hair.id
+                self.hairColorlbl.text = hair.title
+            }))
+        }
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
-    //aim Button Actions
+    //presented view button actions
     @IBAction func onCancel(_ sender: Any) {
         UIView.transition(with: backgroundView, duration: 0.3, options: .transitionCrossDissolve, animations: {
             self.backgroundView.alpha = 0
         }, completion: nil)
     }
     
+    //aim ok button pressed
     @IBAction func onOk(_ sender: Any) {
         aimTextView.text = "Цель знакомства: "
-        aimTextView.text = aimTextView.text! + (sponsorS.isOn ? aim[0] : "")
-        aimTextView.text = aimTextView.text! + (nightS.isOn ? (", " + aim[1]) : "")
-        aimTextView.text = aimTextView.text! + (datingS.isOn ? (", " + aim[2]) : "")
-        aimTextView.text = aimTextView.text! + (travelS.isOn ? (", " + aim[3]) : "")
-        aimTextView.text = aimTextView.text! + (friendshipS.isOn ? (", " + aim[4]) : "")
+        aimTextView.text = aimTextView.text! + (sponsorS.isOn ? aim[0] : "") + " \u{2022} "
+        aimTextView.text = aimTextView.text! + (nightS.isOn ? (aim[1]) : "") + " \u{2022} "
+        aimTextView.text = aimTextView.text! + (datingS.isOn ? (aim[2]) : "") + " \u{2022} "
+        aimTextView.text = aimTextView.text! + (travelS.isOn ? (aim[3]) : "") + " \u{2022} "
+        aimTextView.text = aimTextView.text! + (friendshipS.isOn ? (aim[4]) : "") + " \u{2022} "
         
         UIView.transition(with: backgroundView, duration: 0.3, options: .transitionCrossDissolve, animations: {
             self.backgroundView.alpha = 0
         }, completion: nil)
     }
-    //------
     
+    //aim Button Actions. Presents view with animation
     @objc func onAim() {
         UIView.transition(with: backgroundView, duration: 0.3, options: .transitionCrossDissolve, animations: {
             self.backgroundView.alpha = 1
         }, completion: nil)
     }
-    //-------
     
-    //photo collectionView
+    //MARK: - photo collection view data source
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
+        12
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "editPhotoCell", for: indexPath) as! PhotoCollectionCell
-        if(indexPath.row == 0) {
-            cell.photoView.image = UIImage(named: "test6")
+        if(indexPath.row < photos.count) {
+            let url = baseUrl + "/" + photos[indexPath.row].pathURLPreview
+            cell.photoView?.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named: "plusImg"))
         } else {
             cell.photoView.image = UIImage(named: "plusImg")
         }
         return cell
     }
-    //------
     
     //size of cells
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -287,7 +414,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     }
     //----
     
-    //textView placeholder imitation
+    //MARK: - textField delegates for imitating placeholder
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.darkGray {
             textView.text = nil
@@ -314,7 +441,15 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         }
     }
     
+    //when going to main edit view controller
     @IBAction func onMain(_ sender: Any) {
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showMainEditVC" {
+            let vc = segue.destination as? MainEditVC
+            vc?.userInfo = userInformation!
+        }
     }
     
 }

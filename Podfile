@@ -14,6 +14,7 @@ target 'BoomBoom' do
   pod 'Firebase/Analytics'
   pod 'MessageKit', '~>3.0.0-swift5'
   pod "SearchTextField"
+  pod 'SDWebImage', '~> 5.0'
   
   target 'BoomBoomTests' do
     inherit! :search_paths

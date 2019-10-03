@@ -10,6 +10,8 @@ import UIKit
 
 class VerificationCell: UITableViewCell {
 
+    @IBOutlet weak var photoView: UIImageView!
+    @IBOutlet weak var titleTextView: UITextView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -21,9 +23,9 @@ class VerificationCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0))
-    }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//
+//        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0))
+//    }
 }

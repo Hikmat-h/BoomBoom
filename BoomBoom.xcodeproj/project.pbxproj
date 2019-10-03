@@ -57,6 +57,10 @@
 		9E8C2EF823297A450004B5A2 /* ChatListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8C2EF723297A450004B5A2 /* ChatListCell.swift */; };
 		9E8C2EFC232986E10004B5A2 /* StarredChatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8C2EFB232986E10004B5A2 /* StarredChatsCell.swift */; };
 		9E8C2F00232988B40004B5A2 /* StarredChatsCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8C2EFF232988B40004B5A2 /* StarredChatsCollectionVC.swift */; };
+		9E90727023435B670074EE43 /* UserProfilePhotosCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E90726F23435B670074EE43 /* UserProfilePhotosCell.swift */; };
+		9E98061D2343549A00118E3C /* ProfilePhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98061C2343549A00118E3C /* ProfilePhotoCell.swift */; };
+		9E98061F234354F000118E3C /* ProfileActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98061E234354F000118E3C /* ProfileActionCell.swift */; };
+		9E9806242343552000118E3C /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9806232343552000118E3C /* ProfileInfoCell.swift */; };
 		9EAD7891232611DF00BFFAE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD7890232611DF00BFFAE7 /* AppDelegate.swift */; };
 		9EAD7896232611DF00BFFAE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EAD7894232611DF00BFFAE7 /* Main.storyboard */; };
 		9EAD7899232611DF00BFFAE7 /* BoomBoom.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD7897232611DF00BFFAE7 /* BoomBoom.xcdatamodeld */; };
@@ -163,6 +167,10 @@
 		9E8C9AB7232E680200B906C3 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		9E8C9AB8232E680200B906C3 /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
 		9E8C9AB9232E680200B906C3 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
+		9E90726F23435B670074EE43 /* UserProfilePhotosCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfilePhotosCell.swift; sourceTree = "<group>"; };
+		9E98061C2343549A00118E3C /* ProfilePhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoCell.swift; sourceTree = "<group>"; };
+		9E98061E234354F000118E3C /* ProfileActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionCell.swift; sourceTree = "<group>"; };
+		9E9806232343552000118E3C /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
 		9EAD788D232611DF00BFFAE7 /* BoomBoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoomBoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EAD7890232611DF00BFFAE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9EAD7895232611DF00BFFAE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -279,7 +287,11 @@
 		9E29CDA82336359200AB7D0A /* profile */ = {
 			isa = PBXGroup;
 			children = (
-				9E29CDAC2336360500AB7D0A /* BLockedUsersCell.swift */,
+				9E7B5B00232A3F480063A676 /* profilePhotosCell */,
+				9E98061C2343549A00118E3C /* ProfilePhotoCell.swift */,
+				9E98061E234354F000118E3C /* ProfileActionCell.swift */,
+				9E9806232343552000118E3C /* ProfileInfoCell.swift */,
+				9E90726F23435B670074EE43 /* UserProfilePhotosCell.swift */,
 			);
 			path = profile;
 			sourceTree = "<group>";
@@ -382,6 +394,14 @@
 				9E8C9AB8232E680200B906C3 /* RobotoCondensed-BoldItalic.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		9E98061B2343544D00118E3C /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				9E29CDAC2336360500AB7D0A /* BLockedUsersCell.swift */,
+			);
+			path = settings;
 			sourceTree = "<group>";
 		};
 		9EAD7884232611DE00BFFAE7 = {
@@ -494,11 +514,11 @@
 		9EAD78C823261ACD00BFFAE7 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				9E98061B2343544D00118E3C /* settings */,
 				9E29CDA82336359200AB7D0A /* profile */,
 				9EF6BDF923339F0700311A99 /* ProfileEditCells */,
 				9EF6BDF0233374FC00311A99 /* LikePageCell */,
 				9EE599F3232A894200AB56EF /* NewsCell */,
-				9E7B5B00232A3F480063A676 /* profilePhotosCell */,
 				9E8C2EF623297A250004B5A2 /* ChatListCell */,
 				9E7B0A8B232928580082539F /* PersonalNewsCell */,
 			);
@@ -907,6 +927,7 @@
 				9EDF1FF9233B6C9400AE7DD5 /* FirstVC.swift in Sources */,
 				9E7B0A8A232926050082539F /* ProfileVC.swift in Sources */,
 				9E731021233E234100A19423 /* UserDetailsService.swift in Sources */,
+				9E9806242343552000118E3C /* ProfileInfoCell.swift in Sources */,
 				9E06C23B2330BEF0007F0E86 /* PreviewVC.swift in Sources */,
 				9EC6EE8223311654000F7F9E /* Message.swift in Sources */,
 				9E7B5B02232A3F7F0063A676 /* ProfilePhotosCell.swift in Sources */,
@@ -922,6 +943,7 @@
 				9EF6BDF823337CC100311A99 /* VerificationCell.swift in Sources */,
 				9EDF1FFE233B823B00AE7DD5 /* GeneralAnswer.swift in Sources */,
 				9EC4F6712328F19900179C2E /* RegistrationDetailVC.swift in Sources */,
+				9E98061F234354F000118E3C /* ProfileActionCell.swift in Sources */,
 				9E29CD9D233628AD00AB7D0A /* AccountSettings.swift in Sources */,
 				9EF6BDFF2333A15700311A99 /* EditProfileVC.swift in Sources */,
 				9EAD78D523261CAE00BFFAE7 /* Utils.swift in Sources */,
@@ -929,7 +951,9 @@
 				9EAD78D023261C5F00BFFAE7 /* ActionResultDelegate.swift in Sources */,
 				9E8C2F00232988B40004B5A2 /* StarredChatsCollectionVC.swift in Sources */,
 				9E29CDA12336290900AB7D0A /* HelpVC.swift in Sources */,
+				9E98061D2343549A00118E3C /* ProfilePhotoCell.swift in Sources */,
 				9E7B0A8D232928880082539F /* NewsCell.swift in Sources */,
+				9E90727023435B670074EE43 /* UserProfilePhotosCell.swift in Sources */,
 				9EAD7891232611DF00BFFAE7 /* AppDelegate.swift in Sources */,
 				9EF6BDF62333756B00311A99 /* ActionsCell.swift in Sources */,
 				9E7B0A84232925930082539F /* ChatVC.swift in Sources */,

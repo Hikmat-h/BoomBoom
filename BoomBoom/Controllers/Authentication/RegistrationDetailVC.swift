@@ -33,7 +33,7 @@ class RegistrationDetailVC: UIViewController, UITextFieldDelegate {
     var loadingView: UIView = UIView()
     var spinner = UIActivityIndicatorView(style: .whiteLarge)
     
-    let token = UserDefaults.standard.value(forKey: "token") as! String
+    var token = UserDefaults.standard.value(forKey: "token") as! String
     
     //birthdate picker
     let datePicker = UIDatePicker()
@@ -276,7 +276,9 @@ class RegistrationDetailVC: UIViewController, UITextFieldDelegate {
         UserDetailsSerice.current.createBasicProfileData(token: token, lang: lang, sexId: sexID, email: email, phone: phone, countryId: countryID, cityId: cityID, name: name, dateBirth: dateBirth) { (userInfo, error) in
             self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
             if error == nil {
+                UserDefaults.standard.set(true, forKey: "auth")
                 self.performSegue(withIdentifier: "showMain", sender: self)
+                self.setNewRootController(nameController: "MainVC")
             } else {
                 self.showErrorWindow(errorMessage: error?.domain ?? "")
             }

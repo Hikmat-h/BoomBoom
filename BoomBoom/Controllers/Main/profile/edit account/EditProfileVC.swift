@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import IGRPhotoTweaks
 
 class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate {
 
@@ -139,6 +140,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     override func viewWillAppear(_ animated: Bool) {
         //nav bar
         self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1725490196, alpha: 1)
+        boobSizeView.isHidden = true
         getUserInfo(token: token, lang: language)
         //set aim textView texts
         onOk(self)
@@ -162,9 +164,11 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         self.bodyTypelbl.text = "\(userInformation?.bodyType.title ?? "")"
         if userInformation?.sex.id == 2 {
             boobSizeViewHeight.constant = 44
+            boobSizeView.isHidden = false
             boobSizeView.layoutIfNeeded()
             boobSize.text = "\(userInformation?.breastSize ?? 0)"
         } else {
+            boobSizeView.isHidden = true
             boobSizeViewHeight.constant = 0
             boobSizeView.layoutIfNeeded()
         }
@@ -188,7 +192,6 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     }
     @objc func onSave() {
         saveChanges(token: token, lang: language)
-        self.navigationController?.popViewController(animated: true)
     }
     
     //MARK: - API calls
@@ -222,20 +225,27 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         UserDetailsSerice.current.getOrientation(token: token, lang: lang) { (model, error) in
             DispatchQueue.main.async {
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
-            }
-            if(error == nil) {
-                self.orientationList = model ?? []
-            } else {
-                self.showErrorWindow(errorMessage: error?.domain ?? "")
+                if(error == nil) {
+                    self.orientationList = model ?? []
+                } else {
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
             }
         }
     }
     
     func saveChanges(token:String, lang:String) {
+        showActivityIndicator(loadingView: loadingView, spinner: spinner)
         UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: bodyTypeID, sexId: userInformation?.sex.id ?? 0, sexualOrientation: orientationID, countryId: userInformation?.countries.countryID ?? 0, cityId: userInformation?.cities.cityID ?? 0, name: userInformation?.name ?? "", dateBirth: userInformation?.dateBirth ?? "", information: aboutTextView.text, weight: Int(weightLbl.text ?? "") ?? 0, height: Int(heightLbl.text ?? "") ?? 0, breastSize: Int(boobSize.text ?? ""), pdSponsorship: sponsorS.isOn, pdSpendEvening: nightS.isOn, pdPeriodicMeetings: datingS.isOn, pdTravels: travelS.isOn, pdFriendshipCommunication: friendshipS.isOn, hobby: interestsTextView.text, favoritePlacesCity: favPlacesTextView.text, visitedCountries: interestedCountriesTextView.text, countriesWantVisit: interestedCountriesTextView.text, hairColorId: hairID) { (model, error) in
             if (error != nil) {
                 DispatchQueue.main.async {
+                    self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                    self.navigationController?.popViewController(animated: true)
                 }
             }
         }
@@ -449,6 +459,12 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         if segue.identifier == "showMainEditVC" {
             let vc = segue.destination as? MainEditVC
             vc?.userInfo = userInformation!
+        } else if segue.identifier == "showEdit" {
+
+            let vc = segue.destination as! PhotoEditVC
+            let cell = sender as? PhotoCollectionCell
+            vc.image = cell?.photoView.image
+            vc.delegate = self as? IGRPhotoTweakViewControllerDelegate
         }
     }
     

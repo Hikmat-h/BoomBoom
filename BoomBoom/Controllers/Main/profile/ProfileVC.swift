@@ -16,9 +16,9 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var loadingView: UIView = UIView()
     var spinner = UIActivityIndicatorView(style: .whiteLarge)
     
-    //let token:String = UserDefaults.standard.value(forKey: "token") as! String
-    //let language:String = UserDefaults.standard.value(forKey: "language") as! String
-    let token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2OCIsImlhdCI6MTU2OTk0MTA4OSwiZXhwIjoxNTcwODA1MDg5fQ.1Yt8sY90vdyJOhNz6BIP2vOrAEBG0HYSy4bqH9DBr0osSOKB45YwHT1drVlFu_mbTlAtQBmj2RrC_IkRkkfdwQ"
+    var token:String = UserDefaults.standard.value(forKey: "token") as! String
+    let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
+//    let token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2OCIsImlhdCI6MTU2OTk0MTA4OSwiZXhwIjoxNTcwODA1MDg5fQ.1Yt8sY90vdyJOhNz6BIP2vOrAEBG0HYSy4bqH9DBr0osSOKB45YwHT1drVlFu_mbTlAtQBmj2RrC_IkRkkfdwQ"
     let baseURL = Constants.HTTP.PATH_URL
     
     var userInformation: EditUserInfo?
@@ -36,7 +36,6 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = .black
         navigationItem.hidesBackButton = true
-
         
         let downloader = SDWebImageDownloader.shared
         downloader.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -51,7 +50,7 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         infoTitleArray.removeAll()
         //nav bar
         self.navigationController?.navigationBar.barTintColor = .black
-        getUserInfo(token: token, lang: "en")
+        getUserInfo(token: token, lang: language)
     }
     
     // MARK: - main tableView dataSource
@@ -179,7 +178,7 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //MARK: - API request methods
     func getUserInfo(token:String, lang:String) {
         self.showActivityIndicator(loadingView: loadingView, spinner: spinner)
-        UserDetailsSerice.current.getProfileDetails(token: token, lang: "en") { (userInfoModel, error) in
+        UserDetailsSerice.current.getProfileDetails(token: token, lang: lang) { (userInfoModel, error) in
             DispatchQueue.main.async {
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if (error == nil) {

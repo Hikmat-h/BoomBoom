@@ -14,11 +14,11 @@ class FirstVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(UserDefaults.standard.value(forKey: "auth") as Any)
         if let isLoggedIn = UserDefaults.standard.value(forKey: "auth") as? Bool {
             if isLoggedIn {
                 performSegue(withIdentifier: "showMain", sender: self)
-                setNewRootController(nameController: "Main")
+                setNewRootController(nameController: "MainVC")
             } else {
                 performSegue(withIdentifier: "showAuth", sender: self)
                 setNewRootController(nameController: "AuthorizationVC")

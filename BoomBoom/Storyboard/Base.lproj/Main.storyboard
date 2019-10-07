@@ -1360,6 +1360,22 @@
             </objects>
             <point key="canvasLocation" x="4962.3188405797109" y="1903.7946428571427"/>
         </scene>
+        <!--Photo EditVC-->
+        <scene sceneID="vkN-ly-7Gd">
+            <objects>
+                <viewController id="BvQ-1r-s2o" customClass="PhotoEditVC" customModule="BoomBoom" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uEt-u8-6Yw">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="TDj-OA-0rI"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Y90-zz-4bC"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="N84-f2-ZUi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6134" y="2046"/>
+        </scene>
         <!--PreviewVC-->
         <scene sceneID="782-Ts-s1i">
             <objects>
@@ -2056,6 +2072,10 @@
                                                         </view>
                                                         <connections>
                                                             <outlet property="photoView" destination="TGb-gx-nzM" id="RMK-hz-kkh"/>
+                                                            <segue destination="BvQ-1r-s2o" kind="presentation" identifier="showEdit" id="hKS-Mp-SBX">
+                                                                <segue key="commit" inheritsFrom="parent" id="VhF-1W-SpZ"/>
+                                                                <segue key="preview" inheritsFrom="commit" id="8mI-tv-0Zj"/>
+                                                            </segue>
                                                         </connections>
                                                     </collectionViewCell>
                                                 </cells>
@@ -2263,20 +2283,20 @@
                                                     <constraint firstAttribute="bottom" secondItem="JLS-mj-t0g" secondAttribute="bottom" constant="1" id="p0i-uc-Rcc"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BfT-dJ-k21">
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BfT-dJ-k21">
                                                 <rect key="frame" x="0.0" y="467" width="414" height="44"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gqq-CF-jMt">
+                                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gqq-CF-jMt">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Размер груди:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcg-ff-SLz">
+                                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Размер груди:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcg-ff-SLz">
                                                                 <rect key="frame" x="16" y="11" width="115" height="20"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                                 <color key="textColor" red="0.87843137250000003" green="0.87843137250000003" blue="0.87843137250000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5k9-eW-e2b">
+                                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5k9-eW-e2b">
                                                                 <rect key="frame" x="139" y="11" width="267" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
@@ -6075,8 +6095,9 @@ Cg
     <inferredMetricsTieBreakers>
         <segue reference="4zp-Wt-GxQ"/>
         <segue reference="d66-of-T6v"/>
-        <segue reference="Lzu-fb-Hp6"/>
-        <segue reference="w6T-Xm-Baw"/>
+        <segue reference="zX7-Ah-oaO"/>
+        <segue reference="hKS-Mp-SBX"/>
+        <segue reference="bY8-Eo-37y"/>
         <segue reference="Cp5-CE-0Dx"/>
     </inferredMetricsTieBreakers>
 </document>

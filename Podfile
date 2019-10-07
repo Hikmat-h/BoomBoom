@@ -15,6 +15,8 @@ target 'BoomBoom' do
   pod 'MessageKit', '~>3.0.0-swift5'
   pod "SearchTextField"
   pod 'SDWebImage', '~> 5.0'
+  pod 'CropViewController'
+  pod 'IGRPhotoTweaks', '~> 1.0.0'
   
   target 'BoomBoomTests' do
     inherit! :search_paths

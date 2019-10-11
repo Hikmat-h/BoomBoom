@@ -218,4 +218,33 @@ class UserDetailsSerice {
             }
         }
     }
+    
+    func setPhoto(token:String, lang:String, image:UIImage, completion: @escaping (NSError?)->Void) {
+        let imgData = image.jpegData(compressionQuality: 0.5)!
+        if let url = URL(string: "\(pathURL)/user/photo/set") {
+        headers_urlencoded["Accept-Language"] = lang
+        headers_urlencoded["Authorization"] = "Bearer \(token)"
+            Alamofire.upload( multipartFormData: { (multiPartFormData) in
+                multiPartFormData.append(imgData, withName: "photo", fileName: "file.jpg", mimeType: "image/jpg")
+            }, to: url, headers: headers_urlencoded) { (result) in
+                switch result {
+                case .success(let upload, _, _):
+                    //progress block
+                    upload.uploadProgress(closure: { (progress) in
+                        print("Upload Progress: \(progress.fractionCompleted)")
+                    })
+                    
+                    //success block
+                    upload.responseJSON { response in
+                        print(response.result.value as Any)
+                        completion(nil)
+                    }
+
+                case .failure(let encodingError):
+                    print(encodingError)
+                    completion(encodingError as NSError)
+                }
+            }
+        }
+    }
 }

@@ -16,7 +16,9 @@ target 'BoomBoom' do
   pod "SearchTextField"
   pod 'SDWebImage', '~> 5.0'
   pod 'CropViewController'
-  pod 'IGRPhotoTweaks', '~> 1.0.0'
+  pod 'IGRPhotoTweaks'
+  pod 'HorizontalDial'
+
   
   target 'BoomBoomTests' do
     inherit! :search_paths

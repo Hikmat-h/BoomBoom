@@ -8,6 +8,7 @@
 
 import UIKit
 import IGRPhotoTweaks
+import CropViewController
 
 class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate {
 
@@ -402,9 +403,9 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "editPhotoCell", for: indexPath) as! PhotoCollectionCell
         if(indexPath.row < photos.count) {
             let url = baseUrl + "/" + photos[indexPath.row].pathURLPreview
-            cell.photoView?.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named: "plusImg"))
+            cell.collectionPhotoView.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named: "plusImg"))
         } else {
-            cell.photoView.image = UIImage(named: "plusImg")
+            cell.collectionPhotoView.image = UIImage(named: "plusImg")
         }
         return cell
     }
@@ -422,7 +423,16 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 14.0
     }
-    //----
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row >= photos.count{
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .photoLibrary
+            imagePicker.allowsEditing = false
+            imagePicker.delegate = self
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+    }
     
     //MARK: - textField delegates for imitating placeholder
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -459,13 +469,52 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         if segue.identifier == "showMainEditVC" {
             let vc = segue.destination as? MainEditVC
             vc?.userInfo = userInformation!
-        } else if segue.identifier == "showEdit" {
+        }
+//        } else if segue.identifier == "showEdit" {
+//
+//            let vc = segue.destination as! PhotoEditVC
+//            let cell = sender as? PhotoCollectionCell
+//            vc.image = cell?.photoView.image!
+//        }
+    }
+    
+}
 
-            let vc = segue.destination as! PhotoEditVC
-            let cell = sender as? PhotoCollectionCell
-            vc.image = cell?.photoView.image
-            vc.delegate = self as? IGRPhotoTweakViewControllerDelegate
+extension EditProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        print("woowowowowo")
+        guard let image = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage) else { return }
+        let cropViewController = CropViewController(image: image)
+        cropViewController.aspectRatioPickerButtonHidden = true
+        cropViewController.aspectRatioLockEnabled = true
+        cropViewController.customAspectRatio = CGSize(width: 3.0, height: 4.0)
+        cropViewController.resetAspectRatioEnabled = false
+        cropViewController.delegate = self
+        picker.dismiss(animated: true, completion: {
+            self.present(cropViewController, animated: true, completion: nil)
+        })
+    }
+}
+
+extension EditProfileVC: CropViewControllerDelegate {
+    func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
+        cropViewController.showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        UserDetailsSerice.current.setPhoto(token: token, lang: language, image: image) { (error) in
+            if error != nil {
+                DispatchQueue.main.async {
+                    cropViewController.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                    cropViewController.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            } else {
+                DispatchQueue.main.async {
+                    cropViewController.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                    cropViewController.dismiss(animated: true, completion: nil)
+                }
+            }
         }
     }
     
+    func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
+        cropViewController.dismiss(animated: true, completion: nil)
+    }
 }

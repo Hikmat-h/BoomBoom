@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="flV-JA-Njz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="flV-JA-Njz">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1363,18 +1363,103 @@
         <!--Photo EditVC-->
         <scene sceneID="vkN-ly-7Gd">
             <objects>
-                <viewController id="BvQ-1r-s2o" customClass="PhotoEditVC" customModule="BoomBoom" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="BvQ-1r-s2o" customClass="PhotoEditVC" customModule="BoomBoom" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uEt-u8-6Yw">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Usb-JY-WbQ" customClass="HorizontalDial" customModule="HorizontalDial">
+                                <rect key="frame" x="16" y="716" width="382" height="66"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="66" id="aL0-pE-utn"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="minimumValue">
+                                        <real key="value" value="-90"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="maximumValue">
+                                        <real key="value" value="90"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="value">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="tick">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="centerMarkColor">
+                                        <color key="value" red="0.89803921568627454" green="0.10196078431372549" blue="0.29411764705882354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="centerMarkWidth">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="centerMarkRadius">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="markColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="markWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="markCount">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="enableRange" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="verticalAlign" value="center"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="centerMarkHeightRatio">
+                                        <real key="value" value="0.80000000000000004"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="padding">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rBZ-mO-G0K">
+                                <rect key="frame" x="0.0" y="782" width="414" height="80"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NvY-fm-fko">
+                                        <rect key="frame" x="366" y="25" width="37" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Done"/>
+                                        <connections>
+                                            <action selector="onDone:" destination="BvQ-1r-s2o" eventType="touchUpInside" id="Gor-OL-EqD"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="whb-jm-4B0">
+                                        <rect key="frame" x="12" y="25" width="39" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Reset"/>
+                                        <connections>
+                                            <action selector="onReset:" destination="BvQ-1r-s2o" eventType="touchUpInside" id="mru-lM-yfH"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="FiP-BX-iWO"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Usb-JY-WbQ" firstAttribute="centerX" secondItem="TDj-OA-0rI" secondAttribute="centerX" id="1Ks-fu-IPc"/>
+                            <constraint firstItem="TDj-OA-0rI" firstAttribute="bottom" secondItem="rBZ-mO-G0K" secondAttribute="bottom" id="3NI-ZT-T1y"/>
+                            <constraint firstItem="rBZ-mO-G0K" firstAttribute="top" secondItem="Usb-JY-WbQ" secondAttribute="bottom" id="8ct-BL-9j6"/>
+                            <constraint firstItem="rBZ-mO-G0K" firstAttribute="leading" secondItem="TDj-OA-0rI" secondAttribute="leading" id="DAk-XF-SAp"/>
+                            <constraint firstItem="Usb-JY-WbQ" firstAttribute="leading" secondItem="TDj-OA-0rI" secondAttribute="leading" constant="16" id="Lc0-Sf-PVq"/>
+                            <constraint firstItem="rBZ-mO-G0K" firstAttribute="centerX" secondItem="TDj-OA-0rI" secondAttribute="centerX" id="UFn-k0-72Y"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="TDj-OA-0rI"/>
                     </view>
                     <navigationItem key="navigationItem" id="Y90-zz-4bC"/>
+                    <connections>
+                        <outlet property="horizontalDial" destination="Usb-JY-WbQ" id="AoZ-5c-YZj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N84-f2-ZUi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6134" y="2046"/>
+            <point key="canvasLocation" x="6133.3333333333339" y="2045.7589285714284"/>
         </scene>
         <!--PreviewVC-->
         <scene sceneID="782-Ts-s1i">
@@ -2005,8 +2090,8 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
-                                            <outlet property="photoView" destination="0Xn-0l-h4f" id="MG2-ct-KC9"/>
                                             <outlet property="titleTextView" destination="nYy-Pf-Kjk" id="pr1-ql-1Om"/>
+                                            <outlet property="verifPhotoView" destination="0Xn-0l-h4f" id="UXK-br-UjT"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -2071,11 +2156,7 @@
                                                             </subviews>
                                                         </view>
                                                         <connections>
-                                                            <outlet property="photoView" destination="TGb-gx-nzM" id="RMK-hz-kkh"/>
-                                                            <segue destination="BvQ-1r-s2o" kind="presentation" identifier="showEdit" id="hKS-Mp-SBX">
-                                                                <segue key="commit" inheritsFrom="parent" id="VhF-1W-SpZ"/>
-                                                                <segue key="preview" inheritsFrom="commit" id="8mI-tv-0Zj"/>
-                                                            </segue>
+                                                            <outlet property="collectionPhotoView" destination="TGb-gx-nzM" id="ZeE-q1-RUS"/>
                                                         </connections>
                                                     </collectionViewCell>
                                                 </cells>
@@ -3895,7 +3976,7 @@ Cg
 </string>
                                         <attributes>
                                             <color key="NSColor" red="0.8784313725490196" green="0.8784313725490196" blue="0.8784313725490196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" metaFont="system" size="14"/>
+                                            <font key="NSFont" metaFont="menu" size="14"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -6096,7 +6177,6 @@ Cg
         <segue reference="4zp-Wt-GxQ"/>
         <segue reference="d66-of-T6v"/>
         <segue reference="zX7-Ah-oaO"/>
-        <segue reference="hKS-Mp-SBX"/>
         <segue reference="bY8-Eo-37y"/>
         <segue reference="Cp5-CE-0Dx"/>
     </inferredMetricsTieBreakers>

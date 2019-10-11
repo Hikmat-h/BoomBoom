@@ -7,32 +7,57 @@
 //
 
 import UIKit
+import CropViewController
+import HorizontalDial
 import IGRPhotoTweaks
-class PhotoEditVC: IGRPhotoTweakViewController, IGRPhotoTweakViewControllerDelegate {
-//    func photoTweaksController(_ controller: IGRPhotoTweakViewController, didFinishWithCroppedImage croppedImage: UIImage) {
-//        <#code#>
-//    }
-//
-//    func photoTweaksControllerDidCancel(_ controller: IGRPhotoTweakViewController) {
-//        <#code#>
-//    }
+
+class PhotoEditVC: IGRPhotoTweakViewController {
     
+    @IBOutlet weak var horizontalDial: HorizontalDial! {
+        didSet {
+            self.horizontalDial?.migneticOption = .none
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        horizontalDial.delegate = self
         
-        self
+//        self.photoView.minimumZoomScale = 1.0;
+//        self.photoView.maximumZoomScale = 10.0;
+        self.setCropAspectRect(aspect: "3:4")
+        self.lockAspectRatio(true)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    // MARK: - Rotation
+       
+//   override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+//       super.willTransition(to: newCollection, with: coordinator)
+//
+//       coordinator.animate(alongsideTransition: { (context) in
+//           self.view.layoutIfNeeded()
+//       }) { (context) in
+//           //
+//       }
+//   }
+    
+    @IBAction func onReset(_ sender: Any) {
+        self.horizontalDial.value = 0.0
     }
-    */
+    
+    @IBAction func onDone(_ sender: Any) {
+        
+    }
+}
+    // MARK: - horizontalDial delegate
+extension PhotoEditVC: HorizontalDialDelegate {
+    func horizontalDialDidValueChanged(_ horizontalDial: HorizontalDial) {
+        let degrees = horizontalDial.value
+        let radians = IGRRadianAngle.toRadians(CGFloat(degrees))
+        self.changedAngle(value: radians)
+    }
 
+    func horizontalDialDidEndScroll(_ horizontalDial: HorizontalDial) {
+        self.stopChangeAngle()
+    }
 }

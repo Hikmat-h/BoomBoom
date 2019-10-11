@@ -61,6 +61,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.2.4):
     - GoogleUtilities/Logger
+  - HorizontalDial (4.0)
   - IGRPhotoTweaks (1.0.7)
   - InputBarAccessoryView (4.2.2)
   - IQKeyboardManagerSwift (6.4.1)
@@ -86,7 +87,8 @@ DEPENDENCIES:
   - Alamofire
   - CropViewController
   - Firebase/Analytics
-  - IGRPhotoTweaks (~> 1.0.0)
+  - HorizontalDial
+  - IGRPhotoTweaks
   - IQKeyboardManagerSwift
   - MessageKit (~> 3.0.0-swift5)
   - PeekPop (~> 1.0)
@@ -96,7 +98,7 @@ DEPENDENCIES:
   - Tabman (~> 2.4)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - AutoInsetter
     - CropViewController
@@ -110,6 +112,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
     - GoogleUtilities
+    - HorizontalDial
     - IGRPhotoTweaks
     - InputBarAccessoryView
     - IQKeyboardManagerSwift
@@ -136,6 +139,7 @@ SPEC CHECKSUMS:
   GoogleDataTransport: b0115dbdf1943c998628dca30800ddd263aaa166
   GoogleDataTransportCCTSupport: 3451e7d8ba19093e533362a6d78d6d9014c6a037
   GoogleUtilities: 64b5e3982b1b01bda26712affd5c523ef32563cf
+  HorizontalDial: 50b43d3d12b9024688c40633ccab46066911846f
   IGRPhotoTweaks: 8fe6b62c6599238d860b19b46a85a454e202f502
   InputBarAccessoryView: 2b937602598e2fab3149f37f51dd7ad795653812
   IQKeyboardManagerSwift: d2df660d0b8d64a15cb2537c9ff303213fa515b2
@@ -148,6 +152,6 @@ SPEC CHECKSUMS:
   SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
   Tabman: c2c83ebfcbec3e5be67e27a1dd6689a4e3efccd3
 
-PODFILE CHECKSUM: 60793298ae81d03b166584d2fce4560250759ac6
+PODFILE CHECKSUM: 045c14540b199b8b28c314cb9d38454d2da1069d
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.3

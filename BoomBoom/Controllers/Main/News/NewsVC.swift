@@ -88,7 +88,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     }
     
     
-    //Force touch
+    //MARK: - 3d Touch
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard let indexPath = photoCollectionV?.indexPathForItem(at: location) else { return nil }
@@ -121,16 +121,4 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
 //            return CGSize(width: 81, height: 113)
 //        }
 //    }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    
 }

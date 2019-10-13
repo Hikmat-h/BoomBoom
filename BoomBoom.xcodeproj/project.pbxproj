@@ -481,8 +481,8 @@
 		9EAD78C22326172000BFFAE7 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				9EDF1FFB233B815000AE7DD5 /* AuthorizationService.swift */,
 				9E5DD399233BCF14006856F2 /* AppNetwork.swift */,
+				9EDF1FFB233B815000AE7DD5 /* AuthorizationService.swift */,
 				9E73101C233DD88B00A19423 /* RegistrationService.swift */,
 				9E731020233E234100A19423 /* UserDetailsService.swift */,
 			);

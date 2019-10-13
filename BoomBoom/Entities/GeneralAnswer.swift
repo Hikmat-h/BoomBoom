@@ -64,6 +64,8 @@ typealias CityListAnswerModel = [City]
 
 typealias CountryListAnswerModel = [Country]
 
+typealias PhotoListAnswer = [Photo]
+
 
 
 // MARK: - EditUserInfo  all info about user
@@ -122,7 +124,7 @@ struct Photo: Codable {
     let pathURL, pathURLPreview: String
     let main: Bool
     let cntLike: Int
-    let ilike: Bool
+    let ilike: Bool?
 
     enum CodingKeys: String, CodingKey {
         case id

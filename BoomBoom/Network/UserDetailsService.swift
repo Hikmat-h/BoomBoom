@@ -136,8 +136,8 @@ class UserDetailsSerice {
     
     func getGender(token:String, lang:String, completion: @escaping (GenderListAnswer?, NSError?)-> Void) {
         if let url = URL(string: "\(pathURL)/directory/sex/get") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
             let params: Parameters = [:]
             AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.default, headers: headers_urlencoded, codableClass: GenderListAnswer.self) { (model, error) in
                 guard let model = model else {
@@ -222,8 +222,8 @@ class UserDetailsSerice {
     func setPhoto(token:String, lang:String, image:UIImage, completion: @escaping (NSError?)->Void) {
         let imgData = image.jpegData(compressionQuality: 0.5)!
         if let url = URL(string: "\(pathURL)/user/photo/set") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
             Alamofire.upload( multipartFormData: { (multiPartFormData) in
                 multiPartFormData.append(imgData, withName: "photo", fileName: "file.jpg", mimeType: "image/jpg")
             }, to: url, headers: headers_urlencoded) { (result) in
@@ -247,4 +247,35 @@ class UserDetailsSerice {
             }
         }
     }
+    
+    func deletePhoto(token:String, lang:String, photoID:Int, completion: @escaping (PhotoListAnswer?, NSError?)->Void) {
+       if let url = URL(string: "\(pathURL)/user/photo/delete") {
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
+            let params: Parameters = ["id":photoID]
+            AppNetwork.request(url: url, method: .delete, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: PhotoListAnswer.self) { (model, error) in
+                if error == nil {
+                    completion(model, nil)
+                } else {
+                    completion(nil, error)
+                }
+            }
+        }
+    }
+    
+    func makePhotoAvatar(token:String, lang:String, photoID:Int, completion: @escaping (PhotoListAnswer?, NSError?)->Void) {
+       if let url = URL(string: "\(pathURL)/user/photo/avatar") {
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
+            let params: Parameters = ["photoId":photoID]
+            AppNetwork.request(url: url, method: .post, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: PhotoListAnswer.self) { (model, error) in
+                if error == nil {
+                    completion(model, nil)
+                } else {
+                    completion(nil, error)
+                }
+            }
+        }
+    }
+
 }

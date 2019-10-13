@@ -18,13 +18,12 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var token:String = UserDefaults.standard.value(forKey: "token") as! String
     let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
-//    let token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2OCIsImlhdCI6MTU2OTk0MTA4OSwiZXhwIjoxNTcwODA1MDg5fQ.1Yt8sY90vdyJOhNz6BIP2vOrAEBG0HYSy4bqH9DBr0osSOKB45YwHT1drVlFu_mbTlAtQBmj2RrC_IkRkkfdwQ"
+
     let baseURL = Constants.HTTP.PATH_URL
     
     var userInformation: EditUserInfo?
     var infoArray:[String] = []
     var infoTitleArray:[String] = []
-    var userPhotos:[Photo] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +63,8 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row==0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfilePhotoCell") as! ProfilePhotoCell
-            let url = baseURL + "/" + ((userInformation?.photos[0].pathURL) ?? "")
+            let photo = userInformation?.photos.first(where: {$0.main == true})
+            let url = baseURL + "/" + (photo?.pathURL ?? "")
             cell.mainPhotoImgV?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
             return cell
         } else if indexPath.row == 1 {
@@ -74,6 +74,8 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.row == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "UserProfilePhotosCell") as! UserProfilePhotosCell
             cell.userPhotos = userInformation?.photos ?? []
+            cell.parentVC = self
+            cell.photosCollectionView.reloadData()
             return cell
         } else if indexPath.row >= 3 && indexPath.row < (3+infoArray.count) {
             
@@ -112,7 +114,6 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     func setUserInfo(infoModel:EditUserInfo) {
         
-        self.userPhotos = infoModel.photos
         self.userInformation = infoModel
         if (!self.userInformation!.information.isEmpty) {
             self.infoTitleArray.append("Обо мне")

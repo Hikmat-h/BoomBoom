@@ -431,6 +431,35 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
             imagePicker.allowsEditing = false
             imagePicker.delegate = self
             self.present(imagePicker, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "удалить", style: .default, handler: { (action) in
+                self.showActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                UserDetailsSerice.current.deletePhoto(token: self.token, lang: self.language, photoID: self.photos[indexPath.row].id) { (model, error) in
+                    DispatchQueue.main.async {
+                        self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                        if error == nil {
+                            self.photos = model ?? []
+                            self.collectionView.reloadData()
+                        } else {
+                            self.showErrorWindow(errorMessage: error?.domain ?? "")
+                        }
+                    }
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "сделать основной", style: .default, handler: { (action) in
+                self.showActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                UserDetailsSerice.current.makePhotoAvatar(token: self.token, lang: self.language, photoID: self.photos[indexPath.row].id) { (model, error) in
+                    DispatchQueue.main.async {
+                        self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                        if error != nil {
+                            self.showErrorWindow(errorMessage: error?.domain ?? "")
+                        }
+                    }
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -482,7 +511,6 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
 
 extension EditProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        print("woowowowowo")
         guard let image = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage) else { return }
         let cropViewController = CropViewController(image: image)
         cropViewController.aspectRatioPickerButtonHidden = true
@@ -490,8 +518,10 @@ extension EditProfileVC: UIImagePickerControllerDelegate, UINavigationController
         cropViewController.customAspectRatio = CGSize(width: 3.0, height: 4.0)
         cropViewController.resetAspectRatioEnabled = false
         cropViewController.delegate = self
+        cropViewController.definesPresentationContext = true
         picker.dismiss(animated: true, completion: {
-            self.present(cropViewController, animated: true, completion: nil)
+//            self.present(cropViewController, animated: true, completion: nil)
+            self.navigationController?.pushViewController(cropViewController, animated: true)
         })
     }
 }
@@ -508,13 +538,15 @@ extension EditProfileVC: CropViewControllerDelegate {
             } else {
                 DispatchQueue.main.async {
                     cropViewController.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
-                    cropViewController.dismiss(animated: true, completion: nil)
+//                    cropViewController.dismiss(animated: true, completion: nil)
+                    cropViewController.navigationController?.popViewController(animated: true)
                 }
             }
         }
     }
     
     func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
-        cropViewController.dismiss(animated: true, completion: nil)
+//        cropViewController.dismiss(animated: true, completion: nil)
+        cropViewController.navigationController?.popViewController(animated: true)
     }
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import PeekPop
 
 class UserProfilePhotosCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
 
@@ -16,6 +17,8 @@ class UserProfilePhotosCell: UITableViewCell, UICollectionViewDelegate, UICollec
     
     var userPhotos:[Photo] = []
     let baseURL = Constants.HTTP.PATH_URL
+    var peekPop: PeekPop?
+    var parentVC: UIViewController?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,6 +28,12 @@ class UserProfilePhotosCell: UITableViewCell, UICollectionViewDelegate, UICollec
         
     }
 
+    override func didMoveToSuperview() {
+        //3d touch
+        peekPop = PeekPop(viewController: parentVC!)
+        peekPop?.registerForPreviewingWithDelegate(self, sourceView: photosCollectionView)
+    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
@@ -48,4 +57,23 @@ class UserProfilePhotosCell: UITableViewCell, UICollectionViewDelegate, UICollec
         cell.likeCountLbl.text = "\(photo.cntLike)"
         return cell
     }
+}
+
+extension UserProfilePhotosCell: PeekPopPreviewingDelegate {
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = photosCollectionView?.indexPathForItem(at: location) else { return nil }
+        guard let cell = photosCollectionView?.cellForItem(at: indexPath) as? ProfilePhotosCell else { return nil }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let preview = storyboard.instantiateViewController(withIdentifier: "PreviewVC") as? PreviewVC else { return nil }
+        previewingContext.sourceRect = cell.frame
+        preview.img = cell.photoImgView.image
+        
+        return preview
+    }
+    
+    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
+        
+    }
+    
+    
 }

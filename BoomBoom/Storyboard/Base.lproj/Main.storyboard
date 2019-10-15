@@ -263,7 +263,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="125" height="125"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="test6" translatesAutoresizingMaskIntoConstraints="NO" id="g3r-Et-gH9">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="test6" translatesAutoresizingMaskIntoConstraints="NO" id="g3r-Et-gH9">
                                                     <rect key="frame" x="0.0" y="0.0" width="125" height="125"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -2064,20 +2064,38 @@
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Верификация пройдена" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYy-Pf-Kjk">
-                                                            <rect key="frame" x="87" y="86" width="236" height="33"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Верификация пройдена" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYy-Pf-Kjk">
+                                                            <rect key="frame" x="87" y="86" width="283" height="33"/>
                                                             <color key="backgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                         </textView>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="test5" translatesAutoresizingMaskIntoConstraints="NO" id="0Xn-0l-h4f">
-                                                            <rect key="frame" x="14" y="77" width="50" height="50"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="test5" translatesAutoresizingMaskIntoConstraints="NO" id="0Xn-0l-h4f">
+                                                            <rect key="frame" x="14" y="77" width="52" height="52"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="52" id="X1O-kb-9bS"/>
+                                                                <constraint firstAttribute="height" constant="52" id="i3b-Pc-0hj"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7LP-g0-h1y">
+                                                            <rect key="frame" x="50" y="112" width="16" height="16"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="16" id="DW9-kl-efl"/>
+                                                                <constraint firstAttribute="height" constant="16" id="I34-If-pLc"/>
+                                                            </constraints>
                                                         </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="nYy-Pf-Kjk" secondAttribute="trailing" constant="16" id="ELa-VW-tLq"/>
+                                                        <constraint firstItem="nYy-Pf-Kjk" firstAttribute="leading" secondItem="xjr-m4-D4k" secondAttribute="leading" constant="87" id="UGv-0K-ZGs"/>
+                                                        <constraint firstItem="7LP-g0-h1y" firstAttribute="leading" secondItem="0Xn-0l-h4f" secondAttribute="trailing" constant="-16" id="UUF-Ap-Nb9"/>
+                                                        <constraint firstItem="0Xn-0l-h4f" firstAttribute="leading" secondItem="xjr-m4-D4k" secondAttribute="leading" constant="14" id="gG7-Xv-FWh"/>
+                                                        <constraint firstItem="nYy-Pf-Kjk" firstAttribute="top" secondItem="xjr-m4-D4k" secondAttribute="top" constant="86" id="gc3-xv-gof"/>
+                                                        <constraint firstItem="7LP-g0-h1y" firstAttribute="top" secondItem="0Xn-0l-h4f" secondAttribute="bottom" constant="-16" id="mhC-K3-Jxe"/>
+                                                        <constraint firstItem="0Xn-0l-h4f" firstAttribute="centerY" secondItem="nYy-Pf-Kjk" secondAttribute="centerY" id="ySw-om-3Ev"/>
+                                                    </constraints>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2092,6 +2110,7 @@
                                         <connections>
                                             <outlet property="titleTextView" destination="nYy-Pf-Kjk" id="pr1-ql-1Om"/>
                                             <outlet property="verifPhotoView" destination="0Xn-0l-h4f" id="UXK-br-UjT"/>
+                                            <outlet property="verifStateImgView" destination="7LP-g0-h1y" id="aad-sd-rfj"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -2113,7 +2132,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hc7-eR-7o9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4914" y="3098"/>
+            <point key="canvasLocation" x="4913.04347826087" y="3097.7678571428569"/>
         </scene>
         <!--РЕДАКТИРОВАТЬ-->
         <scene sceneID="aFO-B1-K24">

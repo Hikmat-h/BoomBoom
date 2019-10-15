@@ -11,6 +11,7 @@ import UIKit
 class VerificationCell: UITableViewCell {
 
     @IBOutlet weak var verifPhotoView: UIImageView!
+    @IBOutlet weak var verifStateImgView: UIImageView!
     @IBOutlet weak var titleTextView: UITextView!
     override func awakeFromNib() {
         super.awakeFromNib()

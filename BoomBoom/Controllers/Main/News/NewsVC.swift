@@ -8,6 +8,7 @@
 
 import UIKit
 import PeekPop
+import SDWebImage
 
 class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, PeekPopPreviewingDelegate {
     
@@ -17,6 +18,21 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     @IBOutlet weak var photoCollectionV: UICollectionView!
     let cellWidth = UIScreen.main.bounds.size.width/3
     let screenWidth = UIScreen.main.bounds.width
+    
+    var loadingView: UIView = UIView()
+    var spinner = UIActivityIndicatorView(style: .whiteLarge)
+    
+    //data models
+    var firstTop100Photo:Top100Account?
+    var newAccountPhotos:[NewAccount] = []
+    var accountWithPhoto:[NewAccount] = []
+    
+    //static vars
+    var token:String = UserDefaults.standard.value(forKey: "token") as! String
+    let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
+    let baseURL = Constants.HTTP.PATH_URL
+    
+    var pageNo:CLong=0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,13 +52,15 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        getAllPhotos(token:token, lang: language, page: 0)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    //collectionView delegate
+    //MARK: - CollectionView dataSource and delegate
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -51,7 +69,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         if collectionView == starredCollectionV {
             return 5
         } else {
-            return 16
+            return accountWithPhoto.count
         }
     }
     
@@ -63,8 +81,13 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.NEWS_PHOTO_CELL, for: indexPath) as! NewsPhotoCell
             if (indexPath.row == 0) {
                 cell.photoImgView.frame.size = CGSize(width: cellWidth*2 + 1, height: cellWidth*2 + 1)
+                let url = baseURL + "/" + (firstTop100Photo?.pathURL ?? "")
+                cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
             } else {
                 cell.photoImgView.frame.size = CGSize(width: cellWidth + 1, height: cellWidth + 1)
+                let account = accountWithPhoto[indexPath.row]
+                let url = baseURL + "/" + (account.photos[0].pathURLPreview )
+                cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
             }
             return cell
         }
@@ -75,6 +98,15 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         if indexPath.row != 0 {
             guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
             show(detailVC, sender: self)
+        }
+    }
+    
+    //load new photos
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let lastRow = indexPath.row
+        if lastRow == accountWithPhoto.count - 1 {
+            pageNo = pageNo + 1
+            getNewAccountPhotos(token: token, lang: language, page: pageNo)
         }
     }
     
@@ -108,6 +140,37 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         show(detailVC, sender: self)
     }
     
+    //MARK: - API calls
+    func getAllPhotos(token:String, lang:String, page:Int){
+        showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        NewsService.current.getFirstTop100Photo(token: token, lang: lang) { (photoModel, error) in
+            DispatchQueue.main.async {
+                self.getNewAccountPhotos(token: token, lang: lang, page: page)
+                if error == nil {
+                    self.firstTop100Photo = photoModel?.first
+                } else {
+                    self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            }
+        }
+    }
+    
+    func getNewAccountPhotos(token:String, lang:String, page:Int){
+        NewsService.current.getNewAccounts(token: token, lang: lang, page: page) { (photoListModel, error) in
+            DispatchQueue.main.async {
+                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                if error == nil {
+                    self.newAccountPhotos = self.newAccountPhotos + (photoListModel ?? [])
+                    let temp: [NewAccount] = photoListModel ?? []
+                    self.accountWithPhoto = self.accountWithPhoto + temp.filter({$0.photos.count>0})
+                    self.photoCollectionV.reloadData()
+                } else {
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            }
+        }
+    }
     
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        if (collectionView == photoCollectionV) {

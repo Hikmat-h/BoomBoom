@@ -66,6 +66,9 @@ typealias CountryListAnswerModel = [Country]
 
 typealias PhotoListAnswer = [Photo]
 
+typealias NewAccountListAnswer = [NewAccount]
+
+typealias Top100PhotoListAnswer = [Top100Account]
 
 
 // MARK: - EditUserInfo  all info about user
@@ -78,13 +81,14 @@ struct EditUserInfo: Codable {
     let sexualOrientation: SexualOrientationModel
     let bodyType: BodyType
     let sex: GenderModel
-    let weight, height, breastSize: Int
+    let weight, height: Int
+    let breastSize:Int?
     let pdSponsorship, pdSpendEvening, pdPeriodicMeetings, pdTravels: Bool
     let pdFriendshipCommunication: Bool
     let hobby, favoritePlacesCity, visitedCountries, countriesWantVisit: String
     let photos: [Photo]
     let email, phone: String
-    let hairColor: HairModel
+    let hairColor: HairModel?
     let verification: BodyType
 }
 
@@ -123,8 +127,49 @@ struct Photo: Codable {
     let id: Int
     let pathURL, pathURLPreview: String
     let main: Bool
-    let cntLike: Int
+    let cntLike: Int?
     let ilike: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case pathURL = "pathUrl"
+        case pathURLPreview = "pathUrlPreview"
+        case main, cntLike, ilike
+    }
+}
+
+// MARK: - firstTop100
+struct Top100Account: Codable {
+    let id: Int
+    let pathURL, pathURLPreview: String
+    let accountID, cntLike: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case pathURL = "pathUrl"
+        case pathURLPreview = "pathUrlPreview"
+        case accountID = "accountId"
+        case cntLike
+    }
+}
+
+// MARK: - NewAccount
+struct NewAccount: Codable {
+    let id: Int
+    let name: String
+    let photos: [NewAccountPhoto]
+    let dateBirth: String
+    let cities: City
+    let typeAccount: String
+}
+
+// MARK: - Photo
+struct NewAccountPhoto: Codable {
+    let id: Int
+    let pathURL, pathURLPreview: String
+    let main: Bool
+    let cntLike: Int
+    let ilike: Int?
 
     enum CodingKeys: String, CodingKey {
         case id

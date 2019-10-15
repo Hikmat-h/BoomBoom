@@ -173,7 +173,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
             boobSizeViewHeight.constant = 0
             boobSizeView.layoutIfNeeded()
         }
-        self.hairColorlbl.text = userInformation?.hairColor.title
+        self.hairColorlbl.text = userInformation?.hairColor?.title
         if !userInformation!.hobby.isEmpty {
             interestsTextView.textColor = .white
             interestsTextView.text = userInformation?.hobby

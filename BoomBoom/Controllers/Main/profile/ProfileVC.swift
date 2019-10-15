@@ -24,6 +24,7 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var userInformation: EditUserInfo?
     var infoArray:[String] = []
     var infoTitleArray:[String] = []
+    var avatar:Photo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,9 +36,6 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = .black
         navigationItem.hidesBackButton = true
-        
-        let downloader = SDWebImageDownloader.shared
-        downloader.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
@@ -63,8 +61,8 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row==0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfilePhotoCell") as! ProfilePhotoCell
-            let photo = userInformation?.photos.first(where: {$0.main == true})
-            let url = baseURL + "/" + (photo?.pathURL ?? "")
+            avatar = userInformation?.photos.first(where: {$0.main == true})
+            let url = baseURL + "/" + (avatar?.pathURL ?? "")
             cell.mainPhotoImgV?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
             return cell
         } else if indexPath.row == 1 {
@@ -86,7 +84,25 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "VerificationCell") as! VerificationCell
-            cell.titleTextView.text = userInformation?.verification.title
+            let url = baseURL + "/" + (avatar?.pathURL ?? "")
+            cell.verifPhotoView.layer.cornerRadius = 26
+            cell.verifPhotoView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+            switch userInformation?.verification.id {
+            case 2:
+                cell.titleTextView.text = "Верификация пройдена"
+                cell.verifStateImgView.isHidden = false
+                cell.verifStateImgView.image = UIImage(named: "verifConfirmed")
+            case 1, 3:
+                cell.titleTextView.text = "Пройти верификацию"
+                cell.verifStateImgView.isHidden = true
+            case 4:
+                cell.titleTextView.text = "Мы получили ваше фото и оно будет проверено в ближайшее время"
+                cell.verifStateImgView.isHidden = false
+                cell.verifStateImgView.image = UIImage(named: "verifTime")
+            default:
+                cell.titleTextView.text = "Пройти верификацию"
+                cell.verifStateImgView.isHidden = true
+            }
             return cell
         }
     }

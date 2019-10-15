@@ -19,9 +19,9 @@ class UserDetailsSerice {
     
     func searchCountry(token:String, lang:String, title:String, page:Int, completion: @escaping (CountryListAnswerModel?, NSError?)-> Void) {
         if let url = URL(string: "\(pathURL)/directory/countries/get") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
-        let params: Parameters = ["title": title, "page": page]
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
+            let params: Parameters = ["title": title, "page": page]
             AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.default, headers: headers_urlencoded, codableClass: CountryListAnswerModel.self) { (model, error) in
                 guard let model = model else {
                     if error != nil {
@@ -36,8 +36,8 @@ class UserDetailsSerice {
     
     func searchCity(token:String, lang:String, countryId:Int, title:String, page:Int, completion: @escaping (CityListAnswerModel?, NSError?)-> Void) {
         if let url = URL(string: "\(pathURL)/directory/cities/get") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
             let params: Parameters = ["title": title, "page": page, "countryId":countryId]
             AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.default, headers: headers_urlencoded, codableClass: CityListAnswerModel.self) { (model, error) in
                 guard let model = model else {
@@ -53,8 +53,8 @@ class UserDetailsSerice {
     
     func createBasicProfileData (token:String, lang:String, sexId:Int, email:String?, phone:String?, countryId:Int, cityId:Int, name:String, dateBirth:String, completion: @escaping (EditUserInfo?, NSError?)-> Void) {
         if let url = URL(string: "\(pathURL)/user/save") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
             var params: Parameters = ["sexId":sexId, "countryId":countryId, "cityId":cityId, "name":name, "dateBirth":dateBirth]
             if phone != nil {
                 params["phone"] = phone
@@ -99,9 +99,9 @@ class UserDetailsSerice {
                          hairColorId:Int,
                          completion: @escaping (EditUserInfo?, NSError?)->Void) {
        if let url = URL(string: "\(pathURL)/user/save") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
-        var params: Parameters = ["bodyTypeId":bodyTypeId, "sexId":sexId, "sexualOrientation":sexualOrientation, "countryId":countryId, "cityId":cityId, "name":name, "dateBirth":dateBirth, "information":information, "weight":weight, "height":height, "pdSponsorship":pdSponsorship, "pdSpendEvening":pdSpendEvening, "pdPeriodicMeetings":pdPeriodicMeetings, "pdTravels":pdTravels, "pdFriendshipCommunication":pdFriendshipCommunication, "hobby":hobby, "favoritePlacesCity":favoritePlacesCity, "visitedCountries":visitedCountries, "countriesWantVisit":countriesWantVisit, "hairColorId":hairColorId]
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
+            var params: Parameters = ["bodyTypeId":bodyTypeId, "sexId":sexId, "sexualOrientation":sexualOrientation, "countryId":countryId, "cityId":cityId, "name":name, "dateBirth":dateBirth, "information":information, "weight":weight, "height":height, "pdSponsorship":pdSponsorship, "pdSpendEvening":pdSpendEvening, "pdPeriodicMeetings":pdPeriodicMeetings, "pdTravels":pdTravels, "pdFriendshipCommunication":pdFriendshipCommunication, "hobby":hobby, "favoritePlacesCity":favoritePlacesCity, "visitedCountries":visitedCountries, "countriesWantVisit":countriesWantVisit, "hairColorId":hairColorId]
             if breastSize != nil {
                 params["breastSize"] = breastSize
             }
@@ -153,8 +153,8 @@ class UserDetailsSerice {
     
     func getHairColor(token:String, lang:String, completion: @escaping (HairListAnswer?, NSError?)-> Void) {
         if let url = URL(string: "\(pathURL)/directory/haircolor/get") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
             let params: Parameters = [:]
             AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.default, headers: headers_urlencoded, codableClass: HairListAnswer.self) { (model, error) in
                 guard let model = model else {
@@ -170,8 +170,8 @@ class UserDetailsSerice {
     
     func getBodyType(token:String, lang:String, completion: @escaping (BodyTypeListAnswer?, NSError?)-> Void) {
         if let url = URL(string: "\(pathURL)/directory/bodytype/get") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
             let params: Parameters = [:]
             AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.default, headers: headers_urlencoded, codableClass: BodyTypeListAnswer.self) { (model, error) in
                 guard let model = model else {
@@ -187,8 +187,8 @@ class UserDetailsSerice {
     
     func getOrientation(token:String, lang:String, completion: @escaping (OrientationListAnswer?, NSError?)-> Void) {
         if let url = URL(string: "\(pathURL)/directory/sexualorientation/get") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
             let params: Parameters = [:]
             AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.default, headers: headers_urlencoded, codableClass: OrientationListAnswer.self) { (model, error) in
                 guard let model = model else {
@@ -204,8 +204,8 @@ class UserDetailsSerice {
     
     func getVerification(token:String, lang:String, completion: @escaping (VerificationModel?, NSError?)-> Void) {
         if let url = URL(string: "\(pathURL)/verification/get") {
-        headers_urlencoded["Accept-Language"] = lang
-        headers_urlencoded["Authorization"] = "Bearer \(token)"
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
             let params: Parameters = [:]
             AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.default, headers: headers_urlencoded, codableClass: VerificationModel.self) { (model, error) in
                 guard let model = model else {
@@ -220,7 +220,7 @@ class UserDetailsSerice {
     }
     
     func setPhoto(token:String, lang:String, image:UIImage, completion: @escaping (NSError?)->Void) {
-        let imgData = image.jpegData(compressionQuality: 0.5)!
+        let imgData = image.jpegData(compressionQuality: 1.0)!
         if let url = URL(string: "\(pathURL)/user/photo/set") {
             headers_urlencoded["Accept-Language"] = lang
             headers_urlencoded["Authorization"] = "Bearer \(token)"

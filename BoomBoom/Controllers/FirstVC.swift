@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class FirstVC: UIViewController {
 
@@ -14,7 +15,12 @@ class FirstVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(UserDefaults.standard.value(forKey: "auth") as Any)
+        
+        //set token for image downloader
+        let token = UserDefaults.standard.value(forKey: "token") ?? ""
+        let downloader = SDWebImageDownloader.shared
+        downloader.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
         if let isLoggedIn = UserDefaults.standard.value(forKey: "auth") as? Bool {
             if isLoggedIn {
                 performSegue(withIdentifier: "showMain", sender: self)

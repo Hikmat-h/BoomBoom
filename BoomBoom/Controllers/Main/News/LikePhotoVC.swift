@@ -12,6 +12,20 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
 
     @IBOutlet weak var tableView: UITableView!
     let screenSize = UIScreen.main.bounds.size
+    var userID:Int?
+    var loadingView = UIView()
+    var spinner = UIActivityIndicatorView(style: .whiteLarge)
+    
+    var token:String = UserDefaults.standard.value(forKey: "token") as! String
+    let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
+
+    let baseURL = Constants.HTTP.PATH_URL
+    
+    var userInformation: UserInfo?
+    var infoArray:[String] = []
+    var infoTitleArray:[String] = []
+    var avatar:Photo?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,39 +41,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
-//        //about view
-//        let aboutView = UIView(frame: CGRect(x: 15, y: viewToResize.frame.height-100, width: screenSize.width-30, height: 231))
-//        aboutView.backgroundColor = #colorLiteral(red: 0.1450980392, green: 0.1450980392, blue: 0.1450980392, alpha: 1)
-//
-//        let title = UILabel(frame: CGRect(x: 16, y: 20, width: 153, height: 28))
-//        title.text = "Обо мне"
-//        title.font = UIFont(name: "Roboto-medium", size: 20)
-//        title.textColor = .white
-//
-//        let view = UILabel()
-//        view.frame = CGRect(x: 17, y: 65, width: aboutView.frame.width - 34, height: 51)
-//        view.backgroundColor = .clear
-//        view.textColor = UIColor(red: 0.88, green: 0.88, blue: 0.88, alpha: 1)
-//        view.font = UIFont(name: "Roboto", size: 14)
-//        view.numberOfLines = 0
-//        view.lineBreakMode = .byWordWrapping
-//        view.text = "Родилась и выросла в деревне. Люблю пасти скот, бегать по полю голышом. Увлекаюсь изотерикой и черной магией. Я гетеро, 60 кг, 170 см, плотного телосложения, третий размер груди, блондинка с голубыми глазами."
-//
-//        let view2 = UILabel()
-//        view2.frame = CGRect(x: 17, y: 120, width: aboutView.frame.width-34, height: 94)
-//        view2.backgroundColor = .clear
-//        view2.textColor = UIColor(red: 0.88, green: 0.88, blue: 0.88, alpha: 1)
-//        view2.font = UIFont(name: "Roboto", size: 14)
-//        view2.numberOfLines = 0
-//        view2.lineBreakMode = .byWordWrapping
-//        view2.text = "Я гетеро, 60 кг, 170 см, плотного телосложения, третий размер груди, блондинка с голубыми глазами."
-//
-//
-//
-//        aboutView.addSubview(title)
-//        aboutView.addSubview(view)
-//        aboutView.addSubview(view2)
-//        contentView.addSubview(aboutView)
+        getAccount(token: token, lang: language, id: userID ?? -1)
     }
     
     @objc func onPhone() {
@@ -71,22 +53,54 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        return infoArray.count + 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:UITableViewCell
         if indexPath.row == 0 {
-            cell = tableView.dequeueReusableCell(withIdentifier: "photosCell") as! PhotosCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "photosCell") as! PhotosCell
+            cell.photos = userInformation?.photos ?? []
+            if ((userInformation?.photos.count ?? 0) > 0){
+                avatar = userInformation?.photos.first(where: {$0.main == true})
+                let url = baseURL + "/" + (avatar?.pathURL ?? "")
+                cell.imageView?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+            } else {
+                cell.imageView?.image = UIImage(named: "default_ava")
+            }
             return cell
-        } else if indexPath.row>0 && indexPath.row<5 {
-            cell = tableView.dequeueReusableCell(withIdentifier: "infoCell") as! InfoCell
+        } else if indexPath.row>0 && indexPath.row<5 && indexPath.row<infoArray.count+1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell") as! InfoCell
+            cell.titleLbl.text = infoTitleArray[indexPath.row - 1]
+            cell.textVIew.text = infoArray[indexPath.row - 1]
             return cell
-        } else if indexPath.row == 5 {
-            cell = tableView.dequeueReusableCell(withIdentifier: "verificationCell") as! VerificationCell
+        } else if indexPath.row == infoArray.count+1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "verificationCell") as! VerificationCell
+            let url = baseURL + "/" + (avatar?.pathURL ?? "")
+            cell.verifPhotoView.layer.cornerRadius = 26
+            if ((userInformation?.photos.count ?? 0) > 0) {
+                cell.verifPhotoView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+            } else {
+                cell.verifPhotoView.image = UIImage(named: "default_ava")
+            }
+            switch userInformation?.verification.id {
+            case 2:
+                cell.titleTextView.text = "Верификация пройдена"
+                cell.verifStateImgView.isHidden = false
+                cell.verifStateImgView.image = UIImage(named: "verifConfirmed")
+            case 1, 3:
+                cell.titleTextView.text = "Пройти верификацию"
+                cell.verifStateImgView.isHidden = true
+            case 4:
+                cell.titleTextView.text = "Мы получили ваше фото и оно будет проверено в ближайшее время"
+                cell.verifStateImgView.isHidden = false
+                cell.verifStateImgView.image = UIImage(named: "verifTime")
+            default:
+                cell.titleTextView.text = "Пройти верификацию"
+                cell.verifStateImgView.isHidden = true
+            }
             return cell
         } else {
-            cell = tableView.dequeueReusableCell(withIdentifier: "actionsCell") as! ActionsCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "actionsCell") as! ActionsCell
             return cell
         }
     }
@@ -100,14 +114,84 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
             return 135
         }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func setUserInfo(infoModel:UserInfo) {
+        
+        self.userInformation = infoModel
+        if (!(self.userInformation!.information?.isEmpty ?? true)) {
+            self.infoTitleArray.append("Обо мне")
+            self.infoArray.append(userInformation?.information ?? "")
+        }
+        var aim = ""
+        aim += userInformation!.pdTravels ? "Совместные путешествия \u{2022} " : ""
+        aim += userInformation!.pdSponsorship ? "Cпонсорство \u{2022} " : ""
+        aim += userInformation!.pdSpendEvening ? "Провести вечер \u{2022} " : ""
+        aim += userInformation!.pdPeriodicMeetings ? "Периодические встречи \u{2022} " : ""
+        aim += userInformation!.pdFriendshipCommunication ? "Дружба и общение \u{2022} " : ""
+        
+        if !aim.isEmpty {
+            self.infoTitleArray.append("Цель знакомства")
+            self.infoArray.append(aim)
+        }
+        
+        if !(userInformation!.hobby?.isEmpty ?? true) {
+            self.infoTitleArray.append("Увлечения")
+            self.infoArray.append(userInformation!.hobby ?? "")
+        }
+        
+        var others = ""
+        if userInformation?.sex.id == 1 {
+            if !(userInformation!.favoritePlacesCity?.isEmpty ?? true) {
+                others += "Мои любимые места в городе \(userInformation?.favoritePlacesCity ?? ""). "
+            }
+            if !(userInformation!.visitedCountries?.isEmpty ?? true) {
+                others += "Я был: \(userInformation?.visitedCountries ?? ""). "
+            }
+            if !(userInformation!.countriesWantVisit?.isEmpty ?? true) {
+                others += "Я хотел бы посетить \(userInformation?.countriesWantVisit ?? ""). "
+            }
+        } else if userInformation!.sex.id == 2 {
+            if !(userInformation!.favoritePlacesCity?.isEmpty ?? true) {
+                others += "Мои любимые места в городе \(userInformation?.favoritePlacesCity ?? ""). "
+            }
+            if !(userInformation!.visitedCountries?.isEmpty ?? true) {
+                others += "Я была: \(userInformation?.visitedCountries ?? ""). "
+            }
+            if !(userInformation!.countriesWantVisit?.isEmpty ?? true) {
+                others += "Я хотела бы посетить \(userInformation?.countriesWantVisit ?? ""). "
+            }
+        } else {
+            if !(userInformation!.favoritePlacesCity?.isEmpty ?? true) {
+                others += "Наши любимые места в городе \(userInformation?.favoritePlacesCity ?? ""). "
+            }
+            if !(userInformation!.visitedCountries?.isEmpty ?? true) {
+                others += "Мы были: \(userInformation?.visitedCountries ?? ""). "
+            }
+            if !(userInformation!.countriesWantVisit?.isEmpty ?? true) {
+                
+                others += "Мы хотели бы посетить \(userInformation?.countriesWantVisit ?? ""). "
+            }
+        }
+        if !others.isEmpty {
+            self.infoTitleArray.append("Отдых и досуг")
+            self.infoArray.append(others)
+        }
+        self.tableView.reloadData()
     }
-    */
+    
+    //MARK: - APi call
+    func getAccount(token:String, lang:String, id:Int){
+        self.showActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+           NewsService.current.getAccount(token: token, lang: lang, id: id) { (info, error) in
+               DispatchQueue.main.async {
+                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                if error == nil {
+                    self.setUserInfo(infoModel: info!)
+                } else {
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+               }
+           }
+       }
 
 }

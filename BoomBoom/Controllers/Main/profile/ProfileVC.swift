@@ -21,7 +21,7 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     let baseURL = Constants.HTTP.PATH_URL
     
-    var userInformation: EditUserInfo?
+    var userInformation: UserInfo?
     var infoArray:[String] = []
     var infoTitleArray:[String] = []
     var avatar:Photo?
@@ -52,18 +52,22 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - main tableView dataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if infoArray.isEmpty {
-            return 0
-        }
+//        if infoArray.isEmpty {
+//            return 0
+//        }
         return infoArray.count + 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row==0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfilePhotoCell") as! ProfilePhotoCell
-            avatar = userInformation?.photos.first(where: {$0.main == true})
-            let url = baseURL + "/" + (avatar?.pathURL ?? "")
-            cell.mainPhotoImgV?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+            if ((userInformation?.photos.count ?? 0) > 0) {
+                avatar = userInformation?.photos.first(where: {$0.main == true})
+                let url = baseURL + "/" + (avatar?.pathURL ?? "")
+                cell.mainPhotoImgV?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+            } else {
+                cell.mainPhotoImgV.image = UIImage(named: "default_ava")
+            }
             return cell
         } else if indexPath.row == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileActionCell") as! ProfileActionCell
@@ -71,6 +75,7 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
         } else if indexPath.row == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "UserProfilePhotosCell") as! UserProfilePhotosCell
+            cell.numOfPhotosLbl.text = "\(userInformation?.photos.count ?? 0) фотографии"
             cell.userPhotos = userInformation?.photos ?? []
             cell.parentVC = self
             cell.photosCollectionView.reloadData()
@@ -86,7 +91,11 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "VerificationCell") as! VerificationCell
             let url = baseURL + "/" + (avatar?.pathURL ?? "")
             cell.verifPhotoView.layer.cornerRadius = 26
-            cell.verifPhotoView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+            if ((userInformation?.photos.count ?? 0) > 0) {
+                cell.verifPhotoView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+            } else {
+                cell.verifPhotoView.image = UIImage(named: "default_ava")
+            }
             switch userInformation?.verification.id {
             case 2:
                 cell.titleTextView.text = "Верификация пройдена"
@@ -128,10 +137,11 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let age = Int(timeSince/31536000)
         return age
     }
-    func setUserInfo(infoModel:EditUserInfo) {
+    
+    func setUserInfo(infoModel:UserInfo) {
         
         self.userInformation = infoModel
-        if (!self.userInformation!.information.isEmpty) {
+        if (!(self.userInformation!.information?.isEmpty ?? true)) {
             self.infoTitleArray.append("Обо мне")
             self.infoArray.append(userInformation?.information ?? "")
         }
@@ -147,40 +157,40 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             self.infoArray.append(aim)
         }
         
-        if !userInformation!.hobby.isEmpty {
+        if !(userInformation!.hobby?.isEmpty ?? true) {
             self.infoTitleArray.append("Увлечения")
-            self.infoArray.append(userInformation!.hobby)
+            self.infoArray.append(userInformation!.hobby ?? "")
         }
         
         var others = ""
         if userInformation?.sex.id == 1 {
-            if !userInformation!.favoritePlacesCity.isEmpty {
+            if !(userInformation!.favoritePlacesCity?.isEmpty ?? true) {
                 others += "Мои любимые места в городе \(userInformation?.favoritePlacesCity ?? ""). "
             }
-            if !userInformation!.visitedCountries.isEmpty {
+            if !(userInformation!.visitedCountries?.isEmpty ?? true) {
                 others += "Я был: \(userInformation?.visitedCountries ?? ""). "
             }
-            if !userInformation!.countriesWantVisit.isEmpty {
+            if !(userInformation!.countriesWantVisit?.isEmpty ?? true) {
                 others += "Я хотел бы посетить \(userInformation?.countriesWantVisit ?? ""). "
             }
         } else if userInformation!.sex.id == 2 {
-            if !userInformation!.favoritePlacesCity.isEmpty {
+            if !(userInformation!.favoritePlacesCity?.isEmpty ?? true) {
                 others += "Мои любимые места в городе \(userInformation?.favoritePlacesCity ?? ""). "
             }
-            if !userInformation!.visitedCountries.isEmpty {
+            if !(userInformation!.visitedCountries?.isEmpty ?? true) {
                 others += "Я была: \(userInformation?.visitedCountries ?? ""). "
             }
-            if !userInformation!.countriesWantVisit.isEmpty {
+            if !(userInformation!.countriesWantVisit?.isEmpty ?? true) {
                 others += "Я хотела бы посетить \(userInformation?.countriesWantVisit ?? ""). "
             }
         } else {
-            if !userInformation!.favoritePlacesCity.isEmpty {
+            if !(userInformation!.favoritePlacesCity?.isEmpty ?? true) {
                 others += "Наши любимые места в городе \(userInformation?.favoritePlacesCity ?? ""). "
             }
-            if !userInformation!.visitedCountries.isEmpty {
+            if !(userInformation!.visitedCountries?.isEmpty ?? true) {
                 others += "Мы были: \(userInformation?.visitedCountries ?? ""). "
             }
-            if !userInformation!.countriesWantVisit.isEmpty {
+            if !(userInformation!.countriesWantVisit?.isEmpty ?? true) {
                 
                 others += "Мы хотели бы посетить \(userInformation?.countriesWantVisit ?? ""). "
             }

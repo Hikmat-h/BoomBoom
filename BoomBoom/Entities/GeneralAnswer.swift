@@ -71,23 +71,24 @@ typealias NewAccountListAnswer = [NewAccount]
 typealias Top100PhotoListAnswer = [Top100Account]
 
 
-// MARK: - EditUserInfo  all info about user
-struct EditUserInfo: Codable {
+// MARK: - UserInfo  all info about user
+struct UserInfo: Codable {
     let id: Int
     let name, dateBirth: String
     let countries: Country
     let cities: City
-    let information: String
-    let sexualOrientation: SexualOrientationModel
-    let bodyType: BodyType
+    let information: String?
+    let sexualOrientation: SexualOrientationModel?
+    let bodyType: BodyType?
     let sex: GenderModel
     let weight, height: Int
     let breastSize:Int?
     let pdSponsorship, pdSpendEvening, pdPeriodicMeetings, pdTravels: Bool
     let pdFriendshipCommunication: Bool
-    let hobby, favoritePlacesCity, visitedCountries, countriesWantVisit: String
+    let hobby, favoritePlacesCity, visitedCountries, countriesWantVisit: String?
     let photos: [Photo]
-    let email, phone: String
+    let email: String?
+    let phone: String
     let hairColor: HairModel?
     let verification: BodyType
 }

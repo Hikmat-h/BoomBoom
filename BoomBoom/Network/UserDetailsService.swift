@@ -51,7 +51,7 @@ class UserDetailsSerice {
         }
     }
     
-    func createBasicProfileData (token:String, lang:String, sexId:Int, email:String?, phone:String?, countryId:Int, cityId:Int, name:String, dateBirth:String, completion: @escaping (EditUserInfo?, NSError?)-> Void) {
+    func createBasicProfileData (token:String, lang:String, sexId:Int, email:String?, phone:String?, countryId:Int, cityId:Int, name:String, dateBirth:String, completion: @escaping (UserInfo?, NSError?)-> Void) {
         if let url = URL(string: "\(pathURL)/user/save") {
             headers_urlencoded["Accept-Language"] = lang
             headers_urlencoded["Authorization"] = "Bearer \(token)"
@@ -62,7 +62,7 @@ class UserDetailsSerice {
             if email != nil {
                 params["email"] = email
             }
-            AppNetwork.request(url: url, method: .post, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: EditUserInfo.self) { (model, error) in
+            AppNetwork.request(url: url, method: .post, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: UserInfo.self) { (model, error) in
                 guard let model = model else {
                     if error != nil {
                         completion(nil, error)
@@ -97,7 +97,7 @@ class UserDetailsSerice {
                          visitedCountries:String,
                          countriesWantVisit:String,
                          hairColorId:Int,
-                         completion: @escaping (EditUserInfo?, NSError?)->Void) {
+                         completion: @escaping (UserInfo?, NSError?)->Void) {
        if let url = URL(string: "\(pathURL)/user/save") {
             headers_urlencoded["Accept-Language"] = lang
             headers_urlencoded["Authorization"] = "Bearer \(token)"
@@ -105,7 +105,7 @@ class UserDetailsSerice {
             if breastSize != nil {
                 params["breastSize"] = breastSize
             }
-            AppNetwork.request(url: url, method: .post, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: EditUserInfo.self) { (model, error) in
+            AppNetwork.request(url: url, method: .post, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: UserInfo.self) { (model, error) in
                 guard let model = model else {
                     if error != nil {
                         completion(nil, error)
@@ -117,12 +117,12 @@ class UserDetailsSerice {
         }
     }
     
-    func getProfileDetails(token:String, lang:String, completion: @escaping (EditUserInfo?, NSError?)->Void) {
+    func getProfileDetails(token:String, lang:String, completion: @escaping (UserInfo?, NSError?)->Void) {
         if let url = URL(string: "\(pathURL)/user/get") {
             headers_urlencoded["Accept-Language"] = lang
                    headers_urlencoded["Authorization"] = "Bearer \(token)"
             let params:Parameters = [:]
-            AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: EditUserInfo.self) { (model, error) in
+            AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: UserInfo.self) { (model, error) in
                guard let model = model else {
                    if error != nil {
                        completion(nil, error)

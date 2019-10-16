@@ -31,7 +31,7 @@ class MainEditVC: UIViewController, UITextFieldDelegate {
     
     let birthDatePicker = UIDatePicker()
     
-    var userInfo: EditUserInfo?
+    var userInfo: UserInfo?
     var genderList:[GenderModel] = []
     var genderID:Int = -1
     
@@ -278,9 +278,9 @@ class MainEditVC: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func saveChanges (token:String, lang:String, info:EditUserInfo) {
+    func saveChanges (token:String, lang:String, info:UserInfo) {
         showActivityIndicator(loadingView: loadingView, spinner: spinner)
-        UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: info.bodyType.id, sexId: genderID, sexualOrientation: info.sexualOrientation.id, countryId: countryID, cityId: cityID, name: nameLbl.text ?? "", dateBirth: birthDatetextField.text ?? "", information: info.information, weight: info.weight, height: info.height, breastSize: info.breastSize, pdSponsorship: info.pdSponsorship, pdSpendEvening: info.pdSpendEvening, pdPeriodicMeetings: info.pdPeriodicMeetings, pdTravels: info.pdTravels, pdFriendshipCommunication: info.pdFriendshipCommunication, hobby: info.hobby, favoritePlacesCity: info.favoritePlacesCity, visitedCountries: info.visitedCountries, countriesWantVisit: info.countriesWantVisit, hairColorId: info.hairColor?.id ?? 0) { (model, error) in
+        UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: info.bodyType?.id ?? -1, sexId: genderID, sexualOrientation: info.sexualOrientation?.id ?? -1, countryId: countryID, cityId: cityID, name: nameLbl.text ?? "", dateBirth: birthDatetextField.text ?? "", information: info.information ?? "", weight: info.weight, height: info.height, breastSize: info.breastSize, pdSponsorship: info.pdSponsorship, pdSpendEvening: info.pdSpendEvening, pdPeriodicMeetings: info.pdPeriodicMeetings, pdTravels: info.pdTravels, pdFriendshipCommunication: info.pdFriendshipCommunication, hobby: info.hobby ?? "", favoritePlacesCity: info.favoritePlacesCity ?? "", visitedCountries: info.visitedCountries ?? "", countriesWantVisit: info.countriesWantVisit ?? "", hairColorId: info.hairColor?.id ?? 0) { (model, error) in
             DispatchQueue.main.async {
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if error != nil {

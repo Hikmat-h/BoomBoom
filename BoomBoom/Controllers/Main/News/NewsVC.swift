@@ -24,8 +24,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     //data models
     var firstTop100Photo:Top100Account?
-    var newAccountPhotos:[NewAccount] = []
-    var accountWithPhoto:[NewAccount] = []
+    var newAccounts:[NewAccount] = []
     
     //static vars
     var token:String = UserDefaults.standard.value(forKey: "token") as! String
@@ -33,6 +32,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     let baseURL = Constants.HTTP.PATH_URL
     
     var pageNo:CLong=0
+    var isLastPage:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +69,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         if collectionView == starredCollectionV {
             return 5
         } else {
-            return accountWithPhoto.count
+            return newAccounts.count
         }
     }
     
@@ -85,9 +85,13 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
                 cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
             } else {
                 cell.photoImgView.frame.size = CGSize(width: cellWidth + 1, height: cellWidth + 1)
-                let account = accountWithPhoto[indexPath.row]
-                let url = baseURL + "/" + (account.photos[0].pathURLPreview )
-                cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+                let account = newAccounts[indexPath.row]
+                if account.photos.count>0{
+                    let url = baseURL + "/" + (account.photos[0].pathURLPreview )
+                    cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+                } else {
+                    cell.photoImgView.image = UIImage(named: "default_ava")
+                }
             }
             return cell
         }
@@ -97,6 +101,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row != 0 {
             guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
+            detailVC.userID = newAccounts[indexPath.row].id
             show(detailVC, sender: self)
         }
     }
@@ -104,9 +109,11 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     //load new photos
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let lastRow = indexPath.row
-        if lastRow == accountWithPhoto.count - 1 {
-            pageNo = pageNo + 1
-            getNewAccountPhotos(token: token, lang: language, page: pageNo)
+        if lastRow == newAccounts.count - 1 {
+            if !isLastPage{
+                pageNo = pageNo + 1
+                getNewAccountPhotos(token: token, lang: language, page: pageNo)
+            }
         }
     }
     
@@ -161,10 +168,13 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
             DispatchQueue.main.async {
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if error == nil {
-                    self.newAccountPhotos = self.newAccountPhotos + (photoListModel ?? [])
-                    let temp: [NewAccount] = photoListModel ?? []
-                    self.accountWithPhoto = self.accountWithPhoto + temp.filter({$0.photos.count>0})
-                    self.photoCollectionV.reloadData()
+                    if ((photoListModel?.count ?? 0) > 0){
+                        self.isLastPage = false
+                        self.newAccounts = self.newAccounts + (photoListModel ?? [])
+                        self.photoCollectionV.reloadData()
+                    } else {
+                        self.isLastPage = true
+                    }
                 } else {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
                 }

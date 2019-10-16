@@ -46,15 +46,23 @@ class UserProfilePhotosCell: UITableViewCell, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if userPhotos.count == 0 {
+            return 1
+        }
         return userPhotos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.PROFILE_PHOTO_CELL, for: indexPath) as! ProfilePhotosCell
-        let photo = userPhotos[indexPath.row]
-        let url = baseURL + "/" + photo.pathURLPreview
-        cell.photoImgView?.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named: "transparent"), options: .refreshCached)
-        cell.likeCountLbl.text = "\(photo.cntLike)"
+        if indexPath.row == 0 && userPhotos.count == 0{
+            cell.photoImgView.image = UIImage(named: "default_ava")
+            cell.likeCountLbl.text = "0"
+        } else {
+            let photo = userPhotos[indexPath.row]
+            let url = baseURL + "/" + photo.pathURLPreview
+            cell.photoImgView?.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named: "transparent"), options: .refreshCached)
+            cell.likeCountLbl.text = "\(photo.cntLike ?? 0)"
+        }
         return cell
     }
 }

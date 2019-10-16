@@ -51,7 +51,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
 //    let token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2OCIsImlhdCI6MTU2OTk0MTA4OSwiZXhwIjoxNTcwODA1MDg5fQ.1Yt8sY90vdyJOhNz6BIP2vOrAEBG0HYSy4bqH9DBr0osSOKB45YwHT1drVlFu_mbTlAtQBmj2RrC_IkRkkfdwQ"
     
-    var userInformation: EditUserInfo?
+    var userInformation: UserInfo?
     var photos:[Photo] = []
     let baseUrl = Constants.HTTP.PATH_URL
     
@@ -151,18 +151,18 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         //put fresh data
         self.photos = userInformation?.photos ?? []
         self.collectionView.reloadData()
-        if !userInformation!.information.isEmpty {
+        if !(userInformation!.information?.isEmpty ?? true) {
             aboutTextView.textColor = .white
             aboutTextView.text = "\(userInformation?.information ?? "")"
         }
-        self.orientationLbl.text = "\(userInformation?.sexualOrientation.title ?? "")"
+        self.orientationLbl.text = "\(userInformation?.sexualOrientation?.title ?? "")"
         if ((userInformation?.weight) != nil) {
             weightLbl.text = "\(userInformation?.weight ?? 0)"
         }
         if ((userInformation?.height) != nil) {
             heightLbl.text = "\(userInformation?.height ?? 0)"
         }
-        self.bodyTypelbl.text = "\(userInformation?.bodyType.title ?? "")"
+        self.bodyTypelbl.text = "\(userInformation?.bodyType?.title ?? "")"
         if userInformation?.sex.id == 2 {
             boobSizeViewHeight.constant = 44
             boobSizeView.isHidden = false
@@ -174,19 +174,19 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
             boobSizeView.layoutIfNeeded()
         }
         self.hairColorlbl.text = userInformation?.hairColor?.title
-        if !userInformation!.hobby.isEmpty {
+        if !(userInformation!.hobby?.isEmpty ?? true) {
             interestsTextView.textColor = .white
             interestsTextView.text = userInformation?.hobby
         }
-        if !userInformation!.favoritePlacesCity.isEmpty {
+        if !(userInformation!.favoritePlacesCity?.isEmpty ?? true) {
             favPlacesTextView.textColor = .white
             favPlacesTextView.text = userInformation?.favoritePlacesCity
         }
-        if !userInformation!.visitedCountries.isEmpty {
+        if !(userInformation!.visitedCountries?.isEmpty ?? true) {
             visitedCountriesTextView.textColor = .white
             visitedCountriesTextView.text = userInformation?.visitedCountries
         }
-        if !userInformation!.countriesWantVisit.isEmpty {
+        if !(userInformation!.countriesWantVisit?.isEmpty ?? true) {
             interestedCountriesTextView.textColor = .white
             interestedCountriesTextView.text = userInformation?.countriesWantVisit
         }

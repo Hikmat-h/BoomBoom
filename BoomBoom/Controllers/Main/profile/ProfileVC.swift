@@ -89,7 +89,7 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "VerificationCell") as! VerificationCell
-            let url = baseURL + "/" + (avatar?.pathURL ?? "")
+            let url = baseURL + "/" + (avatar?.pathURLPreview ?? "")
             cell.verifPhotoView.layer.cornerRadius = 26
             if ((userInformation?.photos.count ?? 0) > 0) {
                 cell.verifPhotoView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)

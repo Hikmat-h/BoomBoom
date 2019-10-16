@@ -88,11 +88,33 @@ struct UserInfo: Codable {
     let hobby, favoritePlacesCity, visitedCountries, countriesWantVisit: String?
     let photos: [Photo]
     let email: String?
-    let phone: String
+    let phone: String?
     let hairColor: HairModel?
     let verification: BodyType
 }
 
+// MARK: - other user info
+struct OtherProfile: Codable {
+    let id: Int
+    let name, dateBirth: String
+    let countries: Country
+    let cities: City
+    let information: String?
+    let sexualOrientation: SexualOrientationModel?
+    let bodyType: BodyType?
+    let sex: GenderModel
+    let weight, height: Int
+    let breastSize: Int?
+    let pdSponsorship, pdSpendEvening, pdPeriodicMeetings, pdTravels: Bool
+    let pdFriendshipCommunication: Bool
+    let hobby: String?
+    let favoritePlacesCity, visitedCountries, countriesWantVisit: String?
+    let photos: [Photo]
+    let hairColor: HairModel?
+    let verification: BodyType
+    let online: Bool
+    let typeAccount: String
+}
 // MARK: - BodyType
 struct BodyType: Codable {
     let id: Int

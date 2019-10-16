@@ -12,7 +12,9 @@ import SDWebImage
 class PhotosCell: UITableViewCell, UIScrollViewDelegate {
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var likeBtn: UIButton!
+    @IBOutlet weak var nameAndAgelbl: UILabel!
     
+    @IBOutlet weak var cityLbl: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     var photos:[Photo] = []
     var myFrame: CGRect = CGRect(x:0, y:0, width:0, height:0)
@@ -24,27 +26,48 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
         let like = UIImage(named: "like")?.withRenderingMode(.alwaysTemplate)
         likeBtn.tintColor = #colorLiteral(red: 0.2745098039, green: 0.2588235294, blue: 0.2588235294, alpha: 1)
         likeBtn.setImage(like, for: .normal)
-        
-        configurePageControl()
 
         scrollView.delegate = self
         scrollView.isPagingEnabled = true
-        
-        print(scrollView.frame as Any)
-        
+        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
+    }
+    
+    override func prepareForReuse() {
+        self.scrollView.subviews.forEach({$0.removeFromSuperview()})
+    }
+    
+    //used to update scrollView from parent VC
+    func updatePageScroller() {
+        configurePageControl()
         for (index, photo) in photos.enumerated() {
 
             myFrame.origin.x = self.scrollView.frame.size.width * CGFloat(index)
             myFrame.size = self.scrollView.frame.size
 
             let imageView = UIImageView(frame: myFrame)
+            
             let url = baseURL + "/" + photo.pathURL
             imageView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
-            self.scrollView .addSubview(imageView)
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            self.scrollView.addSubview(imageView)
+            
         }
-
-        self.scrollView.contentSize = CGSize(width:self.scrollView.frame.size.width * 4,height: self.scrollView.frame.size.height)
-        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
+        
+        if (photos.count > 0){
+            let width = CGFloat(self.scrollView.frame.size.width) * CGFloat(photos.count)
+            self.scrollView.contentSize = CGSize(width:width, height: self.scrollView.frame.size.height)
+        } else {
+            let width = CGFloat(self.scrollView.frame.size.width)
+            self.scrollView.contentSize = CGSize(width:width, height: self.scrollView.frame.size.height)
+            let tempFrame = CGRect(origin: .zero, size: scrollView.frame.size)
+            let imageView = UIImageView(frame: tempFrame)
+            imageView.image = UIImage(named: "default_ava2")
+            imageView.backgroundColor = .gray
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            self.scrollView.addSubview(imageView)
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

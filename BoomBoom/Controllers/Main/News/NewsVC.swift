@@ -52,6 +52,8 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        newAccounts.removeAll()
+        self.photoCollectionV.reloadData()
         getAllPhotos(token:token, lang: language, page: 0)
         
     }
@@ -69,7 +71,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         if collectionView == starredCollectionV {
             return 5
         } else {
-            return newAccounts.count
+            return newAccounts.count + 1
         }
     }
     
@@ -81,11 +83,15 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.NEWS_PHOTO_CELL, for: indexPath) as! NewsPhotoCell
             if (indexPath.row == 0) {
                 cell.photoImgView.frame.size = CGSize(width: cellWidth*2 + 1, height: cellWidth*2 + 1)
-                let url = baseURL + "/" + (firstTop100Photo?.pathURL ?? "")
-                cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+                if (firstTop100Photo != nil) {
+                    let url = baseURL + "/" + (firstTop100Photo?.pathURLPreview ?? "")
+                    cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+                } else {
+                    cell.photoImgView.image = UIImage(named: "default_ava")
+                }
             } else {
                 cell.photoImgView.frame.size = CGSize(width: cellWidth + 1, height: cellWidth + 1)
-                let account = newAccounts[indexPath.row]
+                let account = newAccounts[indexPath.row-1]
                 if account.photos.count>0{
                     let url = baseURL + "/" + (account.photos[0].pathURLPreview )
                     cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
@@ -101,7 +107,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.row != 0 {
             guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
-            detailVC.userID = newAccounts[indexPath.row].id
+            detailVC.userID = newAccounts[indexPath.row-1].id
             show(detailVC, sender: self)
         }
     }
@@ -109,7 +115,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     //load new photos
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let lastRow = indexPath.row
-        if lastRow == newAccounts.count - 1 {
+        if lastRow == newAccounts.count {
             if !isLastPage{
                 pageNo = pageNo + 1
                 getNewAccountPhotos(token: token, lang: language, page: pageNo)

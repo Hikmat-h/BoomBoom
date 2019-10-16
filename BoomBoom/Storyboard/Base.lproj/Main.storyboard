@@ -4998,19 +4998,17 @@ Cg
                                             <subviews>
                                                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HDs-rt-RUR">
                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="811"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
-                                                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aYh-na-0Dx">
-                                                            <rect key="frame" x="0.0" y="0.0" width="382" height="811"/>
+                                                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="default_ava2" translatesAutoresizingMaskIntoConstraints="NO" id="dnI-f6-Why">
+                                                            <rect key="frame" x="0.0" y="8" width="382" height="795"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </scrollView>
-                                                <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" translatesAutoresizingMaskIntoConstraints="NO" id="Eja-Ec-upc">
-                                                    <rect key="frame" x="171" y="20" width="39" height="37"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" translatesAutoresizingMaskIntoConstraints="NO" id="Eja-Ec-upc">
+                                                    <rect key="frame" x="164" y="16" width="55" height="37"/>
                                                     <color key="pageIndicatorTintColor" red="0.85703223939999995" green="0.85705238579999998" blue="0.85704153780000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </pageControl>
@@ -5075,9 +5073,18 @@ Cg
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Валерия, 25" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tib-95-Sda">
-                                                    <rect key="frame" x="16" y="690" width="350" height="28"/>
+                                                    <rect key="frame" x="16" y="646" width="350" height="28"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="28" id="uI7-cV-oBE"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="22"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Austria" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ye-JN-Itj">
+                                                    <rect key="frame" x="16" y="690" width="350" height="28"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="28" id="enV-6g-dwC"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="22"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -5088,18 +5095,25 @@ Cg
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="tRW-MU-hs0" secondAttribute="bottom" constant="40" id="5tO-DZ-Ema"/>
                                                 <constraint firstItem="Tib-95-Sda" firstAttribute="centerX" secondItem="PpY-8J-clF" secondAttribute="centerX" id="BmJ-4E-4yj"/>
+                                                <constraint firstItem="Eja-Ec-upc" firstAttribute="top" secondItem="PpY-8J-clF" secondAttribute="top" constant="16" id="Gxd-pC-Eu9"/>
+                                                <constraint firstItem="8ye-JN-Itj" firstAttribute="top" secondItem="Tib-95-Sda" secondAttribute="bottom" constant="16" id="JZA-AG-zft"/>
                                                 <constraint firstAttribute="bottom" secondItem="k6N-AY-kRc" secondAttribute="bottom" constant="40" id="Nbw-1F-nYw"/>
                                                 <constraint firstAttribute="trailing" secondItem="AX8-tv-TdM" secondAttribute="trailing" constant="56" id="O3j-ya-SrR"/>
                                                 <constraint firstAttribute="bottom" secondItem="AX8-tv-TdM" secondAttribute="bottom" constant="40" id="OWe-l7-fag"/>
                                                 <constraint firstItem="tRW-MU-hs0" firstAttribute="centerX" secondItem="PpY-8J-clF" secondAttribute="centerX" id="QPS-zp-pe6"/>
+                                                <constraint firstItem="8ye-JN-Itj" firstAttribute="centerX" secondItem="PpY-8J-clF" secondAttribute="centerX" id="SI2-3o-brJ"/>
                                                 <constraint firstItem="Tib-95-Sda" firstAttribute="leading" secondItem="PpY-8J-clF" secondAttribute="leading" constant="16" id="WQ7-1k-7ux"/>
-                                                <constraint firstItem="tRW-MU-hs0" firstAttribute="top" secondItem="Tib-95-Sda" secondAttribute="bottom" constant="10" id="bMq-2N-9Bh"/>
+                                                <constraint firstItem="tRW-MU-hs0" firstAttribute="top" secondItem="8ye-JN-Itj" secondAttribute="bottom" constant="10" id="d2R-MR-fPv"/>
+                                                <constraint firstItem="Eja-Ec-upc" firstAttribute="centerX" secondItem="PpY-8J-clF" secondAttribute="centerX" id="ojG-mA-dxZ"/>
+                                                <constraint firstItem="8ye-JN-Itj" firstAttribute="leading" secondItem="PpY-8J-clF" secondAttribute="leading" constant="16" id="qfN-LU-TIg"/>
                                                 <constraint firstItem="k6N-AY-kRc" firstAttribute="leading" secondItem="PpY-8J-clF" secondAttribute="leading" constant="56" id="ye0-uR-DVe"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
+                                            <outlet property="cityLbl" destination="8ye-JN-Itj" id="7yN-Yb-i3K"/>
                                             <outlet property="likeBtn" destination="0xl-mA-ZhY" id="Eg6-1J-yzu"/>
+                                            <outlet property="nameAndAgelbl" destination="Tib-95-Sda" id="Wj5-e1-uTi"/>
                                             <outlet property="pageControl" destination="Eja-Ec-upc" id="WBT-gh-sSt"/>
                                             <outlet property="scrollView" destination="HDs-rt-RUR" id="WNZ-OD-GKe"/>
                                         </connections>
@@ -5178,7 +5192,7 @@ Cg
                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                         </textView>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="test5" translatesAutoresizingMaskIntoConstraints="NO" id="utT-Xl-9yR">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="test5" translatesAutoresizingMaskIntoConstraints="NO" id="utT-Xl-9yR">
                                                             <rect key="frame" x="14" y="63" width="52" height="52"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="52" id="J7x-E2-NGB"/>
@@ -5318,7 +5332,7 @@ Cg
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bWx-PG-ACc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5809" y="1000"/>
+            <point key="canvasLocation" x="5808.6956521739139" y="999.77678571428567"/>
         </scene>
         <!--О ПРИЛОЖЕНИИ-->
         <scene sceneID="E8G-dK-5Dz">
@@ -6196,6 +6210,7 @@ Cg
         <image name="chat" width="24" height="24"/>
         <image name="checked" width="170.5" height="170.5"/>
         <image name="circle" width="56" height="56"/>
+        <image name="default_ava2" width="166.5" height="222"/>
         <image name="done" width="45" height="45"/>
         <image name="edit_profile" width="53" height="53"/>
         <image name="female" width="30.5" height="31"/>

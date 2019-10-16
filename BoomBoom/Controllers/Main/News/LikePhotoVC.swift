@@ -21,7 +21,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
 
     let baseURL = Constants.HTTP.PATH_URL
     
-    var userInformation: UserInfo?
+    var userInformation: OtherProfile?
     var infoArray:[String] = []
     var infoTitleArray:[String] = []
     var avatar:Photo?
@@ -60,12 +60,11 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "photosCell") as! PhotosCell
             cell.photos = userInformation?.photos ?? []
+            cell.cityLbl.text = userInformation?.cities.title
+            cell.nameAndAgelbl.text = "\(userInformation?.name ?? ""), \(self.comuteAge(userInformation?.dateBirth ?? ""))"
+            cell.updatePageScroller()
             if ((userInformation?.photos.count ?? 0) > 0){
                 avatar = userInformation?.photos.first(where: {$0.main == true})
-                let url = baseURL + "/" + (avatar?.pathURL ?? "")
-                cell.imageView?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
-            } else {
-                cell.imageView?.image = UIImage(named: "default_ava")
             }
             return cell
         } else if indexPath.row>0 && indexPath.row<5 && indexPath.row<infoArray.count+1 {
@@ -75,7 +74,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
             return cell
         } else if indexPath.row == infoArray.count+1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "verificationCell") as! VerificationCell
-            let url = baseURL + "/" + (avatar?.pathURL ?? "")
+            let url = baseURL + "/" + (avatar?.pathURLPreview ?? "")
             cell.verifPhotoView.layer.cornerRadius = 26
             if ((userInformation?.photos.count ?? 0) > 0) {
                 cell.verifPhotoView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
@@ -115,7 +114,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         }
     }
     
-    func setUserInfo(infoModel:UserInfo) {
+    func setUserInfo(infoModel:OtherProfile) {
         
         self.userInformation = infoModel
         if (!(self.userInformation!.information?.isEmpty ?? true)) {
@@ -177,6 +176,15 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
             self.infoArray.append(others)
         }
         self.tableView.reloadData()
+    }
+    
+    //converts userInfo object into array and sets lable values
+    func comuteAge(_ dateBirth:String)->Int {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        let timeSince = Date().timeIntervalSince(formatter.date(from: dateBirth) ?? Date())
+        let age = Int(timeSince/31536000)
+        return age
     }
     
     //MARK: - APi call

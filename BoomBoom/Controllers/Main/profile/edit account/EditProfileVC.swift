@@ -237,7 +237,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
     func saveChanges(token:String, lang:String) {
         showActivityIndicator(loadingView: loadingView, spinner: spinner)
-        UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: bodyTypeID, sexId: userInformation?.sex.id ?? 0, sexualOrientation: orientationID, countryId: userInformation?.countries.countryID ?? 0, cityId: userInformation?.cities.cityID ?? 0, name: userInformation?.name ?? "", dateBirth: userInformation?.dateBirth ?? "", information: aboutTextView.text, weight: Int(weightLbl.text ?? "") ?? 0, height: Int(heightLbl.text ?? "") ?? 0, breastSize: Int(boobSize.text ?? ""), pdSponsorship: sponsorS.isOn, pdSpendEvening: nightS.isOn, pdPeriodicMeetings: datingS.isOn, pdTravels: travelS.isOn, pdFriendshipCommunication: friendshipS.isOn, hobby: interestsTextView.text, favoritePlacesCity: favPlacesTextView.text, visitedCountries: interestedCountriesTextView.text, countriesWantVisit: interestedCountriesTextView.text, hairColorId: hairID) { (model, error) in
+        UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: bodyTypeID, sexId: userInformation?.sex.id ?? 0, sexualOrientation: orientationID, countryId: userInformation?.countries.countryID ?? 0, cityId: userInformation?.cities.cityID ?? 0, name: userInformation?.name ?? "", dateBirth: userInformation?.dateBirth ?? "", information: aboutTextView.text, weight: Int(weightLbl.text ?? "") ?? 0, height: Int(heightLbl.text ?? "") ?? 0, breastSize: Int(boobSize.text ?? ""), pdSponsorship: sponsorS.isOn, pdSpendEvening: nightS.isOn, pdPeriodicMeetings: datingS.isOn, pdTravels: travelS.isOn, pdFriendshipCommunication: friendshipS.isOn, hobby: interestsTextView.textColor != UIColor.darkGray ? (interestsTextView?.text)!:"", favoritePlacesCity: favPlacesTextView.textColor != UIColor.darkGray ? (favPlacesTextView?.text)!:"", visitedCountries: visitedCountriesTextView.textColor != UIColor.darkGray ? (visitedCountriesTextView?.text)!:"", countriesWantVisit: interestedCountriesTextView.textColor != UIColor.darkGray ? (interestedCountriesTextView?.text)!:"", hairColorId: hairID) { (model, error) in
             if (error != nil) {
                 DispatchQueue.main.async {
                     self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
@@ -509,6 +509,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
 }
 
+//MARK: - Photo editor extension
 extension EditProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let image = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage) else { return }

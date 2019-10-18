@@ -31,6 +31,21 @@ class NewsService {
         }
     }
     
+    func getTop100Photo(token:String, lang:String, page:Int, completion: @escaping (Top100PhotoListAnswer?, NSError?)->Void){
+        if let url = URL(string: "\(pathURL)/like/gettop") {
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
+            let params: Parameters = ["page":page]
+            AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.default, headers: headers_urlencoded, codableClass: Top100PhotoListAnswer.self) { (model, error) in
+                guard let model = model else {
+                    completion(nil, error)
+                    return
+                }
+                completion(model, nil)
+            }
+        }
+    }
+    
     func getNewAccounts(token:String, lang:String, page:Int, completion: @escaping (NewAccountListAnswer?, NSError?)->Void){
         if let url = URL(string: "\(pathURL)/accounts/getnew") {
             headers_urlencoded["Accept-Language"] = lang

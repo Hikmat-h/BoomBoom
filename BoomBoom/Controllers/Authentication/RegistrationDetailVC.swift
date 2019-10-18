@@ -33,7 +33,7 @@ class RegistrationDetailVC: UIViewController, UITextFieldDelegate {
     var loadingView: UIView = UIView()
     var spinner = UIActivityIndicatorView(style: .whiteLarge)
     
-    var token = UserDefaults.standard.value(forKey: "token") as! String
+    let token = UserDefaults.standard.value(forKey: "token") as! String
     
     //birthdate picker
     let datePicker = UIDatePicker()

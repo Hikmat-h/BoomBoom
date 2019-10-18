@@ -22,6 +22,27 @@ import Alamofire
 //     }
 //   }
 
+typealias GenderListAnswer = [GenderModel]
+
+typealias HairListAnswer = [HairModel]
+
+typealias BodyTypeListAnswer = [BodyType]
+
+typealias OrientationListAnswer = [SexualOrientationModel]
+
+typealias CityListAnswerModel = [City]
+
+typealias CountryListAnswerModel = [Country]
+
+typealias PhotoListAnswer = [Photo]
+
+typealias NewAccountListAnswer = [NewAccount]
+
+typealias Top100PhotoListAnswer = [Top100Account]
+
+typealias SearchResultList = [SearchResult]
+
+
 struct AuthByMailNetworkResponseModel: Codable {
     let accessToken, tokenType: String
 }
@@ -51,25 +72,6 @@ struct SexualOrientationModel: Codable {
     let id: Int
     let title: String
 }
-
-typealias GenderListAnswer = [GenderModel]
-
-typealias HairListAnswer = [HairModel]
-
-typealias BodyTypeListAnswer = [BodyType]
-
-typealias OrientationListAnswer = [SexualOrientationModel]
-
-typealias CityListAnswerModel = [City]
-
-typealias CountryListAnswerModel = [Country]
-
-typealias PhotoListAnswer = [Photo]
-
-typealias NewAccountListAnswer = [NewAccount]
-
-typealias Top100PhotoListAnswer = [Top100Account]
-
 
 // MARK: - UserInfo  all info about user
 struct UserInfo: Codable {
@@ -115,6 +117,7 @@ struct OtherProfile: Codable {
     let online: Bool
     let typeAccount: String
 }
+
 // MARK: - BodyType
 struct BodyType: Codable {
     let id: Int
@@ -180,7 +183,7 @@ struct Top100Account: Codable {
 struct NewAccount: Codable {
     let id: Int
     let name: String
-    let photos: [NewAccountPhoto]
+    let photos: [Photo]
     let dateBirth: String
     let cities: City
     let typeAccount: String
@@ -201,3 +204,26 @@ struct NewAccountPhoto: Codable {
         case main, cntLike, ilike
     }
 }
+
+// MARK: - SearchResult photo
+struct SearchResultPhoto: Codable {
+    let id: Int
+    let pathURL, pathURLPreview: String
+    let main: Bool
+    let ilike: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case pathURL = "pathUrl"
+        case pathURLPreview = "pathUrlPreview"
+        case main, ilike
+    }
+}
+
+//MARK: - search result
+struct SearchResult: Codable {
+    let id: Int
+    let name: String
+    let photos: [SearchResultPhoto]
+}
+

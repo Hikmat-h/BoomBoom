@@ -63,6 +63,9 @@
 		9E98061D2343549A00118E3C /* ProfilePhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98061C2343549A00118E3C /* ProfilePhotoCell.swift */; };
 		9E98061F234354F000118E3C /* ProfileActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E98061E234354F000118E3C /* ProfileActionCell.swift */; };
 		9E9806242343552000118E3C /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9806232343552000118E3C /* ProfileInfoCell.swift */; };
+		9EAAAFCB23582B7500B0A181 /* Top100VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAAAFCA23582B7500B0A181 /* Top100VC.swift */; };
+		9EAAAFCD23585CAC00B0A181 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAAAFCC23585CAC00B0A181 /* SearchService.swift */; };
+		9EAAAFCF235864E600B0A181 /* SearchResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAAAFCE235864E600B0A181 /* SearchResultVC.swift */; };
 		9EAD7891232611DF00BFFAE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD7890232611DF00BFFAE7 /* AppDelegate.swift */; };
 		9EAD7896232611DF00BFFAE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EAD7894232611DF00BFFAE7 /* Main.storyboard */; };
 		9EAD7899232611DF00BFFAE7 /* BoomBoom.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9EAD7897232611DF00BFFAE7 /* BoomBoom.xcdatamodeld */; };
@@ -175,6 +178,9 @@
 		9E98061C2343549A00118E3C /* ProfilePhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoCell.swift; sourceTree = "<group>"; };
 		9E98061E234354F000118E3C /* ProfileActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionCell.swift; sourceTree = "<group>"; };
 		9E9806232343552000118E3C /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
+		9EAAAFCA23582B7500B0A181 /* Top100VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Top100VC.swift; sourceTree = "<group>"; };
+		9EAAAFCC23585CAC00B0A181 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
+		9EAAAFCE235864E600B0A181 /* SearchResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultVC.swift; sourceTree = "<group>"; };
 		9EAD788D232611DF00BFFAE7 /* BoomBoom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoomBoom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EAD7890232611DF00BFFAE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9EAD7895232611DF00BFFAE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -334,6 +340,7 @@
 			isa = PBXGroup;
 			children = (
 				9E7B0A87232925BE0082539F /* SearchVC.swift */,
+				9EAAAFCE235864E600B0A181 /* SearchResultVC.swift */,
 			);
 			path = search;
 			sourceTree = "<group>";
@@ -488,6 +495,7 @@
 				9E73101C233DD88B00A19423 /* RegistrationService.swift */,
 				9E731020233E234100A19423 /* UserDetailsService.swift */,
 				9E4E228823544F69005FA1FE /* NewsService.swift */,
+				9EAAAFCC23585CAC00B0A181 /* SearchService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -612,6 +620,7 @@
 				9E20A512232B7FB8002CFA94 /* Mosaiclayout.swift */,
 				9E29FD7E232FCEC700A119DF /* LikePhotoVC.swift */,
 				9E06C23A2330BEF0007F0E86 /* PreviewVC.swift */,
+				9EAAAFCA23582B7500B0A181 /* Top100VC.swift */,
 			);
 			path = News;
 			sourceTree = "<group>";
@@ -924,6 +933,7 @@
 				9E29CDAF23364E8300AB7D0A /* DeleteAccountVC.swift in Sources */,
 				9ED5AC642335E88100594245 /* MainEditVC.swift in Sources */,
 				9E0B7E152338E67600A6FE1A /* PageRateVC.swift in Sources */,
+				9EAAAFCF235864E600B0A181 /* SearchResultVC.swift in Sources */,
 				9E20A513232B7FB8002CFA94 /* Mosaiclayout.swift in Sources */,
 				9EB6C45123389DD700456C03 /* DeletionSuccessVC.swift in Sources */,
 				9EB5D1FA232AC21300D5905D /* NewsPhotoCell.swift in Sources */,
@@ -952,6 +962,7 @@
 				9EDF1FFE233B823B00AE7DD5 /* GeneralAnswer.swift in Sources */,
 				9EC4F6712328F19900179C2E /* RegistrationDetailVC.swift in Sources */,
 				9E98061F234354F000118E3C /* ProfileActionCell.swift in Sources */,
+				9EAAAFCD23585CAC00B0A181 /* SearchService.swift in Sources */,
 				9E29CD9D233628AD00AB7D0A /* AccountSettings.swift in Sources */,
 				9EF6BDFF2333A15700311A99 /* EditProfileVC.swift in Sources */,
 				9EAD78D523261CAE00BFFAE7 /* Utils.swift in Sources */,
@@ -961,6 +972,7 @@
 				9E29CDA12336290900AB7D0A /* HelpVC.swift in Sources */,
 				9E98061D2343549A00118E3C /* ProfilePhotoCell.swift in Sources */,
 				9E7B0A8D232928880082539F /* NewsCell.swift in Sources */,
+				9EAAAFCB23582B7500B0A181 /* Top100VC.swift in Sources */,
 				9E90727023435B670074EE43 /* UserProfilePhotosCell.swift in Sources */,
 				9EAD7891232611DF00BFFAE7 /* AppDelegate.swift in Sources */,
 				9EF6BDF62333756B00311A99 /* ActionsCell.swift in Sources */,

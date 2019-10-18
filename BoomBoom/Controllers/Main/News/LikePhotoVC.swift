@@ -67,7 +67,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
                 avatar = userInformation?.photos.first(where: {$0.main == true})
             }
             return cell
-        } else if indexPath.row>0 && indexPath.row<5 && indexPath.row<infoArray.count+1 {
+        } else if indexPath.row<infoArray.count+1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell") as! InfoCell
             cell.titleLbl.text = infoTitleArray[indexPath.row - 1]
             cell.textVIew.text = infoArray[indexPath.row - 1]
@@ -107,7 +107,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return tableView.frame.height
-        } else if indexPath.row > 0 && indexPath.row < 5 {
+        } else if indexPath.row<infoArray.count+1 {
             return 180
         } else {
             return 135

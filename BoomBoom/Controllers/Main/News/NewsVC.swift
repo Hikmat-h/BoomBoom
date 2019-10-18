@@ -26,6 +26,9 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     var firstTop100Photo:Top100Account?
     var newAccounts:[NewAccount] = []
     
+    //for 3d touch
+    var chosenIndex = -1
+    
     //static vars
     var token:String = UserDefaults.standard.value(forKey: "token") as! String
     let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
@@ -105,7 +108,10 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row != 0 {
+        if indexPath.row == 0 {
+            guard let top100VC = storyboard?.instantiateViewController(withIdentifier: "Top100VC") as? Top100VC else { return }
+            show(top100VC, sender: self)
+        } else {
             guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
             detailVC.userID = newAccounts[indexPath.row-1].id
             show(detailVC, sender: self)
@@ -140,6 +146,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         if indexPath == IndexPath(item: 0, section: 0) {
             return nil
         }
+        chosenIndex = indexPath.row
         guard let cell = photoCollectionV?.cellForItem(at: indexPath) as? NewsPhotoCell else { return nil }
         guard let preview = storyboard?.instantiateViewController(withIdentifier: "PreviewVC") as? PreviewVC else { return nil }
         previewingContext.sourceRect = cell.frame
@@ -150,6 +157,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
          guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
+        detailVC.userID = newAccounts[chosenIndex-1].id
         show(detailVC, sender: self)
     }
     
@@ -187,17 +195,4 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
             }
         }
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        if (collectionView == photoCollectionV) {
-//            let height = cellWidth+1
-//            if (indexPath.row == 0) {
-//                return CGSize(width: cellWidth*2, height: height*2)
-//            }
-//
-//            return CGSize(width: cellWidth, height: height)
-//        } else {
-//            return CGSize(width: 81, height: 113)
-//        }
-//    }
 }

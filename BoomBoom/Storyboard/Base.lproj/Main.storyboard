@@ -5315,21 +5315,21 @@ Cg
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Верификация пройдена" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wPG-ib-RGZ">
-                                                            <rect key="frame" x="87" y="73" width="279" height="32"/>
+                                                            <rect key="frame" x="82" y="66.5" width="284" height="32.5"/>
                                                             <color key="backgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                         </textView>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="test5" translatesAutoresizingMaskIntoConstraints="NO" id="utT-Xl-9yR">
-                                                            <rect key="frame" x="14" y="63" width="52" height="52"/>
+                                                            <rect key="frame" x="14" y="56.5" width="52" height="52"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="52" id="J7x-E2-NGB"/>
                                                                 <constraint firstAttribute="width" secondItem="utT-Xl-9yR" secondAttribute="height" multiplier="1:1" id="JWM-9x-sKY"/>
                                                             </constraints>
                                                         </imageView>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FAB-ke-vYs">
-                                                            <rect key="frame" x="50" y="99" width="16" height="16"/>
+                                                            <rect key="frame" x="50" y="92.5" width="16" height="16"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="16" id="HDc-yw-GZE"/>
                                                                 <constraint firstAttribute="width" constant="16" id="VTO-Ir-Vnd"/>
@@ -5338,13 +5338,13 @@ Cg
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstItem="wPG-ib-RGZ" firstAttribute="top" secondItem="peh-ON-NHo" secondAttribute="top" constant="73" id="26Z-Jm-A8W"/>
                                                         <constraint firstItem="utT-Xl-9yR" firstAttribute="leading" secondItem="peh-ON-NHo" secondAttribute="leading" constant="14" id="4Me-Sf-Dcs"/>
-                                                        <constraint firstItem="wPG-ib-RGZ" firstAttribute="leading" secondItem="peh-ON-NHo" secondAttribute="leading" constant="87" id="6gy-FH-Nxg"/>
                                                         <constraint firstItem="FAB-ke-vYs" firstAttribute="leading" secondItem="utT-Xl-9yR" secondAttribute="trailing" constant="-16" id="D7I-xJ-oIJ"/>
+                                                        <constraint firstItem="wPG-ib-RGZ" firstAttribute="centerY" secondItem="peh-ON-NHo" secondAttribute="centerY" constant="15" id="DDu-Cy-24h"/>
                                                         <constraint firstItem="FAB-ke-vYs" firstAttribute="top" secondItem="utT-Xl-9yR" secondAttribute="bottom" constant="-16" id="WfQ-k3-6Ny"/>
                                                         <constraint firstItem="utT-Xl-9yR" firstAttribute="centerY" secondItem="wPG-ib-RGZ" secondAttribute="centerY" id="t1t-v0-vDn"/>
                                                         <constraint firstAttribute="trailing" secondItem="wPG-ib-RGZ" secondAttribute="trailing" constant="16" id="vtb-vh-rb6"/>
+                                                        <constraint firstItem="wPG-ib-RGZ" firstAttribute="leading" secondItem="utT-Xl-9yR" secondAttribute="trailing" constant="16" id="y18-Tz-icF"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>

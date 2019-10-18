@@ -36,6 +36,8 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     var pageNo:CLong=0
     var isLastPage:Bool = false
+    //for returning to the same cell
+    var selectedIndexPath:IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,17 +52,13 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         
         peekPop = PeekPop(viewController: self)
         peekPop?.registerForPreviewingWithDelegate(self, sourceView: photoCollectionV)
-        
+        getAllPhotos(token:token, lang: language, page: 0)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        newAccounts.removeAll()
-        self.photoCollectionV.reloadData()
-        getAllPhotos(token:token, lang: language, page: 0)
-        
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
@@ -112,8 +110,11 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
             guard let top100VC = storyboard?.instantiateViewController(withIdentifier: "Top100VC") as? Top100VC else { return }
             show(top100VC, sender: self)
         } else {
+            selectedIndexPath = indexPath
             guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
             detailVC.userID = newAccounts[indexPath.row-1].id
+//            detailVC.modalPresentationStyle = .popover
+//            self.present(detailVC, animated: true, completion: nil)
             show(detailVC, sender: self)
         }
     }
@@ -159,6 +160,8 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
          guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
         detailVC.userID = newAccounts[chosenIndex-1].id
         show(detailVC, sender: self)
+//        detailVC.modalPresentationStyle = .popover
+//        self.present(detailVC, animated: true, completion: nil)
     }
     
     //MARK: - API calls
@@ -186,6 +189,9 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
                         self.isLastPage = false
                         self.newAccounts = self.newAccounts + (photoListModel ?? [])
                         self.photoCollectionV.reloadData()
+//                        if let index = self.selectedIndexPath{
+//                            self.photoCollectionV.scrollToItem(at: index, at: .centeredVertically, animated: false)
+//                        }
                     } else {
                         self.isLastPage = true
                     }

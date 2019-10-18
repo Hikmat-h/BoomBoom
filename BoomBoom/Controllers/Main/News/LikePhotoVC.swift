@@ -38,8 +38,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = .black
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        
         tableView.rowHeight = UITableView.automaticDimension
         getAccount(token: token, lang: language, id: userID ?? -1)
     }
@@ -63,6 +62,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
             cell.cityLbl.text = userInformation?.cities.title
             cell.nameAndAgelbl.text = "\(userInformation?.name ?? ""), \(self.comuteAge(userInformation?.dateBirth ?? ""))"
             cell.updatePageScroller()
+            cell.updateLikeBtnState()
             if ((userInformation?.photos.count ?? 0) > 0){
                 avatar = userInformation?.photos.first(where: {$0.main == true})
             }
@@ -115,6 +115,9 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     }
     
     func setUserInfo(infoModel:OtherProfile) {
+        //activate table view only after getting the data
+        tableView.delegate = self
+        tableView.dataSource = self
         
         self.userInformation = infoModel
         if (!(self.userInformation!.information?.isEmpty ?? true)) {
@@ -201,5 +204,4 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
                }
            }
        }
-
 }

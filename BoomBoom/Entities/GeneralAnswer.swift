@@ -152,9 +152,9 @@ struct Country: Codable {
 struct Photo: Codable {
     let id: Int
     let pathURL, pathURLPreview: String
-    let main: Bool
+    let main: Bool?
     let cntLike: Int?
-    let ilike: Bool?
+    var ilike: Bool?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -168,7 +168,7 @@ struct Photo: Codable {
 struct Top100Account: Codable {
     let id: Int
     let pathURL, pathURLPreview: String
-    let accountID, cntLike: Int
+    let accountID, cntLike: Int?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -190,20 +190,20 @@ struct NewAccount: Codable {
 }
 
 // MARK: - Photo
-struct NewAccountPhoto: Codable {
-    let id: Int
-    let pathURL, pathURLPreview: String
-    let main: Bool
-    let cntLike: Int
-    let ilike: Int?
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case pathURL = "pathUrl"
-        case pathURLPreview = "pathUrlPreview"
-        case main, cntLike, ilike
-    }
-}
+//struct NewAccountPhoto: Codable {
+//    let id: Int
+//    let pathURL, pathURLPreview: String
+//    let main: Bool
+//    let cntLike: Int
+//    let ilike: Int?
+//
+//    enum CodingKeys: String, CodingKey {
+//        case id
+//        case pathURL = "pathUrl"
+//        case pathURLPreview = "pathUrlPreview"
+//        case main, cntLike, ilike
+//    }
+//}
 
 // MARK: - SearchResult photo
 struct SearchResultPhoto: Codable {

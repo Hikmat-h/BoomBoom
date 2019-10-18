@@ -16,9 +16,16 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
     
     @IBOutlet weak var cityLbl: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
+    
+    var token:String = UserDefaults.standard.value(forKey: "token") as! String
+    let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
+    
     var photos:[Photo] = []
     var myFrame: CGRect = CGRect(x:0, y:0, width:0, height:0)
     let baseURL = Constants.HTTP.PATH_URL
+    let gray = #colorLiteral(red: 0.2745098039, green: 0.2588235294, blue: 0.2588235294, alpha: 1)
+    let red = #colorLiteral(red: 0.8980392157, green: 0.1019607843, blue: 0.2941176471, alpha: 1)
+    var currentPhotoIndex = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -77,9 +84,14 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
     }
 
     @IBAction func onLike(_ sender: Any) {
-        let gray = #colorLiteral(red: 0.2745098039, green: 0.2588235294, blue: 0.2588235294, alpha: 1)
-        let red = #colorLiteral(red: 0.8980392157, green: 0.1019607843, blue: 0.2941176471, alpha: 1)
-        if (likeBtn.tintColor == gray) {
+        if currentPhotoIndex < photos.count {
+            likePhoto(token:token, lang: language, photoID: photos[currentPhotoIndex].id)
+        }
+    }
+    
+    func updateLikeBtnState(){
+        guard photos.count>0 else { return }
+        if photos[currentPhotoIndex].ilike ?? false {
             likeBtn.tintColor = red
         } else {
             likeBtn.tintColor = gray
@@ -112,5 +124,19 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
 
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
+        currentPhotoIndex = Int(pageNumber)
+        updateLikeBtnState()
+    }
+    
+    //MARK: - api call
+    func likePhoto(token:String, lang:String, photoID:Int){
+        NewsService.current.likePhoto(token: token, lang: lang, photoId: photoID) { (photo, error) in
+            DispatchQueue.main.async {
+                if error == nil {
+                    self.photos[self.currentPhotoIndex].ilike?.toggle()
+                    self.updateLikeBtnState()
+                }
+            }
+        }
     }
 }

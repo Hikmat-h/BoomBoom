@@ -50,14 +50,11 @@ class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollecti
         peekPop = PeekPop(viewController: self)
         peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
         
-        // Do any additional setup after loading the view.
+        getTop100(token: token, lang: language, page: 0)
     }
 
     override func viewWillAppear(_ animated: Bool) {
-           self.navigationController?.setNavigationBarHidden(false, animated: false)
-        photos.removeAll()
-        self.collectionView.reloadData()
-        getTop100(token: token, lang: language, page: 0)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     @objc func showInfo(){

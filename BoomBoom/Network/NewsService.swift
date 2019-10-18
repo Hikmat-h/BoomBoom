@@ -75,4 +75,19 @@ class NewsService {
             }
         }
     }
+    
+    func likePhoto(token:String, lang:String, photoId:Int, completion: @escaping (Photo?, NSError?)->Void){
+        if let url = URL(string: "\(pathURL)/like/set") {
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
+            let params: Parameters = ["photoId":photoId]
+            AppNetwork.request(url: url, method: .post, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: Photo.self) { (model, error) in
+                if error == nil {
+                    completion(model, nil)
+                } else {
+                    completion(nil, error)
+                }
+            }
+        }
+    }
 }

@@ -67,13 +67,11 @@ class SearchResultVC: UIViewController, UICollectionViewDelegateFlowLayout, UICo
         peekPop = PeekPop(viewController: self)
         peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
         
+        getAccounts(token: token, lang: language, yearFrom: minAge, yearTo: maxAge, sex: sex, heightFrom: minHeight, heightTo: maxHeight, weightFrom: minWeight, weightTo: maxWeight, pdSponsorship: sponsor, pdSpendEvening: evening, pdPeriodicMeetings: dating, pdTravels: travel, pdFriendshipCommunication: friendShip, countryId: countryID != -1 ? countryID : nil, cityId: cityID != -1 ? cityID : nil, page: 0)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-           self.navigationController?.setNavigationBarHidden(false, animated: false)
-        accounts.removeAll()
-        self.collectionView.reloadData()
-        getAccounts(token: token, lang: language, yearFrom: minAge, yearTo: maxAge, sex: sex, heightFrom: minHeight, heightTo: maxHeight, weightFrom: minWeight, weightTo: maxWeight, pdSponsorship: sponsor, pdSpendEvening: evening, pdPeriodicMeetings: dating, pdTravels: travel, pdFriendshipCommunication: friendShip, countryId: countryID != -1 ? countryID : nil, cityId: cityID != -1 ? cityID : nil, page: 0)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     //MARK: - CollectionView dataSource and delegate

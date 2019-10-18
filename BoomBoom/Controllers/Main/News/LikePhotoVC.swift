@@ -60,7 +60,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
             let cell = tableView.dequeueReusableCell(withIdentifier: "photosCell") as! PhotosCell
             cell.photos = userInformation?.photos ?? []
             cell.cityLbl.text = userInformation?.cities.title
-            cell.nameAndAgelbl.text = "\(userInformation?.name ?? ""), \(self.comuteAge(userInformation?.dateBirth ?? ""))"
+            cell.nameAndAgelbl.text = "\(userInformation?.name ?? ""), \(Utils.current.comuteAge(userInformation?.dateBirth ?? ""))"
             cell.updatePageScroller()
             cell.updateLikeBtnState()
             if ((userInformation?.photos.count ?? 0) > 0){
@@ -179,15 +179,6 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
             self.infoArray.append(others)
         }
         self.tableView.reloadData()
-    }
-    
-    //converts userInfo object into array and sets lable values
-    func comuteAge(_ dateBirth:String)->Int {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy"
-        let timeSince = Date().timeIntervalSince(formatter.date(from: dateBirth) ?? Date())
-        let age = Int(timeSince/31536000)
-        return age
     }
     
     //MARK: - APi call

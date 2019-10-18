@@ -25,7 +25,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     //data models
     var firstTop100Photo:Top100Account?
     var newAccounts:[NewAccount] = []
-    
+    var topPaidList:[NewAccount] = []
     //for 3d touch
     var chosenIndex = -1
     
@@ -36,8 +36,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     var pageNo:CLong=0
     var isLastPage:Bool = false
-    //for returning to the same cell
-    var selectedIndexPath:IndexPath?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +69,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == starredCollectionV {
-            return 5
+            return topPaidList.count
         } else {
             return newAccounts.count + 1
         }
@@ -78,7 +77,15 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == starredCollectionV {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.STARRED_NEWS_CELL, for: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.STARRED_NEWS_CELL, for: indexPath) as! StarredNewsCell
+            cell.placeLbl.text = topPaidList[indexPath.row].cities.title
+            cell.timeLbl.text = "\(topPaidList[indexPath.row].name), \(Utils.current.comuteAge(topPaidList[indexPath.row].dateBirth ))"
+            if (topPaidList[indexPath.row].photos.count>0){
+                let url = baseURL + "/" + topPaidList[indexPath.row].photos[0].pathURLPreview
+                cell.userImgView?.sd_setImage(with:URL(string: url), placeholderImage: nil, options: .refreshCached)
+            } else {
+                cell.userImgView?.image = UIImage(named: "default_ava")
+            }
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.NAME_CELL.NEWS_PHOTO_CELL, for: indexPath) as! NewsPhotoCell
@@ -106,16 +113,21 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            guard let top100VC = storyboard?.instantiateViewController(withIdentifier: "Top100VC") as? Top100VC else { return }
-            show(top100VC, sender: self)
-        } else {
-            selectedIndexPath = indexPath
+        if collectionView == starredCollectionV{
             guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
-            detailVC.userID = newAccounts[indexPath.row-1].id
-//            detailVC.modalPresentationStyle = .popover
-//            self.present(detailVC, animated: true, completion: nil)
+            detailVC.userID = topPaidList[indexPath.row].id
             show(detailVC, sender: self)
+        } else {
+            if indexPath.row == 0 {
+                guard let top100VC = storyboard?.instantiateViewController(withIdentifier: "Top100VC") as? Top100VC else { return }
+                show(top100VC, sender: self)
+            } else {
+                guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "LikePhotoVC") as? LikePhotoVC else { return }
+                detailVC.userID = newAccounts[indexPath.row-1].id
+    //            detailVC.modalPresentationStyle = .popover
+    //            self.present(detailVC, animated: true, completion: nil)
+                show(detailVC, sender: self)
+            }
         }
     }
     
@@ -170,6 +182,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         NewsService.current.getFirstTop100Photo(token: token, lang: lang) { (photoModel, error) in
             DispatchQueue.main.async {
                 self.getNewAccountPhotos(token: token, lang: lang, page: page)
+                self.getTop(token: token, lang: lang)
                 if error == nil {
                     self.firstTop100Photo = photoModel?.first
                 } else {
@@ -183,18 +196,29 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     func getNewAccountPhotos(token:String, lang:String, page:Int){
         NewsService.current.getNewAccounts(token: token, lang: lang, page: page) { (photoListModel, error) in
             DispatchQueue.main.async {
-                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if error == nil {
                     if ((photoListModel?.count ?? 0) > 0){
                         self.isLastPage = false
                         self.newAccounts = self.newAccounts + (photoListModel ?? [])
                         self.photoCollectionV.reloadData()
-//                        if let index = self.selectedIndexPath{
-//                            self.photoCollectionV.scrollToItem(at: index, at: .centeredVertically, animated: false)
-//                        }
                     } else {
+                        self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                         self.isLastPage = true
                     }
+                } else {
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            }
+        }
+    }
+    
+    func getTop(token:String, lang:String){
+        NewsService.current.getTopPaid(token: token, lang: lang) { (accountsList, error) in
+            DispatchQueue.main.async {
+                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
+                if error == nil {
+                    self.topPaidList = accountsList ?? []
+                    self.starredCollectionV.reloadData()
                 } else {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
                 }

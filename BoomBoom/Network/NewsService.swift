@@ -90,4 +90,20 @@ class NewsService {
             }
         }
     }
+    
+    func getTopPaid(token:String, lang:String, completion: @escaping (NewAccountListAnswer?, NSError?)->Void){
+        if let url = URL(string: "\(pathURL)/accounts/gettoppaid") {
+            headers_urlencoded["Accept-Language"] = lang
+            headers_urlencoded["Authorization"] = "Bearer \(token)"
+            let params: Parameters = [:]
+            AppNetwork.request(url: url, method: .get, params: params, encoding: URLEncoding.queryString, headers: headers_urlencoded, codableClass: NewAccountListAnswer.self) { (model, error) in
+                if error == nil {
+                    completion(model, nil)
+                } else {
+                    completion(nil, error)
+                }
+            }
+        }
+    }
+    
 }

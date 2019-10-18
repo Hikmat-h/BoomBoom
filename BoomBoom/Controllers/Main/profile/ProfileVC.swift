@@ -71,7 +71,7 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
         } else if indexPath.row == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileActionCell") as! ProfileActionCell
-            cell.nameAndAgeLbl.text = "\(userInformation?.name ?? ""), \(self.comuteAge(userInformation?.dateBirth ?? ""))"
+            cell.nameAndAgeLbl.text = "\(userInformation?.name ?? ""), \(Utils.current.comuteAge(userInformation?.dateBirth ?? ""))"
             return cell
         } else if indexPath.row == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "UserProfilePhotosCell") as! UserProfilePhotosCell
@@ -127,15 +127,6 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             //other cells
             return 180
         }
-    }
-    
-    //converts userInfo object into array and sets lable values
-    func comuteAge(_ dateBirth:String)->Int {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy"
-        let timeSince = Date().timeIntervalSince(formatter.date(from: dateBirth) ?? Date())
-        let age = Int(timeSince/31536000)
-        return age
     }
     
     func setUserInfo(infoModel:UserInfo) {

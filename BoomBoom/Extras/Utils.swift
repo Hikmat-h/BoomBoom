@@ -138,6 +138,15 @@ class Utils {
         return stringError
     }
     
+    //converts userInfo object into array and sets lable values
+    func comuteAge(_ dateBirth:String)->Int {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        let timeSince = Date().timeIntervalSince(formatter.date(from: dateBirth) ?? Date())
+        let age = Int(timeSince/31536000)
+        return age
+    }
+    
     func setButtonStyle(btn: UIButton, cornerRadius: Int = 30) -> UIButton {
         btn.layer.borderWidth = 2
         btn.layer.borderColor = #colorLiteral(red: 0.8980392157, green: 0.1019607843, blue: 0.2941176471, alpha: 1)

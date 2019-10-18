@@ -42,7 +42,6 @@ typealias Top100PhotoListAnswer = [Top100Account]
 
 typealias SearchResultList = [SearchResult]
 
-
 struct AuthByMailNetworkResponseModel: Codable {
     let accessToken, tokenType: String
 }

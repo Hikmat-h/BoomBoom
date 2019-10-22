@@ -10,7 +10,7 @@ import UIKit
 import PeekPop
 import SDWebImage
 
-class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, PeekPopPreviewingDelegate {
+class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, PeekPopPreviewingDelegate, UIScrollViewDelegate {
 
     var peekPop: PeekPop?
     
@@ -26,6 +26,8 @@ class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollecti
     var token:String = UserDefaults.standard.value(forKey: "token") as! String
     let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
     let baseURL = Constants.HTTP.PATH_URL
+    
+    var refreshControl: UIRefreshControl?
     
     var pageNo:CLong=0
     var isLastPage:Bool = false
@@ -50,11 +52,49 @@ class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollecti
         peekPop = PeekPop(viewController: self)
         peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
         
+        //настраиваем refreshControl
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+                
+        refreshControl = UIRefreshControl()
+        refreshControl?.attributedTitle = NSAttributedString(string: "Загрузка ...", attributes: attributes)
+        
+        refreshControl?.tintColor = UIColor.white
+        //        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.collectionView?.addSubview(refreshControl!)
+        
         getTop100(token: token, lang: language, page: 0)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    //MARK: - refreshing
+    var canRefresh = true
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if scrollView.contentOffset.y < -100 {
+            
+            if canRefresh && !self.refreshControl!.isRefreshing {
+                
+                self.canRefresh = false
+                self.refreshControl!.beginRefreshing()
+                
+                self.refresh(sender: self)
+            }
+        }else if scrollView.contentOffset.y >= 0 {
+            
+            self.canRefresh = true
+        }
+    }
+    
+    @objc func refresh(sender:AnyObject) {
+        photos.removeAll()
+        
+        collectionView?.reloadData()
+        pageNo = 0
+        getTop100(token: token, lang: language, page: 0)
     }
     
     @objc func showInfo(){
@@ -145,6 +185,7 @@ class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollecti
         showActivityIndicator(loadingView: loadingView, spinner: spinner)
         NewsService.current.getTop100Photo(token: token, lang: lang, page: page) { (photoList, error) in
             DispatchQueue.main.async {
+                self.refreshControl?.endRefreshing()
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if error == nil {
                     if ((photoList?.count ?? 0) > 0){

@@ -1567,8 +1567,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fTY-ra-0PW">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fTY-ra-0PW">
                                 <rect key="frame" x="0.0" y="65" width="414" height="797"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.5" minimumInteritemSpacing="0.5" id="jYg-fh-ieU">
                                     <size key="itemSize" width="125" height="125"/>
@@ -1611,12 +1612,8 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="fTY-ra-0PW" firstAttribute="top" secondItem="fpr-6H-xR2" secondAttribute="bottom" id="4Un-ED-axR"/>
-                            <constraint firstItem="g8U-k5-Gpt" firstAttribute="bottom" secondItem="fTY-ra-0PW" secondAttribute="bottom" id="PuH-o8-Zvn"/>
                             <constraint firstItem="fpr-6H-xR2" firstAttribute="top" secondItem="g8U-k5-Gpt" secondAttribute="top" id="Uub-es-kiO"/>
-                            <constraint firstItem="fTY-ra-0PW" firstAttribute="leading" secondItem="g8U-k5-Gpt" secondAttribute="leading" id="W4w-6p-7dR"/>
                             <constraint firstItem="fpr-6H-xR2" firstAttribute="leading" secondItem="g8U-k5-Gpt" secondAttribute="leading" constant="129" id="bWB-3s-6I3"/>
-                            <constraint firstItem="fTY-ra-0PW" firstAttribute="trailing" secondItem="g8U-k5-Gpt" secondAttribute="trailing" id="tg0-eT-Ymf"/>
                             <constraint firstItem="fpr-6H-xR2" firstAttribute="centerX" secondItem="g8U-k5-Gpt" secondAttribute="centerX" id="zfy-fs-h5J"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="g8U-k5-Gpt"/>
@@ -4921,7 +4918,7 @@ Cg
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Повторите эту позу" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="45F-26-Kcg">
-                                <rect key="frame" x="125.5" y="261" width="163.5" height="30"/>
+                                <rect key="frame" x="124" y="261" width="166" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="zll-5g-qPi"/>
                                 </constraints>

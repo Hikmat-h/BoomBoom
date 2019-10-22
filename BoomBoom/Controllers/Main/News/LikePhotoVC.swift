@@ -34,7 +34,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         let imageView = UIImageView(image:logo)
         self.navigationItem.titleView = imageView
         let phone = UIBarButtonItem(image: UIImage(named: "phone")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(onPhone))
-        self.navigationItem.rightBarButtonItem = phone
+        self.navigationItem.rightBarButtonItem = nil
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = .black
         

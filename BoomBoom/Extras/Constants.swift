@@ -9,6 +9,9 @@
 import Foundation
 
 public class Constants {
+    public class Sockets {
+        static let PATH = "ws://46.183.163.124:8080/ws"
+    }
     public class UsersProperties {
         static let USER_MAIL = "user_login"
         static let TOKEN_NAME = "token_name"

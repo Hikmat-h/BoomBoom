@@ -10,7 +10,7 @@ import UIKit
 import PeekPop
 import SDWebImage
 
-class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, PeekPopPreviewingDelegate {
+class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, PeekPopPreviewingDelegate, UIScrollViewDelegate {
     
     var peekPop: PeekPop?
     
@@ -28,6 +28,8 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     var topPaidList:[NewAccount] = []
     //for 3d touch
     var chosenIndex = -1
+    
+    var refreshControl: UIRefreshControl?
     
     //static vars
     var token:String = UserDefaults.standard.value(forKey: "token") as! String
@@ -51,6 +53,17 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         
         peekPop = PeekPop(viewController: self)
         peekPop?.registerForPreviewingWithDelegate(self, sourceView: photoCollectionV)
+        
+        //настраиваем refreshControl
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+                
+        refreshControl = UIRefreshControl()
+        refreshControl?.attributedTitle = NSAttributedString(string: "Загрузка ...", attributes: attributes)
+        
+        refreshControl?.tintColor = UIColor.white
+        //        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.photoCollectionV?.addSubview(refreshControl!)
+        
         getAllPhotos(token:token, lang: language, page: 0)
     }
     
@@ -60,6 +73,36 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
 
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    //MARK: - refreshing
+    var canRefresh = true
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if scrollView.contentOffset.y < -100 {
+            
+            if canRefresh && !self.refreshControl!.isRefreshing {
+                
+                self.canRefresh = false
+                self.refreshControl!.beginRefreshing()
+                
+                self.refresh(sender: self)
+            }
+        }else if scrollView.contentOffset.y >= 0 {
+            
+            self.canRefresh = true
+        }
+    }
+    
+    @objc func refresh(sender:AnyObject) {
+        newAccounts.removeAll()
+        topPaidList.removeAll()
+        
+        photoCollectionV?.reloadData()
+        starredCollectionV.reloadData()
+        pageNo = 0
+        getAllPhotos(token: token, lang: language, page: 0)
     }
     
     //MARK: - CollectionView dataSource and delegate
@@ -82,7 +125,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
             cell.timeLbl.text = "\(topPaidList[indexPath.row].name), \(Utils.current.comuteAge(topPaidList[indexPath.row].dateBirth ))"
             if (topPaidList[indexPath.row].photos.count>0){
                 let url = baseURL + "/" + topPaidList[indexPath.row].photos[0].pathURLPreview
-                cell.userImgView?.sd_setImage(with:URL(string: url), placeholderImage: nil, options: .refreshCached)
+                cell.userImgView?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
             } else {
                 cell.userImgView?.image = UIImage(named: "default_ava")
             }
@@ -93,7 +136,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
                 cell.photoImgView.frame.size = CGSize(width: cellWidth*2 + 1, height: cellWidth*2 + 1)
                 if (firstTop100Photo != nil) {
                     let url = baseURL + "/" + (firstTop100Photo?.pathURLPreview ?? "")
-                    cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+                    cell.photoImgView?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
                 } else {
                     cell.photoImgView.image = UIImage(named: "default_ava")
                 }
@@ -102,7 +145,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
                 let account = newAccounts[indexPath.row-1]
                 if account.photos.count>0{
                     let url = baseURL + "/" + (account.photos[0].pathURLPreview )
-                    cell.photoImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+                    cell.photoImgView?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
                 } else {
                     cell.photoImgView.image = UIImage(named: "default_ava")
                 }
@@ -133,11 +176,13 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     //load new photos
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let lastRow = indexPath.row
-        if lastRow == newAccounts.count {
-            if !isLastPage{
-                pageNo = pageNo + 1
-                getNewAccountPhotos(token: token, lang: language, page: pageNo)
+        if collectionView == self.photoCollectionV && indexPath.row != 0{
+            let lastRow = indexPath.row
+            if lastRow == newAccounts.count {
+                if !isLastPage{
+                    pageNo = pageNo + 1
+                    getNewAccountPhotos(token: token, lang: language, page: pageNo)
+                }
             }
         }
     }
@@ -215,6 +260,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     func getTop(token:String, lang:String){
         NewsService.current.getTopPaid(token: token, lang: lang) { (accountsList, error) in
             DispatchQueue.main.async {
+                self.refreshControl?.endRefreshing()
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if error == nil {
                     self.topPaidList = accountsList ?? []

@@ -25,6 +25,7 @@
 		9E29CDAD2336360500AB7D0A /* BLockedUsersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E29CDAC2336360500AB7D0A /* BLockedUsersCell.swift */; };
 		9E29CDAF23364E8300AB7D0A /* DeleteAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E29CDAE23364E8300AB7D0A /* DeleteAccountVC.swift */; };
 		9E29FD7F232FCEC700A119DF /* LikePhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E29FD7E232FCEC700A119DF /* LikePhotoVC.swift */; };
+		9E45C297235DDC8E00CD9986 /* SocketAnswers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E45C296235DDC8E00CD9986 /* SocketAnswers.swift */; };
 		9E4E228923544F69005FA1FE /* NewsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4E228823544F69005FA1FE /* NewsService.swift */; };
 		9E4F6B62234B25E8000539A1 /* PhotoEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4F6B61234B25E8000539A1 /* PhotoEditVC.swift */; };
 		9E5DD39A233BCF14006856F2 /* AppNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5DD399233BCF14006856F2 /* AppNetwork.swift */; };
@@ -56,6 +57,7 @@
 		9E7B0A8A232926050082539F /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7B0A89232926050082539F /* ProfileVC.swift */; };
 		9E7B0A8D232928880082539F /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7B0A8C232928880082539F /* NewsCell.swift */; };
 		9E7B5B02232A3F7F0063A676 /* ProfilePhotosCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7B5B01232A3F7F0063A676 /* ProfilePhotosCell.swift */; };
+		9E841FC0235D756600599CCE /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E841FBF235D756600599CCE /* SocketManager.swift */; };
 		9E8C2EF823297A450004B5A2 /* ChatListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8C2EF723297A450004B5A2 /* ChatListCell.swift */; };
 		9E8C2EFC232986E10004B5A2 /* StarredChatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8C2EFB232986E10004B5A2 /* StarredChatsCell.swift */; };
 		9E8C2F00232988B40004B5A2 /* StarredChatsCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8C2EFF232988B40004B5A2 /* StarredChatsCollectionVC.swift */; };
@@ -140,6 +142,7 @@
 		9E29CDAC2336360500AB7D0A /* BLockedUsersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLockedUsersCell.swift; sourceTree = "<group>"; };
 		9E29CDAE23364E8300AB7D0A /* DeleteAccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountVC.swift; sourceTree = "<group>"; };
 		9E29FD7E232FCEC700A119DF /* LikePhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePhotoVC.swift; sourceTree = "<group>"; };
+		9E45C296235DDC8E00CD9986 /* SocketAnswers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketAnswers.swift; sourceTree = "<group>"; };
 		9E4E228823544F69005FA1FE /* NewsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsService.swift; sourceTree = "<group>"; };
 		9E4F6B61234B25E8000539A1 /* PhotoEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditVC.swift; sourceTree = "<group>"; };
 		9E5DD399233BCF14006856F2 /* AppNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNetwork.swift; sourceTree = "<group>"; };
@@ -153,6 +156,7 @@
 		9E7B0A89232926050082539F /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		9E7B0A8C232928880082539F /* NewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.swift; sourceTree = "<group>"; };
 		9E7B5B01232A3F7F0063A676 /* ProfilePhotosCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotosCell.swift; sourceTree = "<group>"; };
+		9E841FBF235D756600599CCE /* SocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
 		9E8C2EF723297A450004B5A2 /* ChatListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCell.swift; sourceTree = "<group>"; };
 		9E8C2EFB232986E10004B5A2 /* StarredChatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarredChatsCell.swift; sourceTree = "<group>"; };
 		9E8C2EFF232988B40004B5A2 /* StarredChatsCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarredChatsCollectionVC.swift; sourceTree = "<group>"; };
@@ -315,6 +319,14 @@
 			path = personalNews;
 			sourceTree = "<group>";
 		};
+		9E45C295235DDC7500CD9986 /* SocketAnswers */ = {
+			isa = PBXGroup;
+			children = (
+				9E45C296235DDC8E00CD9986 /* SocketAnswers.swift */,
+			);
+			path = SocketAnswers;
+			sourceTree = "<group>";
+		};
 		9E7B0A7E23291A0C0082539F /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -372,6 +384,14 @@
 				9E7B0A89232926050082539F /* ProfileVC.swift */,
 			);
 			path = profile;
+			sourceTree = "<group>";
+		};
+		9E841FBE235D754E00599CCE /* Sockets */ = {
+			isa = PBXGroup;
+			children = (
+				9E841FBF235D756600599CCE /* SocketManager.swift */,
+			);
+			path = Sockets;
 			sourceTree = "<group>";
 		};
 		9E8C2EF623297A250004B5A2 /* ChatListCell */ = {
@@ -490,6 +510,7 @@
 		9EAD78C22326172000BFFAE7 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				9E841FBE235D754E00599CCE /* Sockets */,
 				9E5DD399233BCF14006856F2 /* AppNetwork.swift */,
 				9EDF1FFB233B815000AE7DD5 /* AuthorizationService.swift */,
 				9E73101C233DD88B00A19423 /* RegistrationService.swift */,
@@ -503,6 +524,7 @@
 		9EAD78C32326173800BFFAE7 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				9E45C295235DDC7500CD9986 /* SocketAnswers */,
 				9EC6EE802331163E000F7F9E /* chat */,
 				9EDF1FFD233B823B00AE7DD5 /* GeneralAnswer.swift */,
 			);
@@ -940,6 +962,7 @@
 				9E4E228923544F69005FA1FE /* NewsService.swift in Sources */,
 				9ED78CC1232D69500083D44D /* TabBarVC.swift in Sources */,
 				9E4F6B62234B25E8000539A1 /* PhotoEditVC.swift in Sources */,
+				9E45C297235DDC8E00CD9986 /* SocketAnswers.swift in Sources */,
 				9E29CD9F233628F200AB7D0A /* AccountParameters.swift in Sources */,
 				9E8C2EF823297A450004B5A2 /* ChatListCell.swift in Sources */,
 				9EDF1FF9233B6C9400AE7DD5 /* FirstVC.swift in Sources */,
@@ -968,6 +991,7 @@
 				9EAD78D523261CAE00BFFAE7 /* Utils.swift in Sources */,
 				9EB6C4542338A01000456C03 /* PushNotificationSettingsVC.swift in Sources */,
 				9EAD78D023261C5F00BFFAE7 /* ActionResultDelegate.swift in Sources */,
+				9E841FC0235D756600599CCE /* SocketManager.swift in Sources */,
 				9E8C2F00232988B40004B5A2 /* StarredChatsCollectionVC.swift in Sources */,
 				9E29CDA12336290900AB7D0A /* HelpVC.swift in Sources */,
 				9E98061D2343549A00118E3C /* ProfilePhotoCell.swift in Sources */,

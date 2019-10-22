@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import SDWebImage
 class TabBarVC: UITabBarController {
 
     override func viewDidLoad() {
@@ -15,6 +15,11 @@ class TabBarVC: UITabBarController {
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.tabBarController?.hidesBottomBarWhenPushed = true
+        
+        //set token for image downloader
+        let token = UserDefaults.standard.value(forKey: "token") ?? ""
+        let downloader = SDWebImageDownloader.shared
+        downloader.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     }
 
     /*

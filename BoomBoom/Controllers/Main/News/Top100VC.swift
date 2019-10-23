@@ -52,6 +52,7 @@ class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollecti
         peekPop = PeekPop(viewController: self)
         peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: NSNotification.Name(rawValue: "refreshing"), object: nil)
         //настраиваем refreshControl
         let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
                 
@@ -59,7 +60,7 @@ class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollecti
         refreshControl?.attributedTitle = NSAttributedString(string: "Загрузка ...", attributes: attributes)
         
         refreshControl?.tintColor = UIColor.white
-        //        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         self.collectionView?.addSubview(refreshControl!)
         
         getTop100(token: token, lang: language, page: 0)
@@ -70,28 +71,27 @@ class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollecti
     }
     
     //MARK: - refreshing
-    var canRefresh = true
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if scrollView.contentOffset.y < -100 {
-            
-            if canRefresh && !self.refreshControl!.isRefreshing {
-                
-                self.canRefresh = false
-                self.refreshControl!.beginRefreshing()
-                
-                self.refresh(sender: self)
-            }
-        }else if scrollView.contentOffset.y >= 0 {
-            
-            self.canRefresh = true
-        }
-    }
+//    var canRefresh = true
+//
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//
+//        if scrollView.contentOffset.y < -100 {
+//
+//            if canRefresh && !self.refreshControl!.isRefreshing {
+//
+//                self.canRefresh = false
+//                self.refreshControl!.beginRefreshing()
+//
+//                self.refresh(sender: self)
+//            }
+//        }else if scrollView.contentOffset.y >= 0 {
+//            self.canRefresh = true
+//        }
+//    }
     
     @objc func refresh(sender:AnyObject) {
         photos.removeAll()
-        
+        self.isLastPage = false
         collectionView?.reloadData()
         pageNo = 0
         getTop100(token: token, lang: language, page: 0)
@@ -182,7 +182,9 @@ class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollecti
     //MARK: - API call
     
     func getTop100(token:String, lang:String, page:Int){
-        showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        if !(self.refreshControl?.isRefreshing ?? false) {
+            showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        }
         NewsService.current.getTop100Photo(token: token, lang: lang, page: page) { (photoList, error) in
             DispatchQueue.main.async {
                 self.refreshControl?.endRefreshing()
@@ -195,6 +197,12 @@ class Top100VC: UIViewController, UICollectionViewDelegateFlowLayout, UICollecti
                     } else {
                         self.isLastPage = true
                     }
+                } else if error?.code == 401 {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
                 }

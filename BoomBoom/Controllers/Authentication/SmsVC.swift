@@ -46,6 +46,7 @@ class SmsVC: UIViewController {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
                     return
                 }
+                UserDefaults.standard.set(true, forKey: "auth")
                 UserDefaults.standard.set(res.accessToken, forKey: "token")
                 if self.isReg {
                     self.performSegue(withIdentifier: "showRegDetail", sender: self)

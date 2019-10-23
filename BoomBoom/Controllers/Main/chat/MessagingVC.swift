@@ -53,7 +53,7 @@ class MessagingVC: MessagesViewController{
 //        messageInputBar.rightStackViewItems = [InputItem]
         messageInputBar.inputTextView.placeholder = "Ваше сообщение"
         messageInputBar.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.9333333333, blue: 0.9333333333, alpha: 1)
-        messageInputBar.inputTextView.tintColor = #colorLiteral(red: 0.8980392157, green: 0.1019607843, blue: 0.2941176471, alpha: 1)
+        messageInputBar.inputTextView.textColor = .black
         messageInputBar.sendButton.title = ""
         messageInputBar.sendButton.setTitle("", for: .normal)
         messageInputBar.sendButton.setTitle("", for: .highlighted)
@@ -193,6 +193,7 @@ extension MessagingVC: MessageInputBarDelegate {
         
         messages.append(newMessage)
         inputBar.inputTextView.text = ""
+        SocketManager.current.sendMessage(accountID: 174, message: text, typeMessage: "text")
         messagesCollectionView.reloadData()
         messagesCollectionView.scrollToBottom(animated: true)
     }

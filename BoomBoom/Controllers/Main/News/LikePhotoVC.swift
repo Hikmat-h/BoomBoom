@@ -26,6 +26,8 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     var infoTitleArray:[String] = []
     var avatar:Photo?
     
+    let phone = UIBarButtonItem(image: UIImage(named: "phone")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(onPhone))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,7 +35,6 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         let logo = UIImage(named: "logo")
         let imageView = UIImageView(image:logo)
         self.navigationItem.titleView = imageView
-        let phone = UIBarButtonItem(image: UIImage(named: "phone")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(onPhone))
         self.navigationItem.rightBarButtonItem = nil
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = .black
@@ -119,6 +120,10 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         tableView.delegate = self
         tableView.dataSource = self
         
+        if infoModel.online {
+            self.navigationItem.rightBarButtonItem = phone
+        }
+        
         self.userInformation = infoModel
         if (!(self.userInformation!.information?.isEmpty ?? true)) {
             self.infoTitleArray.append("Обо мне")
@@ -189,6 +194,12 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if error == nil {
                     self.setUserInfo(infoModel: info!)
+                } else if error?.code == 401 {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
                 }

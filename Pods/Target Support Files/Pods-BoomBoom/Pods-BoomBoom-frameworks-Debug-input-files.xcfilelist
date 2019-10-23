@@ -11,9 +11,10 @@ ${BUILT_PRODUCTS_DIR}/MessageKit/MessageKit.framework
 ${BUILT_PRODUCTS_DIR}/Pageboy/Pageboy.framework
 ${BUILT_PRODUCTS_DIR}/PeekPop/PeekPop.framework
 ${BUILT_PRODUCTS_DIR}/RangeSeekSlider/RangeSeekSlider.framework
+${BUILT_PRODUCTS_DIR}/Realm/Realm.framework
+${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework
 ${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework
 ${BUILT_PRODUCTS_DIR}/SearchTextField/SearchTextField.framework
 ${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework
-${BUILT_PRODUCTS_DIR}/SwiftWebSocket/SwiftWebSocket.framework
 ${BUILT_PRODUCTS_DIR}/Tabman/Tabman.framework
 ${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework

@@ -18,8 +18,8 @@ target 'BoomBoom' do
   pod 'CropViewController'
   pod 'IGRPhotoTweaks'
   pod 'HorizontalDial'
-  pod 'SwiftWebSocket'
   pod 'Starscream', '~> 3.0.2'
+  pod 'RealmSwift'
   
   target 'BoomBoomTests' do
     inherit! :search_paths

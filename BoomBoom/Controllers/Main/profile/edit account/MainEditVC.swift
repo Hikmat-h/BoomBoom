@@ -239,6 +239,12 @@ class MainEditVC: UIViewController, UITextFieldDelegate {
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if(error == nil) {
                     self.genderList = model ?? []
+                } else if error?.code == 401 {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
                 }
@@ -252,8 +258,15 @@ class MainEditVC: UIViewController, UITextFieldDelegate {
             DispatchQueue.main.async {
                 self.cityField.stopLoadingIndicator()
                 if (error != nil) {
-                    self.showErrorWindow(errorMessage: error?.domain ?? "")
-                    
+                    if error?.code == 401 {
+                        let domain = Bundle.main.bundleIdentifier!
+                        UserDefaults.standard.removePersistentDomain(forName: domain)
+                        UserDefaults.standard.synchronize()
+                        self.performSegue(withIdentifier: "showAuth", sender: self)
+                        self.setNewRootController(nameController: "AuthorizationVC")
+                    } else {
+                        self.showErrorWindow(errorMessage: error?.domain ?? "")
+                    }
                 } else {
                     self.cityListModel = arrayModel ?? []
                     self.cityField.filterStrings(self.cityListModel.map{$0.title})
@@ -268,7 +281,15 @@ class MainEditVC: UIViewController, UITextFieldDelegate {
             DispatchQueue.main.async {
                 self.countryField.stopLoadingIndicator()
                 if (error != nil) {
-                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                    if error?.code == 401 {
+                        let domain = Bundle.main.bundleIdentifier!
+                        UserDefaults.standard.removePersistentDomain(forName: domain)
+                        UserDefaults.standard.synchronize()
+                        self.performSegue(withIdentifier: "showAuth", sender: self)
+                        self.setNewRootController(nameController: "AuthorizationVC")
+                    } else {
+                        self.showErrorWindow(errorMessage: error?.domain ?? "")
+                    }
                     
                 } else {
                     self.countryListModel = arrayModel ?? []
@@ -284,7 +305,15 @@ class MainEditVC: UIViewController, UITextFieldDelegate {
             DispatchQueue.main.async {
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if error != nil {
-                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                    if error?.code == 401 {
+                        let domain = Bundle.main.bundleIdentifier!
+                        UserDefaults.standard.removePersistentDomain(forName: domain)
+                        UserDefaults.standard.synchronize()
+                        self.performSegue(withIdentifier: "showAuth", sender: self)
+                        self.setNewRootController(nameController: "AuthorizationVC")
+                    } else {
+                        self.showErrorWindow(errorMessage: error?.domain ?? "")
+                    }
                 } else {
                     self.navigationController?.popViewController(animated: true)
                 }

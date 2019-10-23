@@ -15,7 +15,6 @@ class FirstVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Socketmanager.current.connect()
         if let isLoggedIn = UserDefaults.standard.value(forKey: "auth") as? Bool {
             if isLoggedIn {
                 performSegue(withIdentifier: "showMain", sender: self)

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SDWebImage
+import RealmSwift
 
 class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -61,6 +63,7 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         let starBtn = UIBarButtonItem(image: UIImage(named: "star"), style: .plain, target: self, action: #selector(onStar))
         navigationItem.rightBarButtonItem = starBtn
+        
     }
     
     @objc func onStar() {
@@ -103,5 +106,51 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 extension ChatVC: UISearchControllerDelegate, UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         
+    }
+}
+
+extension ChatVC: SocketManagerDelegate {
+    func didReceiveChatList(socketChats: GetChatListAnswer) {
+        let chats = socketChats.chats
+        let localChats = List<RealmChat>()
+        for chat in chats {
+            let localChat = RealmChat()
+            
+            if chat.photo.count>0 {
+                let photo = RealmChatPhoto()
+                photo.pathURLPreview = chat.photo[0].pathURLPreview
+                localChat.photos.append(photo)
+            }
+            
+            localChat.name = chat.name
+            localChat.online = chat.online
+            localChat.accountID = chat.accountID
+            localChat.lastDateAddMessage = chat.lastDateAddMessage
+            localChat.chatID = chat.chatID
+            localChat.message = RealmMessage()
+            localChat.message.accountID = chat.message.accountID
+            localChat.message.chatID = chat.message.chatID
+            localChat.message.chatMessageID = chat.message.chatMessageID
+            
+            if chat.message.chatMessageStatusList.count>0{
+                let status = RealmChatMessageStatus()
+                status.id = chat.message.chatMessageStatusList[0].id
+                status.accountID = chat.message.chatMessageStatusList[0].accontID
+                status.read = chat.message.chatMessageStatusList[0].read
+                status.delivered = chat.message.chatMessageStatusList[0].delivered
+                localChat.message.chatMessageStatusList.append(status)
+            }
+            
+            localChat.message.dateSend = chat.message.dateSend
+            localChat.message.message = chat.message.message
+            localChat.countNewMessages = chat.countNewMessages
+            localChat.favorite = chat.favorite
+            localChat.typeAccount = chat.typeAccount
+            localChats.append(localChat)
+        }
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(localChats)
+        }
     }
 }

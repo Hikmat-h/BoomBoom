@@ -61,7 +61,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         refreshControl?.attributedTitle = NSAttributedString(string: "Загрузка ...", attributes: attributes)
         
         refreshControl?.tintColor = UIColor.white
-        //        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         self.photoCollectionV?.addSubview(refreshControl!)
         
         getAllPhotos(token:token, lang: language, page: 0)
@@ -76,24 +76,24 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     }
     
     //MARK: - refreshing
-    var canRefresh = true
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if scrollView.contentOffset.y < -100 {
-            
-            if canRefresh && !self.refreshControl!.isRefreshing {
-                
-                self.canRefresh = false
-                self.refreshControl!.beginRefreshing()
-                
-                self.refresh(sender: self)
-            }
-        }else if scrollView.contentOffset.y >= 0 {
-            
-            self.canRefresh = true
-        }
-    }
+//    var canRefresh = true
+//
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//
+//        if scrollView.contentOffset.y < -100 {
+//
+//            if canRefresh && !self.refreshControl!.isRefreshing {
+//
+//                self.canRefresh = false
+//                self.refreshControl!.beginRefreshing()
+//
+//                self.refresh(sender: self)
+//            }
+//        }else if scrollView.contentOffset.y >= 0 {
+//
+//            self.canRefresh = true
+//        }
+//    }
     
     @objc func refresh(sender:AnyObject) {
         newAccounts.removeAll()
@@ -102,6 +102,7 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
         photoCollectionV?.reloadData()
         starredCollectionV.reloadData()
         pageNo = 0
+        self.isLastPage = false
         getAllPhotos(token: token, lang: language, page: 0)
     }
     
@@ -113,8 +114,10 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == starredCollectionV {
             return topPaidList.count
-        } else {
+        } else if newAccounts.count>0 {
             return newAccounts.count + 1
+        } else {
+            return 0
         }
     }
     
@@ -223,13 +226,21 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     
     //MARK: - API calls
     func getAllPhotos(token:String, lang:String, page:Int){
-        showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        if !(self.refreshControl?.isRefreshing ?? false){
+            showActivityIndicator(loadingView: loadingView, spinner: spinner)
+        }
+        self.getTop(token: token, lang: lang)
         NewsService.current.getFirstTop100Photo(token: token, lang: lang) { (photoModel, error) in
             DispatchQueue.main.async {
                 self.getNewAccountPhotos(token: token, lang: lang, page: page)
-                self.getTop(token: token, lang: lang)
                 if error == nil {
                     self.firstTop100Photo = photoModel?.first
+                } else if error?.code == 401 {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
@@ -241,6 +252,8 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     func getNewAccountPhotos(token:String, lang:String, page:Int){
         NewsService.current.getNewAccounts(token: token, lang: lang, page: page) { (photoListModel, error) in
             DispatchQueue.main.async {
+                self.refreshControl?.endRefreshing()
+                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if error == nil {
                     if ((photoListModel?.count ?? 0) > 0){
                         self.isLastPage = false
@@ -250,6 +263,12 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
                         self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                         self.isLastPage = true
                     }
+                } else if error?.code == 401 {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
                 }
@@ -260,11 +279,15 @@ class NewsVC: UIViewController, UICollectionViewDelegateFlowLayout, UICollection
     func getTop(token:String, lang:String){
         NewsService.current.getTopPaid(token: token, lang: lang) { (accountsList, error) in
             DispatchQueue.main.async {
-                self.refreshControl?.endRefreshing()
-                self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if error == nil {
                     self.topPaidList = accountsList ?? []
                     self.starredCollectionV.reloadData()
+                } else if error?.code == 401 {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
                 }

@@ -175,7 +175,7 @@ class AuthorizationVC: UIViewController, UIScrollViewDelegate, UITextFieldDelega
             if let generalAnswer = generalAnswer {
                 DispatchQueue.main.async {
                      self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
-                     UserDefaults.standard.set(generalAnswer.accessToken, forKey: "token")
+                    UserDefaults.standard.set(generalAnswer.accessToken, forKey: "token")
                     UserDefaults.standard.set(true, forKey: "auth")
                     UserDefaults.standard.set(mail, forKey: "email")
                     UserDefaults.standard.synchronize()

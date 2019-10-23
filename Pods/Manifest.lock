@@ -75,12 +75,16 @@ PODS:
   - Pageboy (3.2.3)
   - PeekPop (1.0.0)
   - RangeSeekSlider (1.8.0)
+  - Realm (3.17.3):
+    - Realm/Headers (= 3.17.3)
+  - Realm/Headers (3.17.3)
+  - RealmSwift (3.17.3):
+    - Realm (= 3.17.3)
   - SDWebImage (5.1.0):
     - SDWebImage/Core (= 5.1.0)
   - SDWebImage/Core (5.1.0)
   - SearchTextField (1.2.4)
   - Starscream (3.0.6)
-  - SwiftWebSocket (2.7.0)
   - Tabman (2.4.3):
     - AutoInsetter (~> 1.7.2)
     - Pageboy (~> 3.2.3)
@@ -95,10 +99,10 @@ DEPENDENCIES:
   - MessageKit (~> 3.0.0-swift5)
   - PeekPop (~> 1.0)
   - RangeSeekSlider
+  - RealmSwift
   - SDWebImage (~> 5.0)
   - SearchTextField
   - Starscream (~> 3.0.2)
-  - SwiftWebSocket
   - Tabman (~> 2.4)
 
 SPEC REPOS:
@@ -125,10 +129,11 @@ SPEC REPOS:
     - Pageboy
     - PeekPop
     - RangeSeekSlider
+    - Realm
+    - RealmSwift
     - SDWebImage
     - SearchTextField
     - Starscream
-    - SwiftWebSocket
     - Tabman
 
 SPEC CHECKSUMS:
@@ -154,12 +159,13 @@ SPEC CHECKSUMS:
   Pageboy: 347c49b3a7f15aa78ddb6bf5c6c3b113e382fe52
   PeekPop: dcac0f339476b99eb50f8e3bc584f332c744ecf1
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5
+  Realm: 5a1d9d47bfc101dd597668b1a8af4288a2557f6d
+  RealmSwift: b7fdc2d18616621c31df5c7a398a45a2163f8eb0
   SDWebImage: fb387001955223213dde14bc08c8b73f371f8d8f
   SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
-  SwiftWebSocket: 612c9729fd503cb6b0b8b45390c788686dac306f
   Tabman: c2c83ebfcbec3e5be67e27a1dd6689a4e3efccd3
 
-PODFILE CHECKSUM: be865a0bbd711f4a49bdfb1a852567f3dc407355
+PODFILE CHECKSUM: 34bfd8b88eaac6d404450cfe003cbd51e877bf9e
 
 COCOAPODS: 1.8.3

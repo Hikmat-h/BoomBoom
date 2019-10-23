@@ -200,6 +200,14 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         UserDetailsSerice.current.getBodyType(token: token, lang: lang) { (model, error) in
             if(error == nil) {
                 self.bodyTypeList = model ?? []
+            } else if error?.code == 401 {
+                let domain = Bundle.main.bundleIdentifier!
+                UserDefaults.standard.removePersistentDomain(forName: domain)
+                UserDefaults.standard.synchronize()
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
+                }
             } else {
                 DispatchQueue.main.async {
                     self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
@@ -213,6 +221,14 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
         UserDetailsSerice.current.getHairColor(token: token, lang: lang) { (model, error) in
             if(error == nil) {
                 self.hairColorList = model ?? []
+            } else if error?.code == 401 {
+                let domain = Bundle.main.bundleIdentifier!
+                UserDefaults.standard.removePersistentDomain(forName: domain)
+                UserDefaults.standard.synchronize()
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
+                }
             } else {
                 DispatchQueue.main.async {
                     self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
@@ -228,6 +244,12 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
                 self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                 if(error == nil) {
                     self.orientationList = model ?? []
+                } else if error?.code == 401 {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")
                 }
@@ -241,7 +263,15 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
             if (error != nil) {
                 DispatchQueue.main.async {
                     self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
-                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                    if error?.code == 401 {
+                        let domain = Bundle.main.bundleIdentifier!
+                        UserDefaults.standard.removePersistentDomain(forName: domain)
+                        UserDefaults.standard.synchronize()
+                        self.performSegue(withIdentifier: "showAuth", sender: self)
+                        self.setNewRootController(nameController: "AuthorizationVC")
+                    } else {
+                        self.showErrorWindow(errorMessage: error?.domain ?? "")
+                    }
                 }
             } else {
                 DispatchQueue.main.async {
@@ -261,6 +291,12 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
                 if (error == nil) {
                     self.userInformation = userInfoModel
                     self.updateInfoData()
+                } else if error?.code == 401 {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
+                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.showErrorWindow(errorMessage: error!.domain)
                 }

@@ -98,38 +98,6 @@
             endingLineNumber = "452"
             landmarkName = "collectionView(_:didSelectItemAt:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "85B874D0-7BC2-4C7C-982B-56AB3C825E7A - d35dc1696b1410e5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (__C.UIAlertAction) -&gt; () in BoomBoom.EditProfileVC.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
-                  moduleName = "BoomBoom"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Controllers/Main/profile/edit%20account/EditProfileVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "452"
-                  endingLineNumber = "452"
-                  offsetFromSymbolStart = "264">
-               </Location>
-               <Location
-                  uuid = "85B874D0-7BC2-4C7C-982B-56AB3C825E7A - efcefac2d93f7da4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;BoomBoom.Photo&gt;&gt;, Swift.Optional&lt;__C.NSError&gt;) -&gt; () in closure #2 (__C.UIAlertAction) -&gt; () in BoomBoom.EditProfileVC.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
-                  moduleName = "BoomBoom"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Controllers/Main/profile/edit%20account/EditProfileVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "453"
-                  endingLineNumber = "453"
-                  offsetFromSymbolStart = "188">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -215,48 +183,189 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F87B09BF-95E0-4E3C-8BAE-AD05A9B6CA30"
+            uuid = "4F7195EE-0A73-492B-8273-A0B507683CA4"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BoomBoom/Controllers/Main/News/LikePhotoVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
-            landmarkName = "tableView(_:heightForRowAt:)"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CC605933-DCF6-4DB2-A03A-046D079B212C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Controllers/Main/News/LikePhotoVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9865CC7D-C200-4924-83A5-FB6C463644BE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Controllers/Main/chat/MessagingVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "inputBar(_:didPressSendButtonWith:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E6A5587A-1482-4717-9F00-1BECAA2711E7"
+            uuid = "B40DFD55-D5C8-4B8C-A947-0AF7C38AA034"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Controllers/Main/chat/ChatVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "didReceiveChatList(socketChats:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B45991F1-37CD-4532-8C3C-A06D8E951494"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BoomBoom/Network/Sockets/SocketManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
             landmarkName = "websocketDidReceiveMessage(socket:text:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B45991F1-37CD-4532-8C3C-A06D8E951494 - e2132c45ecacf0cf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BoomBoom.SocketManager.websocketDidReceiveMessage(socket: Starscream.WebSocketClient, text: Swift.String) -&gt; ()"
+                  moduleName = "BoomBoom"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Network/Sockets/SocketManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "1280">
+               </Location>
+               <Location
+                  uuid = "B45991F1-37CD-4532-8C3C-A06D8E951494 - e2132c45ecacf0cf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BoomBoom.SocketManager.websocketDidReceiveMessage(socket: Starscream.WebSocketClient, text: Swift.String) -&gt; ()"
+                  moduleName = "BoomBoom"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Network/Sockets/SocketManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "1616">
+               </Location>
+               <Location
+                  uuid = "B45991F1-37CD-4532-8C3C-A06D8E951494 - e2132c45ecacf0cf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BoomBoom.SocketManager.websocketDidReceiveMessage(socket: Starscream.WebSocketClient, text: Swift.String) -&gt; ()"
+                  moduleName = "BoomBoom"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Network/Sockets/SocketManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "2872">
+               </Location>
+               <Location
+                  uuid = "B45991F1-37CD-4532-8C3C-A06D8E951494 - e2132c45ecacf0cf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BoomBoom.SocketManager.websocketDidReceiveMessage(socket: Starscream.WebSocketClient, text: Swift.String) -&gt; ()"
+                  moduleName = "BoomBoom"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Network/Sockets/SocketManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "4224">
+               </Location>
+               <Location
+                  uuid = "B45991F1-37CD-4532-8C3C-A06D8E951494 - e2132c45ecacf0cf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BoomBoom.SocketManager.websocketDidReceiveMessage(socket: Starscream.WebSocketClient, text: Swift.String) -&gt; ()"
+                  moduleName = "BoomBoom"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Network/Sockets/SocketManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "5496">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CC945FC6-FC1A-496D-B3CD-BC712B9E9C48"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Network/Sockets/SocketManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "getChatListByPage(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0FB448A8-87AF-4629-8C31-F93278C86943"
+            uuid = "4A9FA4F3-C4E6-46D8-9887-8497E40B6F74"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BoomBoom/Network/AppNetwork.swift"
+            filePath = "BoomBoom/Network/Sockets/SocketManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "request(url:method:params:encoding:headers:codableClass:completion:)"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "websocketDidReceiveMessage(socket:text:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

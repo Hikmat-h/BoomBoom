@@ -8,10 +8,14 @@
 
 import Foundation
 import Starscream
+protocol SocketManagerDelegate {
+    func didReceiveChatList(socketChats:GetChatListAnswer)
+}
 
-class Socketmanager{
+class SocketManager{
     
-    static let current = Socketmanager()
+    static let current = SocketManager()
+    var delegate:SocketManagerDelegate?
     public var ws = WebSocket(url: URL(string: Constants.Sockets.PATH)!)
     private init(){}
     
@@ -25,7 +29,7 @@ class Socketmanager{
     }
 }
 
-extension Socketmanager: WebSocketDelegate {
+extension SocketManager: WebSocketDelegate {
     //MARK: - web socket delegates
     func websocketDidConnect(socket: WebSocketClient) {
         print("websocket is connected")
@@ -41,28 +45,82 @@ extension Socketmanager: WebSocketDelegate {
         }
    }
     
+    //MARK: - Socket request methods
+    func sendMessage(accountID:Int, message:String, typeMessage:String) {
+        let object: Dictionary<String, Any> = ["accountId":accountID, "message":message, "typeMessage":typeMessage]
+        let dict: Dictionary<String, Any> = ["action":"sendmessage", "object":object]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+            let str = String(decoding: data, as: UTF8.self)
+            ws.write(string: str)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func getChatListByPage(_ page:Int) {
+        let object: Dictionary<String, Any> = ["page":page]
+        let dict: Dictionary<String, Any> = ["action":"synchronizedall", "object":object]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+            let str = String(decoding: data, as: UTF8.self)
+            ws.write(string: str)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        var answer = Dictionary<String, Any>()
+        var answerDict = Dictionary<String, AnyObject>()
         let data = text.data(using: .utf8)!
         do {
-            if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? Dictionary<String,Any> {
-            answer = jsonArray
+            if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? Dictionary<String,AnyObject> {
+            answerDict = jsonArray
             } else {
                 print("bad json")
             }
         } catch let error as NSError {
             print(error)
         }
-//        switch answer["action"] as! String {
-//        case "auth":
-//            let test = try? JSONDecoder().decode(AuthResult.self, from:((answer["result"] as? Dictionary<String, Any>)?.data(using: .utf8))!)
-//            print(test?.accountID as Any)
-//        default:
-//            print(answer)
-//        }
+        
+        //take action
+        switch answerDict["action"] as! String {
+        case "auth":
+            do {
+                let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
+                let detail = try? JSONDecoder().decode(AuthResult.self, from: data)
+                UserDefaults.standard.set(detail?.accountID, forKey: "accountID")
+            } catch let error as NSError {
+                print(error)
+            }
+        case "sendmessage":
+            do {
+                let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
+                let detail = try? JSONDecoder().decode(SendMessageAnswer.self, from: data)
+                print(detail as Any)
+            } catch let error as NSError {
+                print(error)
+            }
+        case "synchronizedall":
+            do {
+                let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
+                let detail = try? JSONDecoder().decode(GetChatListAnswer.self, from: data)
+                print(detail as Any)
+                delegate?.didReceiveChatList(socketChats: detail ?? GetChatListAnswer(countNewMessages: 0, countAllChats: 0, chats: []))
+            } catch let error as NSError {
+                print(error)
+            }
+        case nil:
+            if let error = answerDict["error"] as? NSError {
+                print(error.domain)
+            }
+        default:
+            print(answerDict)
+        }
    }
-   
-   func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
+    
+    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         print("Received data: \(String(decoding: data, as: UTF8.self))")
    }
+    
 }

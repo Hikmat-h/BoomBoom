@@ -20,6 +20,8 @@ class TabBarVC: UITabBarController {
         let token = UserDefaults.standard.value(forKey: "token") ?? ""
         let downloader = SDWebImageDownloader.shared
         downloader.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        SocketManager.current.connect()
     }
 
     /*

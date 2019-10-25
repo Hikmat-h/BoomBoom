@@ -18,6 +18,9 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var vc:StarredChatsCollectionVC?
     lazy var searchBar: UISearchBar? = nil
     private var searchController: UISearchController!
+    
+    var chats = List<RealmChat>()
+    let baseURL = Constants.HTTP.PATH_URL
     override func viewDidLoad() {
         super.viewDidLoad()
         searchController = UISearchController(searchResultsController: self)
@@ -63,11 +66,14 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         let starBtn = UIBarButtonItem(image: UIImage(named: "star"), style: .plain, target: self, action: #selector(onStar))
         navigationItem.rightBarButtonItem = starBtn
-        
+        SocketManager.current.delegate = self
     }
     
     @objc func onStar() {
         print("star is clicked")
+        let realm = try! Realm()
+        let test = realm.objects(RealmChatPhoto.self)
+        print(test as Any)
     }
     @objc func viewTapped() {
         searchBar?.resignFirstResponder()
@@ -78,16 +84,39 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return chats.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.NAME_CELL.CHAT_LIST_CELL)!
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.NAME_CELL.CHAT_LIST_CELL) as! ChatListCell
+        let chat = chats[indexPath.row]
+        cell.nameLbl.text = chat.name
+        if chat.favorite {
+            cell.starImgView.image = UIImage(named: "star_filled")
+        } else {
+            cell.starImgView.image = UIImage(named: "star")
+        }
+        if chat.photos.count>0{
+            let url = baseURL + "/" + (chat.photos[0].pathURLPreview ?? "")
+            cell.userImgView.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+        } else {
+            cell.userImgView.image = UIImage(named: "default_ava")
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        print(Date(timeIntervalSince1970: TimeInterval(chat.lastDateAddMessage)))
+        cell.timeLbl.text = String(formatter.string(from: Date(timeIntervalSince1970: TimeInterval(chat.lastDateAddMessage)/1000)))
+        if (chat.message?.chatMessageStatusList[0].read)! {
+            cell.lastMessageLbl.text = chat.message?.message
+        } else {
+            cell.lastMessageLbl.text = "Новое сообщение"
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let vc = storyboard?.instantiateViewController(withIdentifier: "MessagingVC") else { return }
+        guard let vc = (storyboard?.instantiateViewController(withIdentifier: "MessagingVC") as? MessagingVC) else { return }
+        vc.friendAccountID = chats[indexPath.row].accountID
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -128,9 +157,9 @@ extension ChatVC: SocketManagerDelegate {
             localChat.lastDateAddMessage = chat.lastDateAddMessage
             localChat.chatID = chat.chatID
             localChat.message = RealmMessage()
-            localChat.message.accountID = chat.message.accountID
-            localChat.message.chatID = chat.message.chatID
-            localChat.message.chatMessageID = chat.message.chatMessageID
+            localChat.message?.accountID = chat.message.accountID
+            localChat.message?.chatID = chat.message.chatID
+            localChat.message?.chatMessageID = Int(chat.message.chatMessageID)
             
             if chat.message.chatMessageStatusList.count>0{
                 let status = RealmChatMessageStatus()
@@ -138,19 +167,35 @@ extension ChatVC: SocketManagerDelegate {
                 status.accountID = chat.message.chatMessageStatusList[0].accontID
                 status.read = chat.message.chatMessageStatusList[0].read
                 status.delivered = chat.message.chatMessageStatusList[0].delivered
-                localChat.message.chatMessageStatusList.append(status)
+                localChat.message?.chatMessageStatusList.append(status)
             }
             
-            localChat.message.dateSend = chat.message.dateSend
-            localChat.message.message = chat.message.message
+            localChat.message?.dateSend = (chat.message.dateSend)
+            localChat.message?.message = chat.message.message
             localChat.countNewMessages = chat.countNewMessages
             localChat.favorite = chat.favorite
             localChat.typeAccount = chat.typeAccount
             localChats.append(localChat)
         }
-        let realm = try! Realm()
-        try! realm.write {
-            realm.add(localChats)
+        self.chats = localChats
+        if chats.count>0{
+            let realm = try! Realm()
+            
+//            let myDog = Dog()
+//            myDog.name = "Rex"
+//            myDog.age = 1
+            
+//            let some1 = RealmChatMessageStatus()
+//            some1.accountID = 1
+//            some1.delivered = true
+//            some1.id = 2
+//            some1.read = true
+//            let some2 = RealmChat()
+            try! realm.write {
+    //            realm.create(RealmChat.self, value: localChats, update: .all)
+                realm.add(localChats)
+            }
         }
+        tableView.reloadData()
     }
 }

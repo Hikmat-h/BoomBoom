@@ -9,39 +9,50 @@
 import Foundation
 import RealmSwift
 
+class Dog: Object {
+    @objc dynamic var name = ""
+    @objc dynamic var age = 0
+}
+class Person: Object {
+    @objc dynamic var name = ""
+    @objc dynamic var picture: Data? = nil // optionals supported
+    let dogs = List<Dog>()
+}
+
+
 
 //MARK: - Realm obects
 class RealmChat:Object{
     dynamic var photos = List<RealmChatPhoto>()
-    dynamic var name = ""
-    dynamic var online = false
-    dynamic var accountID = -1
-    dynamic var lastDateAddMessage: CLong = -1
-    dynamic var chatID = -1
-    dynamic var message = RealmMessage()
-    dynamic var favorite = false
-    dynamic var countNewMessages = 0
-    dynamic var typeAccount = ""
+    @objc dynamic var name = ""
+    @objc dynamic var online = false
+    @objc dynamic var accountID = -1
+    @objc dynamic var lastDateAddMessage: Int64 = 0
+    @objc dynamic var chatID = -1
+    @objc dynamic var message: RealmMessage? = nil
+    @objc dynamic var favorite = false
+    @objc dynamic var countNewMessages = 0
+    @objc dynamic var typeAccount = ""
 }
 
 class RealmChatPhoto: Object{
-    dynamic var pathURLPreview: String? = nil
+    @objc dynamic var pathURLPreview: String? = nil
 }
 
 class RealmMessage:Object{
-    dynamic var accountID = -1
-    dynamic var message = ""
-    dynamic var dateSend: CLong = -1
-    dynamic var chatMessageID = -1
-    dynamic var chatID = -1
+    @objc dynamic var accountID = -1
+    @objc dynamic var message = ""
+    @objc dynamic var dateSend: Int64 = 0
+    @objc dynamic var chatMessageID = -1
+    @objc dynamic var chatID = -1
     dynamic var chatMessageStatusList = List<RealmChatMessageStatus>()
 }
 
 class RealmChatMessageStatus:Object{
-    dynamic var id = -1
-    dynamic var accountID = -1
-    dynamic var delivered = false
-    dynamic var read = false
+    @objc dynamic var id = -1
+    @objc dynamic var accountID = -1
+    @objc dynamic var delivered = false
+    @objc dynamic var read = false
 }
 
 //MARK: - Socket Answers
@@ -60,7 +71,8 @@ struct AuthResult: Codable {
 struct SendMessageAnswer: Codable {
     let accountID, companionID: Int
     let message: String
-    let dateSend, chatMessageID, chatID: Int
+    let dateSend: Int64
+    let chatMessageID, chatID: Int
     let chatMessageStatusList: [ChatMessageStatusList]
     let typeMessage, accountName: String
 
@@ -97,7 +109,8 @@ struct Chat: Codable {
     let photo: [ChatPhoto]
     let name: String
     let online: Bool
-    let accountID, lastDateAddMessage, chatID: Int
+    let accountID, chatID: Int
+    let lastDateAddMessage: Int64
     let message: SocketMessage
     let favorite: Bool
     let countNewMessages: Int
@@ -116,7 +129,8 @@ struct Chat: Codable {
 struct SocketMessage: Codable {
     let accountID: Int
     let message: String
-    let dateSend, chatMessageID, chatID: Int
+    let dateSend: Int64
+    let chatMessageID, chatID: Int
     let chatMessageStatusList: [ChatMessageStatusList]
 
     enum CodingKeys: String, CodingKey {

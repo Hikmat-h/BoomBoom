@@ -8,14 +8,14 @@
 
 import Foundation
 import Starscream
-protocol SocketManagerDelegate {
+protocol SocketManagerDelegate: class{
     func didReceiveChatList(socketChats:GetChatListAnswer)
 }
 
 class SocketManager{
     
     static let current = SocketManager()
-    var delegate:SocketManagerDelegate?
+    weak var delegate:SocketManagerDelegate?
     public var ws = WebSocket(url: URL(string: Constants.Sockets.PATH)!)
     private init(){}
     
@@ -89,7 +89,9 @@ extension SocketManager: WebSocketDelegate {
             do {
                 let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
                 let detail = try? JSONDecoder().decode(AuthResult.self, from: data)
+                
                 UserDefaults.standard.set(detail?.accountID, forKey: "accountID")
+                getChatListByPage(0)
             } catch let error as NSError {
                 print(error)
             }

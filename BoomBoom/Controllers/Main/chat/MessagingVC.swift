@@ -17,6 +17,7 @@ class MessagingVC: MessagesViewController{
     
     let months: [String] = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
     
+    var friendAccountID = -1
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -193,7 +194,7 @@ extension MessagingVC: MessageInputBarDelegate {
         
         messages.append(newMessage)
         inputBar.inputTextView.text = ""
-        SocketManager.current.sendMessage(accountID: 174, message: text, typeMessage: "text")
+        SocketManager.current.sendMessage(accountID: friendAccountID, message: text, typeMessage: "text")
         messagesCollectionView.reloadData()
         messagesCollectionView.scrollToBottom(animated: true)
     }

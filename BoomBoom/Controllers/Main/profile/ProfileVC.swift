@@ -143,6 +143,14 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         aim += userInformation!.pdPeriodicMeetings ? "Периодические встречи \u{2022} " : ""
         aim += userInformation!.pdFriendshipCommunication ? "Дружба и общение \u{2022} " : ""
         
+        //removes last dot
+        var a = aim
+        let removingIndex = a.index(a.endIndex, offsetBy: -2)
+        if a[removingIndex] == "\u{2022}" {
+            a.remove(at: removingIndex)
+            aim = a
+        }
+        
         if !aim.isEmpty {
             self.infoTitleArray.append("Цель знакомства")
             self.infoArray.append(aim)

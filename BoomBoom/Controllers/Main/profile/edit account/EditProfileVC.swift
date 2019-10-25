@@ -259,7 +259,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
     func saveChanges(token:String, lang:String) {
         showActivityIndicator(loadingView: loadingView, spinner: spinner)
-        UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: bodyTypeID, sexId: userInformation?.sex.id ?? 0, sexualOrientation: orientationID, countryId: userInformation?.countries.countryID ?? 0, cityId: userInformation?.cities.cityID ?? 0, name: userInformation?.name ?? "", dateBirth: userInformation?.dateBirth ?? "", information: aboutTextView.text, weight: Int(weightLbl.text ?? "") ?? 0, height: Int(heightLbl.text ?? "") ?? 0, breastSize: Int(boobSize.text ?? ""), pdSponsorship: sponsorS.isOn, pdSpendEvening: nightS.isOn, pdPeriodicMeetings: datingS.isOn, pdTravels: travelS.isOn, pdFriendshipCommunication: friendshipS.isOn, hobby: interestsTextView.textColor != UIColor.darkGray ? (interestsTextView?.text)!:"", favoritePlacesCity: favPlacesTextView.textColor != UIColor.darkGray ? (favPlacesTextView?.text)!:"", visitedCountries: visitedCountriesTextView.textColor != UIColor.darkGray ? (visitedCountriesTextView?.text)!:"", countriesWantVisit: interestedCountriesTextView.textColor != UIColor.darkGray ? (interestedCountriesTextView?.text)!:"", hairColorId: hairID) { (model, error) in
+        UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: bodyTypeID, sexId: userInformation?.sex.id ?? 0, sexualOrientation: orientationID, countryId: userInformation?.countries.countryID ?? 0, cityId: userInformation?.cities.cityID ?? 0, name: userInformation?.name ?? "", dateBirth: userInformation?.dateBirth ?? "", information: aboutTextView.textColor != UIColor.darkGray ? (aboutTextView.text)!:"", weight: Int(weightLbl.text ?? "") ?? 0, height: Int(heightLbl.text ?? "") ?? 0, breastSize: Int(boobSize.text ?? ""), pdSponsorship: sponsorS.isOn, pdSpendEvening: nightS.isOn, pdPeriodicMeetings: datingS.isOn, pdTravels: travelS.isOn, pdFriendshipCommunication: friendshipS.isOn, hobby: interestsTextView.textColor != UIColor.darkGray ? (interestsTextView?.text)!:"", favoritePlacesCity: favPlacesTextView.textColor != UIColor.darkGray ? (favPlacesTextView?.text)!:"", visitedCountries: visitedCountriesTextView.textColor != UIColor.darkGray ? (visitedCountriesTextView?.text)!:"", countriesWantVisit: interestedCountriesTextView.textColor != UIColor.darkGray ? (interestedCountriesTextView?.text)!:"", hairColorId: hairID) { (model, error) in
             if (error != nil) {
                 DispatchQueue.main.async {
                     self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
@@ -408,11 +408,19 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     //aim ok button pressed
     @IBAction func onOk(_ sender: Any) {
         aimTextView.text = "Цель знакомства: "
-        aimTextView.text = aimTextView.text! + (sponsorS.isOn ? aim[0] : "") + " \u{2022} "
-        aimTextView.text = aimTextView.text! + (nightS.isOn ? (aim[1]) : "") + " \u{2022} "
-        aimTextView.text = aimTextView.text! + (datingS.isOn ? (aim[2]) : "") + " \u{2022} "
-        aimTextView.text = aimTextView.text! + (travelS.isOn ? (aim[3]) : "") + " \u{2022} "
-        aimTextView.text = aimTextView.text! + (friendshipS.isOn ? (aim[4]) : "") + " \u{2022} "
+        aimTextView.text = aimTextView.text! + (sponsorS.isOn ? (aim[0] + " \u{2022} ") : "")
+        aimTextView.text = aimTextView.text! + (nightS.isOn ? (aim[1] + " \u{2022} ") : "")
+        aimTextView.text = aimTextView.text! + (datingS.isOn ? (aim[2] + " \u{2022} ") : "")
+        aimTextView.text = aimTextView.text! + (travelS.isOn ? (aim[3] + " \u{2022} ") : "")
+        aimTextView.text = aimTextView.text! + (friendshipS.isOn ? (aim[4]) : "")
+        
+        //removes last dot
+        var a = aimTextView.text
+        let removingIndex = a?.index(a!.endIndex, offsetBy: -2)
+        if a?[removingIndex!] == "\u{2022}" {
+            a?.remove(at: removingIndex!)
+            aimTextView.text = a
+        }
         
         UIView.transition(with: backgroundView, duration: 0.3, options: .transitionCrossDissolve, animations: {
             self.backgroundView.alpha = 0

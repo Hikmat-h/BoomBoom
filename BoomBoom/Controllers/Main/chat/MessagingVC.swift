@@ -13,11 +13,16 @@ import InputBarAccessoryView
 class MessagingVC: MessagesViewController{
 
     var messages: [Message] = []
-    var member: Member!
+    var user: Member!
+    var partner: Member!
     
     let months: [String] = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
     
-    var friendAccountID = -1
+    var partnersAccountID = -1
+    var chatID = -1
+    var chatMessageID = -1
+    var partnersName = ""
+    var userAccountID = -1
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,7 +31,8 @@ class MessagingVC: MessagesViewController{
         let videoBtn = UIBarButtonItem(image: UIImage(named: "video"), style: .plain, target: self, action: #selector(onVideo))
         navigationItem.rightBarButtonItem = videoBtn
         
-        member = Member(name: "", color: .blue)
+        user = Member(name: "tempName", color: .blue)
+        partner = Member(name: partnersName, color: .green)
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messageInputBar.delegate = self
@@ -40,6 +46,11 @@ class MessagingVC: MessagesViewController{
             layout.setMessageOutgoingAvatarSize(.zero)
         }
         configureMessageInputBar()
+        
+        SocketManager.current.getOldMessages(chatId: chatID, chatMessageId: chatMessageID)
+        
+        //to receive messages
+        SocketManager.current.delegate = self
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -116,7 +127,7 @@ extension MessagingVC: MessagesDataSource {
     //-----
     
     func currentSender() -> SenderType {
-        return Sender(id: member.name, displayName: member.name)
+        return Sender(id: "\(userAccountID)", displayName: user.name)
     }
     
     func numberOfSections(
@@ -127,7 +138,6 @@ extension MessagingVC: MessagesDataSource {
     func messageForItem(
         at indexPath: IndexPath,
         in messagesCollectionView: MessagesCollectionView) -> MessageType {
-        
         return messages[indexPath.section]
     }
     
@@ -188,14 +198,37 @@ extension MessagingVC: MessageInputBarDelegate {
     
     func inputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
         let newMessage = Message(
-            member: member,
+            member: user,
             text: text,
+            messageId: UUID().uuidString)
+        messages.append(newMessage)
+        inputBar.inputTextView.text = ""
+        SocketManager.current.sendMessage(accountID: partnersAccountID, message: text, typeMessage: "text")
+        messagesCollectionView.reloadData()
+        messagesCollectionView.scrollToBottom(animated: true)
+    }
+}
+
+extension MessagingVC: SocketManagerDelegate {
+    func didReceiveMessage(detail: SendMessageAnswer) {
+        let newMessage = Message(
+            member: partner,
+            text: detail.message,
             messageId: UUID().uuidString)
         
         messages.append(newMessage)
-        inputBar.inputTextView.text = ""
-        SocketManager.current.sendMessage(accountID: friendAccountID, message: text, typeMessage: "text")
         messagesCollectionView.reloadData()
         messagesCollectionView.scrollToBottom(animated: true)
+    }
+    
+    func didReceiveOldMessages(messages: [SocketMessage]) {
+        for mess in messages {
+            let oldMess = Message(
+            member: partner, //mess.accountID == self.partnersAccountID ? partner :
+            text: mess.message,
+            messageId: UUID().uuidString)
+            self.messages.insert(oldMess, at: 0)
+        }
+        messagesCollectionView.reloadData()
     }
 }

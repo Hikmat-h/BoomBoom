@@ -21,6 +21,11 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var chats = List<RealmChat>()
     let baseURL = Constants.HTTP.PATH_URL
+    
+    //to load more chats
+    var pageNo:CLong=0
+    var isLastPage:Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchController = UISearchController(searchResultsController: self)
@@ -116,22 +121,28 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let vc = (storyboard?.instantiateViewController(withIdentifier: "MessagingVC") as? MessagingVC) else { return }
-        vc.friendAccountID = chats[indexPath.row].accountID
+        vc.partnersAccountID = chats[indexPath.row].accountID
+        vc.chatID = chats[indexPath.row].message?.chatID ?? 0
+        vc.chatMessageID = chats[indexPath.row].message?.chatMessageID ?? 0
+        vc.partnersName = chats[indexPath.row].name
+        vc.userAccountID = chats[indexPath.row].message?.chatMessageStatusList[0].accountID ?? 0
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    //load more chats
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lastRow = indexPath.row
+        if lastRow == chats.count-1 {
+            if !isLastPage{
+                pageNo = pageNo + 1
+                SocketManager.current.getChatListByPage(pageNo)
+            }
+        }
     }
-    */
 
 }
 
+//MARK: - Extensions
 extension ChatVC: UISearchControllerDelegate, UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         
@@ -139,6 +150,7 @@ extension ChatVC: UISearchControllerDelegate, UISearchBarDelegate {
 }
 
 extension ChatVC: SocketManagerDelegate {
+    
     func didReceiveChatList(socketChats: GetChatListAnswer) {
         let chats = socketChats.chats
         let localChats = List<RealmChat>()
@@ -177,24 +189,61 @@ extension ChatVC: SocketManagerDelegate {
             localChat.typeAccount = chat.typeAccount
             localChats.append(localChat)
         }
-        self.chats = localChats
         if chats.count>0{
+            self.chats = localChats
+            self.isLastPage = false
             let realm = try! Realm()
-            
-//            let myDog = Dog()
-//            myDog.name = "Rex"
-//            myDog.age = 1
-            
-//            let some1 = RealmChatMessageStatus()
-//            some1.accountID = 1
-//            some1.delivered = true
-//            some1.id = 2
-//            some1.read = true
-//            let some2 = RealmChat()
             try! realm.write {
-    //            realm.create(RealmChat.self, value: localChats, update: .all)
+                realm.deleteAll()
                 realm.add(localChats)
             }
+        } else {
+            self.isLastPage = true
+        }
+        tableView.reloadData()
+    }
+    
+    func didReceiveMessage(detail: SendMessageAnswer) {
+        if let chat = chats.first(where: {$0.chatID == detail.chatID}) {
+            let realm = try! Realm()
+            try! realm.write {
+                chat.countNewMessages = 1
+                chat.lastDateAddMessage = detail.dateSend
+                chat.message?.message = detail.message
+                chat.message?.chatMessageStatusList[0].read = detail.chatMessageStatusList[0].read
+                chat.message?.chatMessageStatusList[0].delivered = detail.chatMessageStatusList[0].delivered
+            }
+            tableView.reloadData()
+        } else {
+            SocketManager.current.getChatDetail(chatID: detail.chatID)
+        }
+    }
+    
+    func didReceiveChatDetail(chatDetail: Chat) {
+        let localChat = RealmChat()
+        localChat.accountID = chatDetail.accountID
+        localChat.chatID = chatDetail.chatID
+        localChat.countNewMessages = chatDetail.countNewMessages
+        localChat.favorite = chatDetail.favorite
+        localChat.lastDateAddMessage = chatDetail.lastDateAddMessage
+        localChat.message?.accountID = chatDetail.message.accountID
+        localChat.message?.chatID = chatDetail.message.chatID
+        localChat.message?.chatMessageID = chatDetail.message.chatMessageID
+//        localChat.message?.chatMessageStatusList[0].accountID = chatDetail.message.chatMessageStatusList[0].accontID
+//        localChat.message?.chatMessageStatusList[0].delivered = chatDetail.message.chatMessageStatusList[0].delivered
+        localChat.message?.dateSend = chatDetail.message.dateSend
+        localChat.message?.message = chatDetail.message.message
+        localChat.name = chatDetail.name
+        localChat.online = chatDetail.online
+        if chatDetail.photo.count>0{
+            let photo = RealmChatPhoto()
+            photo.pathURLPreview = chatDetail.photo[0].pathURLPreview
+            localChat.photos.append(photo)
+        }
+        localChat.typeAccount = chatDetail.typeAccount
+        let realm = try! Realm()
+        try! realm.write {
+            chats.append(localChat)
         }
         tableView.reloadData()
     }

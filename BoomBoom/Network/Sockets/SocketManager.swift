@@ -10,14 +10,20 @@ import Foundation
 import Starscream
 protocol SocketManagerDelegate: class{
     func didReceiveChatList(socketChats:GetChatListAnswer)
+    func didReceiveMessage(detail:SendMessageAnswer)
+    func didReceiveChatDetail(chatDetail:Chat)
+    func didReceiveOldMessages(messages:[SocketMessage])
 }
 
 class SocketManager{
     
     static let current = SocketManager()
+    var selfID = 0
     weak var delegate:SocketManagerDelegate?
     public var ws = WebSocket(url: URL(string: Constants.Sockets.PATH)!)
-    private init(){}
+    private init(){
+        selfID = UserDefaults.standard.value(forKey: "accountID") as! Int
+    }
     
     func connect() {
         ws.delegate = self as WebSocketDelegate
@@ -70,6 +76,31 @@ extension SocketManager: WebSocketDelegate {
         }
     }
     
+    func getChatDetail(chatID:Int) {
+        let object: Dictionary<String, Any> = ["chatId":chatID]
+        let dict: Dictionary<String, Any> = ["action":"chatdetail", "object":object]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+            let str = String(decoding: data, as: UTF8.self)
+            ws.write(string: str)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func getOldMessages(chatId: Int, chatMessageId: Int) {
+        let object: Dictionary<String, Any> = ["chatId":chatId, "chatMessageId":chatMessageId]
+        let dict: Dictionary<String, Any> = ["action":"getoldmessages", "object":object]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+            let str = String(decoding: data, as: UTF8.self)
+            ws.write(string: str)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    //MARK: - built in web socket delegates
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         var answerDict = Dictionary<String, AnyObject>()
         let data = text.data(using: .utf8)!
@@ -89,7 +120,7 @@ extension SocketManager: WebSocketDelegate {
             do {
                 let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
                 let detail = try? JSONDecoder().decode(AuthResult.self, from: data)
-                
+                selfID = detail?.accountID ?? 0
                 UserDefaults.standard.set(detail?.accountID, forKey: "accountID")
                 getChatListByPage(0)
             } catch let error as NSError {
@@ -99,7 +130,9 @@ extension SocketManager: WebSocketDelegate {
             do {
                 let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
                 let detail = try? JSONDecoder().decode(SendMessageAnswer.self, from: data)
-                print(detail as Any)
+                if detail?.accountID != selfID {
+                    delegate?.didReceiveMessage(detail: detail!)
+                }
             } catch let error as NSError {
                 print(error)
             }
@@ -109,6 +142,26 @@ extension SocketManager: WebSocketDelegate {
                 let detail = try? JSONDecoder().decode(GetChatListAnswer.self, from: data)
                 print(detail as Any)
                 delegate?.didReceiveChatList(socketChats: detail ?? GetChatListAnswer(countNewMessages: 0, countAllChats: 0, chats: []))
+            } catch let error as NSError {
+                print(error)
+            }
+        case "chatdetail":
+            do {
+                let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
+                let detail = try? JSONDecoder().decode(Chat.self, from: data)
+                if let d = detail {
+                    delegate?.didReceiveChatDetail(chatDetail: d)
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+        case "getoldmessages":
+            do {
+                let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
+                let detail = try? JSONDecoder().decode([SocketMessage].self, from: data)
+                if let d = detail {
+                    delegate?.didReceiveOldMessages(messages: d)
+                }
             } catch let error as NSError {
                 print(error)
             }
@@ -125,4 +178,11 @@ extension SocketManager: WebSocketDelegate {
         print("Received data: \(String(decoding: data, as: UTF8.self))")
    }
     
+}
+
+extension SocketManagerDelegate {
+    func didReceiveChatList(socketChats:GetChatListAnswer) {}
+    func didReceiveMessage(detail:SendMessageAnswer) {}
+    func didReceiveChatDetail(chatDetail:Chat) {}
+    func didReceiveOldMessages(messages:[SocketMessage]) {}
 }

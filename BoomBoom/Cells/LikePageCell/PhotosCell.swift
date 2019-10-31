@@ -133,7 +133,7 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
         NewsService.current.likePhoto(token: token, lang: lang, photoId: photoID) { (photo, error) in
             DispatchQueue.main.async {
                 if error == nil {
-                    self.photos[self.currentPhotoIndex].ilike?.toggle()
+                    self.photos[self.currentPhotoIndex].ilike = true
                     self.updateLikeBtnState()
                 }
             }

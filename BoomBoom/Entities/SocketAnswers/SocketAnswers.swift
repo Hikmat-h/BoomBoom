@@ -73,7 +73,7 @@ struct SendMessageAnswer: Codable {
     let message: String
     let dateSend: Int64
     let chatMessageID, chatID: Int
-    let chatMessageStatusList: [ChatMessageStatusList]
+    let chatMessageStatusList: [ChatMessageStatus]
     let typeMessage, accountName: String
 
     enum CodingKeys: String, CodingKey {
@@ -87,7 +87,7 @@ struct SendMessageAnswer: Codable {
 }
 
 // MARK: - ChatMessageStatusList
-struct ChatMessageStatusList: Codable {
+struct ChatMessageStatus: Codable {
     let id, accontID: Int
     let delivered, read: Bool
 
@@ -131,7 +131,7 @@ struct SocketMessage: Codable {
     let message: String
     let dateSend: Int64
     let chatMessageID, chatID: Int
-    let chatMessageStatusList: [ChatMessageStatusList]
+    let chatMessageStatusList: [ChatMessageStatus]
 
     enum CodingKeys: String, CodingKey {
         case accountID = "accountId"

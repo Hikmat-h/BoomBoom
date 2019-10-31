@@ -49,7 +49,6 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
     let token:String = UserDefaults.standard.value(forKey: "token") as! String
     let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
-//    let token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2OCIsImlhdCI6MTU2OTk0MTA4OSwiZXhwIjoxNTcwODA1MDg5fQ.1Yt8sY90vdyJOhNz6BIP2vOrAEBG0HYSy4bqH9DBr0osSOKB45YwHT1drVlFu_mbTlAtQBmj2RrC_IkRkkfdwQ"
     
     var userInformation: UserInfo?
     var photos:[Photo] = []
@@ -65,6 +64,8 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     var orientationID:Int = -1
     var hairID:Int = -1
     
+    var weight = 0
+    var height = 0
     var cellWidth: CGFloat?
     let placeHolderColor = #colorLiteral(red: 0.5490196078, green: 0.5254901961, blue: 0.5254901961, alpha: 1)
     var aim:[String] = []
@@ -259,7 +260,7 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
     
     func saveChanges(token:String, lang:String) {
         showActivityIndicator(loadingView: loadingView, spinner: spinner)
-        UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: bodyTypeID, sexId: userInformation?.sex.id ?? 0, sexualOrientation: orientationID, countryId: userInformation?.countries.countryID ?? 0, cityId: userInformation?.cities.cityID ?? 0, name: userInformation?.name ?? "", dateBirth: userInformation?.dateBirth ?? "", information: aboutTextView.textColor != UIColor.darkGray ? (aboutTextView.text)!:"", weight: Int(weightLbl.text ?? "") ?? 0, height: Int(heightLbl.text ?? "") ?? 0, breastSize: Int(boobSize.text ?? ""), pdSponsorship: sponsorS.isOn, pdSpendEvening: nightS.isOn, pdPeriodicMeetings: datingS.isOn, pdTravels: travelS.isOn, pdFriendshipCommunication: friendshipS.isOn, hobby: interestsTextView.textColor != UIColor.darkGray ? (interestsTextView?.text)!:"", favoritePlacesCity: favPlacesTextView.textColor != UIColor.darkGray ? (favPlacesTextView?.text)!:"", visitedCountries: visitedCountriesTextView.textColor != UIColor.darkGray ? (visitedCountriesTextView?.text)!:"", countriesWantVisit: interestedCountriesTextView.textColor != UIColor.darkGray ? (interestedCountriesTextView?.text)!:"", hairColorId: hairID) { (model, error) in
+        UserDetailsSerice.current.editProfileData(token: token, lang: lang, bodyTypeId: bodyTypeID, sexId: userInformation?.sex.id ?? 0, sexualOrientation: orientationID, countryId: userInformation?.countries.countryID ?? 0, cityId: userInformation?.cities.cityID ?? 0, name: userInformation?.name ?? "", dateBirth: userInformation?.dateBirth ?? "", information: aboutTextView.textColor != UIColor.darkGray ? (aboutTextView.text)!:"", weight: self.weight, height: self.height, breastSize: Int(boobSize.text ?? ""), pdSponsorship: sponsorS.isOn, pdSpendEvening: nightS.isOn, pdPeriodicMeetings: datingS.isOn, pdTravels: travelS.isOn, pdFriendshipCommunication: friendshipS.isOn, hobby: interestsTextView.textColor != UIColor.darkGray ? (interestsTextView?.text)!:"", favoritePlacesCity: favPlacesTextView.textColor != UIColor.darkGray ? (favPlacesTextView?.text)!:"", visitedCountries: visitedCountriesTextView.textColor != UIColor.darkGray ? (visitedCountriesTextView?.text)!:"", countriesWantVisit: interestedCountriesTextView.textColor != UIColor.darkGray ? (interestedCountriesTextView?.text)!:"", hairColorId: hairID) { (model, error) in
             if (error != nil) {
                 DispatchQueue.main.async {
                     self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
@@ -330,6 +331,9 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
             let weight = Int(alert.textFields?[0].text ?? "0") ?? 0
             if weight>=0 && weight<=230 {
              self.weightLbl.text = "\(alert.textFields?[0].text ?? "") кг"
+                let ar = self.weightLbl.text?.split(separator: " ")
+                self.weight = Int(String(ar?[0] ?? "")) ?? 0
+                
             }
         }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
@@ -348,6 +352,8 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
             let height = Int(alert.textFields?[0].text ?? "0") ?? 0
             if height>=0 && height<=250 {
                 self.heightLbl.text = "\(alert.textFields?[0].text ?? "") см."
+                let ar = self.heightLbl.text?.split(separator: " ")
+                self.height = Int(String(ar?[0] ?? "")) ?? 0
             }
         }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))

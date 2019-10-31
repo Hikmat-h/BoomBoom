@@ -110,7 +110,7 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy"
         print(Date(timeIntervalSince1970: TimeInterval(chat.lastDateAddMessage)))
-        cell.timeLbl.text = String(formatter.string(from: Date(timeIntervalSince1970: TimeInterval(chat.lastDateAddMessage)/1000)))
+        cell.timeLbl.text = String(formatter.string(from: Date(timeIntervalSince1970: TimeInterval((chat.lastDateAddMessage)/1000))))
         if (chat.message?.chatMessageStatusList[0].read)! {
             cell.lastMessageLbl.text = chat.message?.message
         } else {
@@ -121,11 +121,14 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let vc = (storyboard?.instantiateViewController(withIdentifier: "MessagingVC") as? MessagingVC) else { return }
-        vc.partnersAccountID = chats[indexPath.row].accountID
         vc.chatID = chats[indexPath.row].message?.chatID ?? 0
         vc.chatMessageID = chats[indexPath.row].message?.chatMessageID ?? 0
         vc.partnersName = chats[indexPath.row].name
+        vc.partnersAccountID = chats[indexPath.row].accountID
         vc.userAccountID = chats[indexPath.row].message?.chatMessageStatusList[0].accountID ?? 0
+        vc.messageAccountID = chats[indexPath.row].message?.accountID ?? 0
+        vc.lastmessage = chats[indexPath.row].message?.message ?? ""
+        vc.lastMessageDate = chats[indexPath.row].message?.dateSend ?? 0
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

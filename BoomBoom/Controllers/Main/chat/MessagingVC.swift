@@ -13,16 +13,21 @@ import InputBarAccessoryView
 class MessagingVC: MessagesViewController{
 
     var messages: [Message] = []
-    var user: Member!
-    var partner: Member!
     
     let months: [String] = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
     
     var partnersAccountID = -1
     var chatID = -1
     var chatMessageID = -1
+    var lastmessage = ""
     var partnersName = ""
     var userAccountID = -1
+    var lastMessageDate = Int64()
+    var messageAccountID = -1
+    
+    var partner: Sender?
+    var user: Sender?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,8 +36,6 @@ class MessagingVC: MessagesViewController{
         let videoBtn = UIBarButtonItem(image: UIImage(named: "video"), style: .plain, target: self, action: #selector(onVideo))
         navigationItem.rightBarButtonItem = videoBtn
         
-        user = Member(name: "tempName", color: .blue)
-        partner = Member(name: partnersName, color: .green)
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messageInputBar.delegate = self
@@ -47,6 +50,20 @@ class MessagingVC: MessagesViewController{
         }
         configureMessageInputBar()
         
+        //set values
+        partner = Sender(id: "\(partnersAccountID)", displayName: partnersName)
+        user = Sender(id: "\(userAccountID)", displayName: "Вы")
+        
+        var currentSender: Sender
+        if messageAccountID == userAccountID {
+            currentSender = user!
+        } else {
+            currentSender = partner!
+        }
+        
+        let lastM = Message(text: lastmessage, messageId: "\(chatMessageID)", sentDate: posixToDate(posixDate: lastMessageDate), kind: .text(lastmessage), sender: currentSender)
+        messages.append(lastM)
+        
         SocketManager.current.getOldMessages(chatId: chatID, chatMessageId: chatMessageID)
         
         //to receive messages
@@ -59,6 +76,11 @@ class MessagingVC: MessagesViewController{
     
     @objc func onVideo() {
         print("wanna video call??")
+    }
+    
+    func posixToDate(posixDate: Int64) -> Date {
+        let date = Date(timeIntervalSince1970: TimeInterval((posixDate)/1000))
+        return Date(timeIntervalSince1970: TimeInterval((posixDate)/1000))
     }
     
     func configureMessageInputBar(){
@@ -76,15 +98,6 @@ class MessagingVC: MessagesViewController{
     @objc func onMedia() {
         print("wanna choose file??")
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
@@ -110,10 +123,9 @@ extension MessagingVC: MessagesDataSource {
     func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy HH:mm"
-        print(formatter.string(from: Date()))
         return NSAttributedString(
             
-            string: formatter.string(from: Date()),
+            string: formatter.string(from:messages[indexPath.section].sentDate),
             attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray])
     }
     
@@ -127,7 +139,7 @@ extension MessagingVC: MessagesDataSource {
     //-----
     
     func currentSender() -> SenderType {
-        return Sender(id: "\(userAccountID)", displayName: user.name)
+        return user!
     }
     
     func numberOfSections(
@@ -185,10 +197,7 @@ extension MessagingVC: MessagesDisplayDelegate {
         for message: MessageType,
         at indexPath: IndexPath,
         in messagesCollectionView: MessagesCollectionView) {
-        
-        let message = messages[indexPath.section]
-        let color = message.member.color
-        avatarView.backgroundColor = color
+        avatarView.backgroundColor = .white
         avatarView.isHidden = true
     }
     
@@ -198,9 +207,8 @@ extension MessagingVC: MessageInputBarDelegate {
     
     func inputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
         let newMessage = Message(
-            member: user,
             text: text,
-            messageId: UUID().uuidString)
+            messageId: "0", sentDate: Date(), kind: .text(text), sender: user!)
         messages.append(newMessage)
         inputBar.inputTextView.text = ""
         SocketManager.current.sendMessage(accountID: partnersAccountID, message: text, typeMessage: "text")
@@ -209,12 +217,12 @@ extension MessagingVC: MessageInputBarDelegate {
     }
 }
 
+//MARK: - socket delegates
 extension MessagingVC: SocketManagerDelegate {
     func didReceiveMessage(detail: SendMessageAnswer) {
         let newMessage = Message(
-            member: partner,
             text: detail.message,
-            messageId: UUID().uuidString)
+            messageId: "\(detail.chatMessageID)", sentDate: posixToDate(posixDate: detail.dateSend), kind: .text(detail.message), sender: partner!)
         
         messages.append(newMessage)
         messagesCollectionView.reloadData()
@@ -223,10 +231,15 @@ extension MessagingVC: SocketManagerDelegate {
     
     func didReceiveOldMessages(messages: [SocketMessage]) {
         for mess in messages {
+            var currentSender:Sender
+            if mess.accountID == userAccountID {
+                currentSender = user!
+            } else {
+                currentSender = partner!
+            }
             let oldMess = Message(
-            member: partner, //mess.accountID == self.partnersAccountID ? partner :
             text: mess.message,
-            messageId: UUID().uuidString)
+            messageId: "\(mess.chatMessageID)", sentDate: posixToDate(posixDate: mess.dateSend), kind: .text(mess.message), sender: currentSender)
             self.messages.insert(oldMess, at: 0)
         }
         messagesCollectionView.reloadData()

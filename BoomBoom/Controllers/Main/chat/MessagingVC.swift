@@ -24,15 +24,18 @@ class MessagingVC: MessagesViewController{
     var userAccountID = -1
     var lastMessageDate = Int64()
     var messageAccountID = -1
-    
+    var newChat = false
     var partner: Sender?
     var user: Sender?
+    
+    var hasMoreMessages = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //nav bar
         self.navigationItem.title = "ЧАТ"
+        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.1725490196, green: 0.1725490196, blue: 0.1725490196, alpha: 1)
         let videoBtn = UIBarButtonItem(image: UIImage(named: "video"), style: .plain, target: self, action: #selector(onVideo))
         navigationItem.rightBarButtonItem = videoBtn
         
@@ -50,7 +53,7 @@ class MessagingVC: MessagesViewController{
         }
         configureMessageInputBar()
         
-        //set values
+        //set values for both parties
         partner = Sender(id: "\(partnersAccountID)", displayName: partnersName)
         user = Sender(id: "\(userAccountID)", displayName: "Вы")
         
@@ -61,30 +64,54 @@ class MessagingVC: MessagesViewController{
             currentSender = partner!
         }
         
-        let lastM = Message(text: lastmessage, messageId: "\(chatMessageID)", sentDate: posixToDate(posixDate: lastMessageDate), kind: .text(lastmessage), sender: currentSender)
-        messages.append(lastM)
-        
-        SocketManager.current.getOldMessages(chatId: chatID, chatMessageId: chatMessageID)
+        if !newChat {
+            let lastM = Message(text: lastmessage, messageId: "\(chatMessageID)", sentDate: posixToDate(posixDate: lastMessageDate), kind: .text(lastmessage), sender: currentSender)
+            messages.append(lastM)
+        }
         
         //to receive messages
         SocketManager.current.delegate = self
+        SocketManager.current.getOldMessages(chatId: chatID, chatMessageId: chatMessageID)
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        
-    }
+    
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShowNotification), name: UIResponder.keyboardDidShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHideNotification), name: UIResponder.keyboardDidHideNotification, object: nil)
+//    }
+//
+//
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+//    }
+//
+//    @objc func keyboardWillShowNotification(notification: NSNotification) {
+//        self.navigationController?.isNavigationBarHidden = true
+//    }
+//
+//    @objc func keyboardWillHideNotification(notification: NSNotification) {
+//        self.navigationController?.isNavigationBarHidden = true
+//    }
+    
+    
+    
+    
     
     @objc func onVideo() {
         print("wanna video call??")
     }
     
     func posixToDate(posixDate: Int64) -> Date {
-        let date = Date(timeIntervalSince1970: TimeInterval((posixDate)/1000))
         return Date(timeIntervalSince1970: TimeInterval((posixDate)/1000))
     }
     
     func configureMessageInputBar(){
 //        messageInputBar.rightStackViewItems = [InputItem]
+        self.navigationController?.hidesBarsWhenKeyboardAppears = false
         messageInputBar.inputTextView.placeholder = "Ваше сообщение"
         messageInputBar.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.9333333333, blue: 0.9333333333, alpha: 1)
         messageInputBar.inputTextView.textColor = .black
@@ -101,6 +128,7 @@ class MessagingVC: MessagesViewController{
 
 }
 
+//MARK: - Message DataSource
 extension MessagingVC: MessagesDataSource {
     
     //cell bottom label style
@@ -171,6 +199,7 @@ extension MessagingVC: MessagesDataSource {
     }
 }
 
+//MARK: - Message layout
 extension MessagingVC: MessagesLayoutDelegate {
     
     func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
@@ -191,6 +220,7 @@ extension MessagingVC: MessagesLayoutDelegate {
     }
 }
 
+//MARK: - Message displaying
 extension MessagingVC: MessagesDisplayDelegate {
     func configureAvatarView(
         _ avatarView: AvatarView,
@@ -203,12 +233,14 @@ extension MessagingVC: MessagesDisplayDelegate {
     
 }
 
+//MARK: - MessageInputBar
 extension MessagingVC: MessageInputBarDelegate {
     
     func inputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
+        let textMess = text.trimmingCharacters(in: .whitespacesAndNewlines)
         let newMessage = Message(
-            text: text,
-            messageId: "0", sentDate: Date(), kind: .text(text), sender: user!)
+            text: textMess,
+            messageId: "0", sentDate: Date(), kind: .text(textMess), sender: user!)
         messages.append(newMessage)
         inputBar.inputTextView.text = ""
         SocketManager.current.sendMessage(accountID: partnersAccountID, message: text, typeMessage: "text")
@@ -230,18 +262,26 @@ extension MessagingVC: SocketManagerDelegate {
     }
     
     func didReceiveOldMessages(messages: [SocketMessage]) {
-        for mess in messages {
-            var currentSender:Sender
-            if mess.accountID == userAccountID {
-                currentSender = user!
-            } else {
-                currentSender = partner!
+        if messages.count>0 {
+            for mess in messages {
+                var currentSender:Sender
+                if mess.accountID == userAccountID {
+                    currentSender = user!
+                } else {
+                    currentSender = partner!
+                }
+                let oldMess = Message(
+                text: mess.message,
+                messageId: "\(mess.chatMessageID)", sentDate: posixToDate(posixDate: Int64(mess.dateSend)), kind: .text(mess.message), sender: currentSender)
+                self.messages.insert(oldMess, at: 0)
             }
-            let oldMess = Message(
-            text: mess.message,
-            messageId: "\(mess.chatMessageID)", sentDate: posixToDate(posixDate: mess.dateSend), kind: .text(mess.message), sender: currentSender)
-            self.messages.insert(oldMess, at: 0)
+            messagesCollectionView.reloadData()
+            if hasMoreMessages {
+                messagesCollectionView.scrollToBottom(animated: false)
+                SocketManager.current.getOldMessages(chatId: messages.last!.chatID, chatMessageId: messages.last!.chatMessageID)
+            }
+        } else {
+            hasMoreMessages = false
         }
-        messagesCollectionView.reloadData()
     }
 }

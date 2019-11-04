@@ -19,6 +19,8 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
     
     var token:String = UserDefaults.standard.value(forKey: "token") as! String
     let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
+    var accountID = 0
+    var parentVC: UIViewController?
     
     var photos:[Photo] = []
     var myFrame: CGRect = CGRect(x:0, y:0, width:0, height:0)
@@ -26,6 +28,7 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
     let gray = #colorLiteral(red: 0.2745098039, green: 0.2588235294, blue: 0.2588235294, alpha: 1)
     let red = #colorLiteral(red: 0.8980392157, green: 0.1019607843, blue: 0.2941176471, alpha: 1)
     var currentPhotoIndex = 0
+    var selfAccountID = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,6 +37,7 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
         likeBtn.tintColor = #colorLiteral(red: 0.2745098039, green: 0.2588235294, blue: 0.2588235294, alpha: 1)
         likeBtn.setImage(like, for: .normal)
 
+        selfAccountID = UserDefaults.standard.value(forKey: "accountID") as? Int ?? 0
         scrollView.delegate = self
         scrollView.isPagingEnabled = true
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
@@ -89,6 +93,13 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
         }
     }
     
+    @IBAction func onChat(_ sender: Any) {
+        if selfAccountID != accountID {
+            SocketManager.current.delegate = self
+            SocketManager.current.initializeChats(accountId: accountID)
+        }
+    }
+    
     func updateLikeBtnState(){
         guard photos.count>0 else { return }
         if photos[currentPhotoIndex].ilike ?? false {
@@ -114,7 +125,7 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
         self.pageControl.currentPageIndicatorTintColor = #colorLiteral(red: 0.3764705882, green: 0.3764705882, blue: 0.3764705882, alpha: 1)
     }
 
-    // MARK : TO CHANGE WHILE CLICKING ON PAGE CONTROL
+    // MARK: - TO CHANGE WHILE CLICKING ON PAGE CONTROL
     @objc func changePage(sender: AnyObject) -> () {
         let x = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
         scrollView.setContentOffset(CGPoint(x:x, y:0), animated: true)
@@ -138,5 +149,31 @@ class PhotosCell: UITableViewCell, UIScrollViewDelegate {
                 }
             }
         }
+    }
+}
+
+extension PhotosCell: SocketManagerDelegate{
+    func didReceiveChatInitAnswer(detail: Chat) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = (storyboard.instantiateViewController(withIdentifier: "MessagingVC") as? MessagingVC) else { return }
+        if let message = detail.message {
+            vc.newChat = false
+            vc.chatID = message.chatID
+            vc.chatMessageID = message.chatMessageID
+            vc.userAccountID = message.chatMessageStatusList[0].accontID
+            vc.messageAccountID = message.accountID
+            vc.lastmessage = message.message
+            vc.lastMessageDate = Int64(message.dateSend)
+            
+            let backItem = UIBarButtonItem()
+            backItem.title = ""
+            parentVC?.navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
+        } else {
+            vc.newChat = true
+        }
+        vc.partnersName = detail.name
+        vc.partnersAccountID = detail.accountID
+        
+        parentVC?.navigationController?.pushViewController(vc, animated: true)
     }
 }

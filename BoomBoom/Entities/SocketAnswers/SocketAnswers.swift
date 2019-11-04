@@ -9,18 +9,6 @@
 import Foundation
 import RealmSwift
 
-class Dog: Object {
-    @objc dynamic var name = ""
-    @objc dynamic var age = 0
-}
-class Person: Object {
-    @objc dynamic var name = ""
-    @objc dynamic var picture: Data? = nil // optionals supported
-    let dogs = List<Dog>()
-}
-
-
-
 //MARK: - Realm obects
 class RealmChat:Object{
     dynamic var photos = List<RealmChatPhoto>()
@@ -106,15 +94,16 @@ struct GetChatListAnswer: Codable {
 
 // MARK: - Chat
 struct Chat: Codable {
-    let photo: [ChatPhoto]
+    let photo: [ChatPhoto]?
     let name: String
     let online: Bool
-    let accountID, chatID: Int
-    let lastDateAddMessage: Int64
-    let message: SocketMessage
+    let accountID: Int
+    let lastDateAddMessage: Int64?
+    let chatID: Int
+    let message: SocketMessage?
     let favorite: Bool
-    let countNewMessages: Int
-    let typeAccount: String
+    let countNewMessages: Int?
+    let typeAccount: String?
 
     enum CodingKeys: String, CodingKey {
         case photo, name, online
@@ -132,13 +121,15 @@ struct SocketMessage: Codable {
     let dateSend: Int64
     let chatMessageID, chatID: Int
     let chatMessageStatusList: [ChatMessageStatus]
-
+    let typeMessage: String
+    
     enum CodingKeys: String, CodingKey {
         case accountID = "accountId"
         case message, dateSend
         case chatMessageID = "chatMessageId"
         case chatID = "chatId"
-        case chatMessageStatusList
+        case chatMessageStatusList, typeMessage
+        
     }
 }
 

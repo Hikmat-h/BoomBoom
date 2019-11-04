@@ -335,7 +335,7 @@ class SearchVC: UIViewController, UITextFieldDelegate {
                         let domain = Bundle.main.bundleIdentifier!
                         UserDefaults.standard.removePersistentDomain(forName: domain)
                         UserDefaults.standard.synchronize()
-                        self.performSegue(withIdentifier: "showAuth", sender: self)
+                        //self.performSegue(withIdentifier: "showAuth", sender: self)
                         self.setNewRootController(nameController: "AuthorizationVC")
                     } else {
                         self.showErrorWindow(errorMessage: error?.domain ?? "")
@@ -358,7 +358,7 @@ class SearchVC: UIViewController, UITextFieldDelegate {
                         let domain = Bundle.main.bundleIdentifier!
                         UserDefaults.standard.removePersistentDomain(forName: domain)
                         UserDefaults.standard.synchronize()
-                        self.performSegue(withIdentifier: "showAuth", sender: self)
+                        //self.performSegue(withIdentifier: "showAuth", sender: self)
                         self.setNewRootController(nameController: "AuthorizationVC")
                     } else {
                         self.showErrorWindow(errorMessage: error?.domain ?? "")

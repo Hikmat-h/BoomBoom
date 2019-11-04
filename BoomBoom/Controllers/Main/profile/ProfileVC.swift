@@ -143,15 +143,14 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         aim += userInformation!.pdPeriodicMeetings ? "Периодические встречи \u{2022} " : ""
         aim += userInformation!.pdFriendshipCommunication ? "Дружба и общение \u{2022} " : ""
         
-        //removes last dot
-        var a = aim
-        let removingIndex = a.index(a.endIndex, offsetBy: -2)
-        if a[removingIndex] == "\u{2022}" {
-            a.remove(at: removingIndex)
-            aim = a
-        }
-        
         if !aim.isEmpty {
+            //removes last dot
+            var a = aim
+            let removingIndex = a.index(a.endIndex, offsetBy: -2)
+            if a[removingIndex] == "\u{2022}" {
+                a.remove(at: removingIndex)
+                aim = a
+            }
             self.infoTitleArray.append("Цель знакомства")
             self.infoArray.append(aim)
         }
@@ -213,7 +212,7 @@ class ProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     let domain = Bundle.main.bundleIdentifier!
                     UserDefaults.standard.removePersistentDomain(forName: domain)
                     UserDefaults.standard.synchronize()
-                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    //self.performSegue(withIdentifier: "showAuth", sender: self)
                     self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.showErrorWindow(errorMessage: error!.domain)

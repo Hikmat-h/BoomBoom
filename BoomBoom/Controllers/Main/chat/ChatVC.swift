@@ -46,7 +46,7 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         searchBar?.tintColor = .clear
         searchBar?.setTextFieldColor(color: .clear)
         searchBar?.setTextColor(color: .white)
-        searchBar?.setPlaceholderTextColor(color: #colorLiteral(red: 0.8784313725, green: 0.8784313725, blue: 0.8784313725, alpha: 1))
+        searchBar?.setPlaceholderTextColor(color: .red)
         
 //        searchController.title = "Поиск"
 //        if #available(iOS 11.0, *) {
@@ -71,14 +71,16 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         let starBtn = UIBarButtonItem(image: UIImage(named: "star"), style: .plain, target: self, action: #selector(onStar))
         navigationItem.rightBarButtonItem = starBtn
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         SocketManager.current.delegate = self
+        pageNo = 0
+        SocketManager.current.getChatListByPage(0)
     }
     
     @objc func onStar() {
         print("star is clicked")
-        let realm = try! Realm()
-        let test = realm.objects(RealmChatPhoto.self)
-        print(test as Any)
     }
     @objc func viewTapped() {
         searchBar?.resignFirstResponder()
@@ -109,7 +111,6 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         }
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy"
-        print(Date(timeIntervalSince1970: TimeInterval(chat.lastDateAddMessage)))
         cell.timeLbl.text = String(formatter.string(from: Date(timeIntervalSince1970: TimeInterval((chat.lastDateAddMessage)/1000))))
         if (chat.message?.chatMessageStatusList[0].read)! {
             cell.lastMessageLbl.text = chat.message?.message
@@ -142,6 +143,24 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             }
         }
     }
+    
+    //delete cells
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            SocketManager.current.deleteChat(chatId: chats[indexPath.row].chatID)
+            tableView.beginUpdates()
+            chats.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.endUpdates()
+        }
+        if (editingStyle == .insert) {
+            
+        }
+    }
 
 }
 
@@ -160,36 +179,36 @@ extension ChatVC: SocketManagerDelegate {
         for chat in chats {
             let localChat = RealmChat()
             
-            if chat.photo.count>0 {
+            if chat.photo?.count ?? 0>0 {
                 let photo = RealmChatPhoto()
-                photo.pathURLPreview = chat.photo[0].pathURLPreview
+                photo.pathURLPreview = chat.photo![0].pathURLPreview
                 localChat.photos.append(photo)
             }
             
             localChat.name = chat.name
             localChat.online = chat.online
             localChat.accountID = chat.accountID
-            localChat.lastDateAddMessage = chat.lastDateAddMessage
+            localChat.lastDateAddMessage = Int64(chat.lastDateAddMessage!)
             localChat.chatID = chat.chatID
             localChat.message = RealmMessage()
-            localChat.message?.accountID = chat.message.accountID
-            localChat.message?.chatID = chat.message.chatID
-            localChat.message?.chatMessageID = Int(chat.message.chatMessageID)
+            localChat.message?.accountID = chat.message!.accountID
+            localChat.message?.chatID = chat.message!.chatID
+            localChat.message?.chatMessageID = Int(chat.message!.chatMessageID)
             
-            if chat.message.chatMessageStatusList.count>0{
+            if (chat.message!.chatMessageStatusList.count)>0{
                 let status = RealmChatMessageStatus()
-                status.id = chat.message.chatMessageStatusList[0].id
-                status.accountID = chat.message.chatMessageStatusList[0].accontID
-                status.read = chat.message.chatMessageStatusList[0].read
-                status.delivered = chat.message.chatMessageStatusList[0].delivered
+                status.id = (chat.message!.chatMessageStatusList[0].id)
+                status.accountID = (chat.message!.chatMessageStatusList[0].accontID)
+                status.read = chat.message!.chatMessageStatusList[0].read
+                status.delivered = chat.message!.chatMessageStatusList[0].delivered
                 localChat.message?.chatMessageStatusList.append(status)
             }
             
-            localChat.message?.dateSend = (chat.message.dateSend)
-            localChat.message?.message = chat.message.message
-            localChat.countNewMessages = chat.countNewMessages
+            localChat.message?.dateSend = Int64(chat.message!.dateSend)
+            localChat.message?.message = chat.message!.message
+            localChat.countNewMessages = chat.countNewMessages!
             localChat.favorite = chat.favorite
-            localChat.typeAccount = chat.typeAccount
+            localChat.typeAccount = chat.typeAccount!
             localChats.append(localChat)
         }
         if chats.count>0{
@@ -226,24 +245,24 @@ extension ChatVC: SocketManagerDelegate {
         let localChat = RealmChat()
         localChat.accountID = chatDetail.accountID
         localChat.chatID = chatDetail.chatID
-        localChat.countNewMessages = chatDetail.countNewMessages
+        localChat.countNewMessages = chatDetail.countNewMessages ?? 0
         localChat.favorite = chatDetail.favorite
-        localChat.lastDateAddMessage = chatDetail.lastDateAddMessage
-        localChat.message?.accountID = chatDetail.message.accountID
-        localChat.message?.chatID = chatDetail.message.chatID
-        localChat.message?.chatMessageID = chatDetail.message.chatMessageID
+        localChat.lastDateAddMessage = chatDetail.lastDateAddMessage ?? 0
+        localChat.message?.accountID = chatDetail.message!.accountID
+        localChat.message?.chatID = chatDetail.message!.chatID
+        localChat.message?.chatMessageID = chatDetail.message!.chatMessageID
 //        localChat.message?.chatMessageStatusList[0].accountID = chatDetail.message.chatMessageStatusList[0].accontID
 //        localChat.message?.chatMessageStatusList[0].delivered = chatDetail.message.chatMessageStatusList[0].delivered
-        localChat.message?.dateSend = chatDetail.message.dateSend
-        localChat.message?.message = chatDetail.message.message
+        localChat.message?.dateSend = Int64(chatDetail.message!.dateSend)
+        localChat.message?.message = chatDetail.message!.message
         localChat.name = chatDetail.name
         localChat.online = chatDetail.online
-        if chatDetail.photo.count>0{
+        if chatDetail.photo?.count ?? 0>0{
             let photo = RealmChatPhoto()
-            photo.pathURLPreview = chatDetail.photo[0].pathURLPreview
+            photo.pathURLPreview = chatDetail.photo![0].pathURLPreview
             localChat.photos.append(photo)
         }
-        localChat.typeAccount = chatDetail.typeAccount
+        localChat.typeAccount = chatDetail.typeAccount ?? "undefined"
         let realm = try! Realm()
         try! realm.write {
             chats.append(localChat)

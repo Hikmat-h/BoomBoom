@@ -13,6 +13,7 @@ protocol SocketManagerDelegate: class{
     func didReceiveMessage(detail:SendMessageAnswer)
     func didReceiveChatDetail(chatDetail:Chat)
     func didReceiveOldMessages(messages:[SocketMessage])
+    func didReceiveChatInitAnswer(detail:Chat)
 }
 
 class SocketManager{
@@ -20,17 +21,20 @@ class SocketManager{
     static let current = SocketManager()
     var selfID = 0
     weak var delegate:SocketManagerDelegate?
+    var retry = true
     public var ws = WebSocket(url: URL(string: Constants.Sockets.PATH)!)
     private init(){
-        selfID = UserDefaults.standard.value(forKey: "accountID") as! Int
+        selfID = UserDefaults.standard.value(forKey: "accountID") as? Int ?? 0
     }
     
     func connect() {
+        retry = true
         ws.delegate = self as WebSocketDelegate
         ws.connect()
     }
     
     func close() {
+        retry = false
         ws.disconnect()
     }
 }
@@ -48,6 +52,12 @@ extension SocketManager: WebSocketDelegate {
             print("websocket is disconnected: \(e.localizedDescription)")
         } else {
             print("websocket disconnected")
+        }
+        if retry {
+            let seconds = 2.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                self.ws.connect()
+            }
         }
    }
     
@@ -100,7 +110,31 @@ extension SocketManager: WebSocketDelegate {
         }
     }
     
-    //MARK: - built in web socket delegates
+    func initializeChats(accountId: Int) {
+        let object: Dictionary<String, Any> = ["accountId":accountId]
+        let dict: Dictionary<String, Any> = ["action":"chatinit", "object":object]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+            let str = String(decoding: data, as: UTF8.self)
+            ws.write(string: str)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func deleteChat(chatId: Int) {
+        let object: Dictionary<String, Any> = ["chatId":chatId]
+        let dict: Dictionary<String, Any> = ["action":"deletechat", "object":object]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+            let str = String(decoding: data, as: UTF8.self)
+            ws.write(string: str)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    //MARK: - built-in web socket delegates
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         var answerDict = Dictionary<String, AnyObject>()
         let data = text.data(using: .utf8)!
@@ -115,7 +149,7 @@ extension SocketManager: WebSocketDelegate {
         }
         
         //take action
-        switch answerDict["action"] as! String {
+        switch answerDict["action"] as? String {
         case "auth":
             do {
                 let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
@@ -165,6 +199,16 @@ extension SocketManager: WebSocketDelegate {
             } catch let error as NSError {
                 print(error)
             }
+        case "chatinit":
+            do {
+                let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
+                let detail = try? JSONDecoder().decode(Chat.self, from: data)
+                if let d = detail {
+                    delegate?.didReceiveChatInitAnswer(detail: d)
+                }
+            } catch let error as NSError {
+                print(error)
+            }
         case nil:
             if let error = answerDict["error"] as? NSError {
                 print(error.domain)
@@ -185,4 +229,5 @@ extension SocketManagerDelegate {
     func didReceiveMessage(detail:SendMessageAnswer) {}
     func didReceiveChatDetail(chatDetail:Chat) {}
     func didReceiveOldMessages(messages:[SocketMessage]) {}
+    func didReceiveChatInitAnswer(detail:Chat) {}
 }

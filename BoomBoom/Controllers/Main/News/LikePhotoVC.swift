@@ -59,6 +59,8 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "photosCell") as! PhotosCell
+            cell.parentVC = self
+            cell.accountID = userInformation?.id ?? 0
             cell.photos = userInformation?.photos ?? []
             cell.cityLbl.text = userInformation?.cities.title
             cell.nameAndAgelbl.text = "\(userInformation?.name ?? ""), \(Utils.current.comuteAge(userInformation?.dateBirth ?? ""))"
@@ -129,6 +131,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
             self.infoTitleArray.append("Обо мне")
             self.infoArray.append(userInformation?.information ?? "")
         }
+        
         var aim = ""
         aim += userInformation!.pdTravels ? "Совместные путешествия \u{2022} " : ""
         aim += userInformation!.pdSponsorship ? "Cпонсорство \u{2022} " : ""
@@ -137,6 +140,13 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         aim += userInformation!.pdFriendshipCommunication ? "Дружба и общение \u{2022} " : ""
         
         if !aim.isEmpty {
+            //removes last dot
+            var a = aim
+            let removingIndex = a.index(a.endIndex, offsetBy: -2)
+            if a[removingIndex] == "\u{2022}" {
+                a.remove(at: removingIndex)
+                aim = a
+            }
             self.infoTitleArray.append("Цель знакомства")
             self.infoArray.append(aim)
         }
@@ -198,7 +208,7 @@ class LikePhotoVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
                     let domain = Bundle.main.bundleIdentifier!
                     UserDefaults.standard.removePersistentDomain(forName: domain)
                     UserDefaults.standard.synchronize()
-                    self.performSegue(withIdentifier: "showAuth", sender: self)
+                    //self.performSegue(withIdentifier: "showAuth", sender: self)
                     self.setNewRootController(nameController: "AuthorizationVC")
                 } else {
                     self.showErrorWindow(errorMessage: error?.domain ?? "")

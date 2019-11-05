@@ -14,6 +14,8 @@ protocol SocketManagerDelegate: class{
     func didReceiveChatDetail(chatDetail:Chat)
     func didReceiveOldMessages(messages:[SocketMessage])
     func didReceiveChatInitAnswer(detail:Chat)
+    func didReceiveMessageDelivery(accountID: Int, chatMessageID: Int, chatID: Int)
+    func didReceiveMessageRead(accountID: Int, chatMessageID: Int, chatID: Int)
 }
 
 class SocketManager{
@@ -65,6 +67,42 @@ extension SocketManager: WebSocketDelegate {
     func sendMessage(accountID:Int, message:String, typeMessage:String) {
         let object: Dictionary<String, Any> = ["accountId":accountID, "message":message, "typeMessage":typeMessage]
         let dict: Dictionary<String, Any> = ["action":"sendmessage", "object":object]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+            let str = String(decoding: data, as: UTF8.self)
+            ws.write(string: str)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func sendDeliveryStatus(chatMessageId: Int) {
+        let object: Dictionary<String, Any> = ["chatMessageId":chatMessageId]
+        let dict: Dictionary<String, Any> = ["action":"delivery", "object":object]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+            let str = String(decoding: data, as: UTF8.self)
+            ws.write(string: str)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func sendReadStatus(chatMessageId: Int) {
+        let object: Dictionary<String, Any> = ["chatMessageId":chatMessageId]
+        let dict: Dictionary<String, Any> = ["action":"read", "object":object]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+            let str = String(decoding: data, as: UTF8.self)
+            ws.write(string: str)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func readAll(chatid: Int) {
+        let object: Dictionary<String, Any> = ["chatid":chatid]
+        let dict: Dictionary<String, Any> = ["action":"readall", "object":object]
         do {
             let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
             let str = String(decoding: data, as: UTF8.self)
@@ -209,6 +247,20 @@ extension SocketManager: WebSocketDelegate {
             } catch let error as NSError {
                 print(error)
             }
+        case "delivery":
+            let accountID = (answerDict["result"]?.object(forKey: "accountId") ?? 0) as! Int
+            let chatMessageID = (answerDict["result"]?.object(forKey: "chatMessageId") ?? 0) as! Int
+            let chatID = (answerDict["result"]?.object(forKey: "chatId") ?? 0) as! Int
+            if accountID != selfID {
+                delegate?.didReceiveMessageDelivery(accountID: accountID, chatMessageID: chatMessageID, chatID: chatID)
+            }
+        case "read":
+            let accountID = (answerDict["result"]?.object(forKey: "accountId") ?? 0) as! Int
+            let chatMessageID = (answerDict["result"]?.object(forKey: "chatMessageId") ?? 0) as! Int
+            let chatID = (answerDict["result"]?.object(forKey: "chatId") ?? 0) as! Int
+            if accountID != selfID {
+                delegate?.didReceiveMessageRead(accountID: accountID, chatMessageID: chatMessageID, chatID: chatID)
+            }
         case nil:
             if let error = answerDict["error"] as? NSError {
                 print(error.domain)
@@ -230,4 +282,6 @@ extension SocketManagerDelegate {
     func didReceiveChatDetail(chatDetail:Chat) {}
     func didReceiveOldMessages(messages:[SocketMessage]) {}
     func didReceiveChatInitAnswer(detail:Chat) {}
+    func didReceiveMessageDelivery(accountID: Int, chatMessageID: Int, chatID: Int) {}
+    func didReceiveMessageRead(accountID: Int, chatMessageID: Int, chatID: Int) {}
 }

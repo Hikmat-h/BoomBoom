@@ -77,7 +77,7 @@ struct SendMessageAnswer: Codable {
 // MARK: - ChatMessageStatusList
 struct ChatMessageStatus: Codable {
     let id, accontID: Int
-    let delivered, read: Bool
+    var delivered, read: Bool
 
     enum CodingKeys: String, CodingKey {
         case id

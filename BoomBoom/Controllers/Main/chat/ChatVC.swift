@@ -126,10 +126,20 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         vc.chatMessageID = chats[indexPath.row].message?.chatMessageID ?? 0
         vc.partnersName = chats[indexPath.row].name
         vc.partnersAccountID = chats[indexPath.row].accountID
-        vc.userAccountID = chats[indexPath.row].message?.chatMessageStatusList[0].accountID ?? 0
         vc.messageAccountID = chats[indexPath.row].message?.accountID ?? 0
         vc.lastmessage = chats[indexPath.row].message?.message ?? ""
         vc.lastMessageDate = chats[indexPath.row].message?.dateSend ?? 0
+        let status1 = chats[indexPath.row].message?.chatMessageStatusList[0]
+        let status2 = chats[indexPath.row].message?.chatMessageStatusList[1]
+        vc.lastMessageStatusList = [ChatMessageStatus(
+            id: status1!.id,
+            accontID: status1!.accountID,
+            delivered: status1!.delivered,
+            read: status1!.read),
+                                    ChatMessageStatus(id: status2!.id,
+                                                      accontID: status2!.accountID,
+                                                      delivered: status2!.delivered,
+                                                      read: status2!.read)]
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -152,6 +162,10 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete) {
             SocketManager.current.deleteChat(chatId: chats[indexPath.row].chatID)
+            let realm = try! Realm()
+            try! realm.write {
+                realm.delete(chats[indexPath.row])
+            }
             tableView.beginUpdates()
             chats.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
@@ -202,6 +216,13 @@ extension ChatVC: SocketManagerDelegate {
                 status.read = chat.message!.chatMessageStatusList[0].read
                 status.delivered = chat.message!.chatMessageStatusList[0].delivered
                 localChat.message?.chatMessageStatusList.append(status)
+                
+                let status1 = RealmChatMessageStatus()
+                status1.id = (chat.message!.chatMessageStatusList[1].id)
+                status1.accountID = (chat.message!.chatMessageStatusList[1].accontID)
+                status1.read = chat.message!.chatMessageStatusList[1].read
+                status1.delivered = chat.message!.chatMessageStatusList[1].delivered
+                localChat.message?.chatMessageStatusList.append(status1)
             }
             
             localChat.message?.dateSend = Int64(chat.message!.dateSend)
@@ -226,6 +247,7 @@ extension ChatVC: SocketManagerDelegate {
     }
     
     func didReceiveMessage(detail: SendMessageAnswer) {
+        SocketManager.current.sendDeliveryStatus(chatMessageId: detail.chatMessageID)
         if let chat = chats.first(where: {$0.chatID == detail.chatID}) {
             let realm = try! Realm()
             try! realm.write {
@@ -248,11 +270,23 @@ extension ChatVC: SocketManagerDelegate {
         localChat.countNewMessages = chatDetail.countNewMessages ?? 0
         localChat.favorite = chatDetail.favorite
         localChat.lastDateAddMessage = chatDetail.lastDateAddMessage ?? 0
+        localChat.message = RealmMessage()
         localChat.message?.accountID = chatDetail.message!.accountID
         localChat.message?.chatID = chatDetail.message!.chatID
         localChat.message?.chatMessageID = chatDetail.message!.chatMessageID
-//        localChat.message?.chatMessageStatusList[0].accountID = chatDetail.message.chatMessageStatusList[0].accontID
-//        localChat.message?.chatMessageStatusList[0].delivered = chatDetail.message.chatMessageStatusList[0].delivered
+
+        localChat.message?.chatMessageStatusList.append(RealmChatMessageStatus())
+        localChat.message?.chatMessageStatusList.append(RealmChatMessageStatus())
+        localChat.message?.chatMessageStatusList[0].accountID = chatDetail.message!.chatMessageStatusList[0].accontID
+        localChat.message?.chatMessageStatusList[0].delivered = chatDetail.message!.chatMessageStatusList[0].delivered
+        localChat.message?.chatMessageStatusList[0].read = chatDetail.message!.chatMessageStatusList[0].read
+        localChat.message?.chatMessageStatusList[0].id = chatDetail.message!.chatMessageStatusList[0].id
+        
+        localChat.message?.chatMessageStatusList[1].accountID = chatDetail.message!.chatMessageStatusList[1].accontID
+        localChat.message?.chatMessageStatusList[1].delivered = chatDetail.message!.chatMessageStatusList[1].delivered
+        localChat.message?.chatMessageStatusList[1].read = chatDetail.message!.chatMessageStatusList[1].read
+        localChat.message?.chatMessageStatusList[1].id = chatDetail.message!.chatMessageStatusList[1].id
+        
         localChat.message?.dateSend = Int64(chatDetail.message!.dateSend)
         localChat.message?.message = chatDetail.message!.message
         localChat.name = chatDetail.name

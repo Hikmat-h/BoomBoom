@@ -40,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UISwitch.appearance().tintColor = #colorLiteral(red: 0.8980392157, green: 0.1019607843, blue: 0.2941176471, alpha: 1)
         UISwitch().onTintColor = #colorLiteral(red: 0.8980392157, green: 0.1019607843, blue: 0.2941176471, alpha: 1)
         IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.disabledToolbarClasses = [MessagingVC.self]
         
         //segmented control configs
         let gray = #colorLiteral(red: 0.6274509804, green: 0.6274509804, blue: 0.6274509804, alpha: 1)

@@ -1955,6 +1955,7 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="ezm-xw-co4"/>
                     </view>
+                    <navigationItem key="navigationItem" id="alK-az-B1D"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u8C-LL-xie" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -122,6 +122,7 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let vc = (storyboard?.instantiateViewController(withIdentifier: "MessagingVC") as? MessagingVC) else { return }
+        vc.newChat = false
         vc.chatID = chats[indexPath.row].message?.chatID ?? 0
         vc.chatMessageID = chats[indexPath.row].message?.chatMessageID ?? 0
         vc.partnersName = chats[indexPath.row].name

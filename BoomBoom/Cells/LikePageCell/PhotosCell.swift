@@ -160,11 +160,14 @@ extension PhotosCell: SocketManagerDelegate{
             vc.newChat = false
             vc.chatID = message.chatID
             vc.chatMessageID = message.chatMessageID
-            vc.userAccountID = message.chatMessageStatusList[0].accontID
+            vc.partnersName = detail.name
+            vc.partnersAccountID = detail.accountID
             vc.messageAccountID = message.accountID
             vc.lastmessage = message.message
             vc.lastMessageDate = Int64(message.dateSend)
-            
+            let status1 = message.chatMessageStatusList[0]
+            let status2 = message.chatMessageStatusList[1]
+            vc.lastMessageStatusList = [status1, status2]
             let backItem = UIBarButtonItem()
             backItem.title = ""
             parentVC?.navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed

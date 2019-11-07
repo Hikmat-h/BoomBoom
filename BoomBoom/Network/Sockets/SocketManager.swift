@@ -16,6 +16,7 @@ protocol SocketManagerDelegate: class{
     func didReceiveChatInitAnswer(detail:Chat)
     func didReceiveMessageDelivery(accountID: Int, chatMessageID: Int, chatID: Int)
     func didReceiveMessageRead(accountID: Int, chatMessageID: Int, chatID: Int)
+    func didReceiveMessageReadAll(accountID: Int, chatID: Int)
 }
 
 class SocketManager{
@@ -101,7 +102,7 @@ extension SocketManager: WebSocketDelegate {
     }
     
     func readAll(chatid: Int) {
-        let object: Dictionary<String, Any> = ["chatid":chatid]
+        let object: Dictionary<String, Any> = ["chatId":chatid]
         let dict: Dictionary<String, Any> = ["action":"readall", "object":object]
         do {
             let data = try JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
@@ -202,9 +203,7 @@ extension SocketManager: WebSocketDelegate {
             do {
                 let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
                 let detail = try? JSONDecoder().decode(SendMessageAnswer.self, from: data)
-                if detail?.accountID != selfID {
-                    delegate?.didReceiveMessage(detail: detail!)
-                }
+                delegate?.didReceiveMessage(detail: detail!)
             } catch let error as NSError {
                 print(error)
             }
@@ -261,6 +260,12 @@ extension SocketManager: WebSocketDelegate {
             if accountID != selfID {
                 delegate?.didReceiveMessageRead(accountID: accountID, chatMessageID: chatMessageID, chatID: chatID)
             }
+        case "readall":
+            let accountID = (answerDict["result"]?.object(forKey: "accountId") ?? 0) as! Int
+            let chatID = (answerDict["result"]?.object(forKey: "chatId") ?? 0) as! Int
+            if accountID != selfID {
+                delegate?.didReceiveMessageReadAll(accountID: accountID, chatID: chatID)
+            }
         case nil:
             if let error = answerDict["error"] as? NSError {
                 print(error.domain)
@@ -284,4 +289,5 @@ extension SocketManagerDelegate {
     func didReceiveChatInitAnswer(detail:Chat) {}
     func didReceiveMessageDelivery(accountID: Int, chatMessageID: Int, chatID: Int) {}
     func didReceiveMessageRead(accountID: Int, chatMessageID: Int, chatID: Int) {}
+    func didReceiveMessageReadAll(accountID: Int, chatID: Int) {}
 }

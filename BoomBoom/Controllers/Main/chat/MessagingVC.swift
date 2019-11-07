@@ -11,10 +11,16 @@ import MessageKit
 import InputBarAccessoryView
 import IQKeyboardManagerSwift
 
+enum MessageStatus{
+    case noStatus
+    case read
+    case delivered
+}
+
 class MessagingVC: MessagesViewController{
 
     var messages: [Message] = []
-    
+    var nextMessageStatus: MessageStatus = .noStatus
     let months: [String] = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
     
     var partnersAccountID = -1
@@ -29,6 +35,9 @@ class MessagingVC: MessagesViewController{
     var partner: Sender?
     var user: Sender?
     var lastMessageStatusList: [ChatMessageStatus] = []
+    
+    let token:String = UserDefaults.standard.value(forKey: "token") as! String
+    let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +58,19 @@ class MessagingVC: MessagesViewController{
         
         //remove space avatarView occupies
         if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
-            layout.setMessageIncomingAvatarSize(.zero)
-            layout.setMessageOutgoingAvatarSize(.zero)
+            layout.setMessageOutgoingCellBottomLabelAlignment(.init(textAlignment: .right, textInsets: .zero))
+            layout.attributedTextMessageSizeCalculator.outgoingAvatarSize = .zero
+            layout.attributedTextMessageSizeCalculator.incomingAvatarSize = .zero
+            layout.textMessageSizeCalculator.outgoingAvatarSize = .zero
+            layout.textMessageSizeCalculator.incomingAvatarSize = .zero
+            layout.photoMessageSizeCalculator.outgoingAvatarSize = .zero
+            layout.photoMessageSizeCalculator.incomingAvatarSize = .zero
+            layout.videoMessageSizeCalculator.outgoingAvatarSize = .zero
+            layout.videoMessageSizeCalculator.incomingAvatarSize = .zero
+            layout.locationMessageSizeCalculator.outgoingAvatarSize = .zero
+            layout.locationMessageSizeCalculator.incomingAvatarSize = .zero
+            layout.emojiMessageSizeCalculator.incomingAvatarSize = .zero
+            layout.emojiMessageSizeCalculator.outgoingAvatarSize = .zero
         }
         configureMessageInputBar()
         
@@ -113,7 +133,13 @@ class MessagingVC: MessagesViewController{
     }
     
     func configureMessageInputBar(){
-//        messageInputBar.rightStackViewItems = [InputItem]
+        let button = InputBarButtonItem()
+        button.setSize(CGSize(width: 36, height: 36), animated: false)
+        button.setImage(UIImage(named: "attach"), for: .normal)
+        button.addTarget(self, action: #selector(onMedia), for: .touchUpInside)
+        button.imageView?.contentMode = .scaleAspectFit
+        messageInputBar.setLeftStackViewWidthConstant(to: 36, animated: false)
+        messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
         self.navigationController?.hidesBarsWhenKeyboardAppears = false
         messageInputBar.inputTextView.placeholder = "Ваше сообщение"
         messageInputBar.backgroundColor = #colorLiteral(red: 0.937254902, green: 0.9333333333, blue: 0.9333333333, alpha: 1)
@@ -126,7 +152,11 @@ class MessagingVC: MessagesViewController{
     }
     
     @objc func onMedia() {
-        print("wanna choose file??")
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = false
+        imagePicker.delegate = self
+        self.present(imagePicker, animated: true, completion: nil)
     }
 
 }
@@ -137,15 +167,50 @@ extension MessagingVC: MessagesDataSource {
     //cell bottom label style
     func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         if (Int(message.sender.senderId) == userAccountID) {
-            let partnerStatus = messages[indexPath.section].statusList.first(where: {$0.accontID == partnersAccountID})
-            if partnerStatus!.read {
-                return NSAttributedString(
-                string: "read",
-                attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray])
+            let partnerStatusIndex =  messages[indexPath.section].statusList.firstIndex(where: {$0.accontID == partnersAccountID}) ?? 1
+            let partnerStatus = messages[indexPath.section].statusList[partnerStatusIndex]
+            var myNextMessageIndex:Int = -1
+            //find my next messageIndex
+            for index in stride(from: indexPath.section + 1, through: messages.count-1, by: 1) {
+                if (Int(messages[index].sender.senderId) == userAccountID) {
+                    myNextMessageIndex = index
+                    break
+                }
+            }
+            if myNextMessageIndex != -1{
+                let nextmessage = messages[myNextMessageIndex].statusList.first(where: {$0.accontID == partnersAccountID})
+                if partnerStatus.read && !nextmessage!.read {
+                    let paragraph = NSMutableParagraphStyle()
+                                   paragraph.alignment = .right
+                                   return NSAttributedString(
+                                   string: "read",
+                                   attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.paragraphStyle: paragraph])
+                } else if partnerStatus.delivered && !nextmessage!.delivered{
+                    let paragraph = NSMutableParagraphStyle()
+                                       paragraph.alignment = .right
+                                       return NSAttributedString(
+                                       string: "delivered",
+                                       attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.paragraphStyle: paragraph])
+                } else {
+                    return nil
+                }
             } else {
-                return NSAttributedString(
-                string: "delivered",
-                attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray])
+                //this should be last message
+                if partnerStatus.read{
+                    let paragraph = NSMutableParagraphStyle()
+                    paragraph.alignment = .right
+                    return NSAttributedString(
+                    string: "read",
+                    attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.paragraphStyle: paragraph])
+                } else if partnerStatus.delivered {
+                    let paragraph = NSMutableParagraphStyle()
+                    paragraph.alignment = .right
+                    return NSAttributedString(
+                    string: "delivered",
+                    attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.paragraphStyle: paragraph])
+                } else {
+                    return nil
+                }
             }
         } else {
             return nil
@@ -154,10 +219,6 @@ extension MessagingVC: MessagesDataSource {
     
     func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 20
-    }
-    
-    func cellBottomLabelAlignment(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LabelAlignment {
-        return LabelAlignment(textAlignment: .natural, textInsets: UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -120))
     }
     
     //cell top label style
@@ -251,27 +312,32 @@ extension MessagingVC: MessageInputBarDelegate {
     
     func inputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
         let textMess = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        let newMessage = Message(
-            text: textMess,
-            messageId: "0", sentDate: Date(), kind: .text(textMess), sender: user!, statusList: [ChatMessageStatus(id: chatID, accontID: userAccountID, delivered: true, read: true), ChatMessageStatus(id: chatID, accontID: partnersAccountID, delivered: false, read: false)] )
-        messages.append(newMessage)
         inputBar.inputTextView.text = ""
-        SocketManager.current.sendMessage(accountID: partnersAccountID, message: text, typeMessage: "text")
-        messagesCollectionView.reloadData()
-        messagesCollectionView.scrollToBottom(animated: true)
+        SocketManager.current.sendMessage(accountID: partnersAccountID, message: textMess, typeMessage: "text")
     }
 }
 
 //MARK: - socket delegates
 extension MessagingVC: SocketManagerDelegate {
     func didReceiveMessage(detail: SendMessageAnswer) {
-        let newMessage = Message(
-            text: detail.message,
-            messageId: "\(detail.chatMessageID)", sentDate: posixToDate(posixDate: detail.dateSend), kind: .text(detail.message), sender: partner!, statusList: detail.chatMessageStatusList)
-        
-        messages.append(newMessage)
-        messagesCollectionView.reloadData()
-        messagesCollectionView.scrollToBottom(animated: true)
+        if detail.accountID == userAccountID {
+            let newMessage = Message(
+                text: detail.message,
+                messageId: "\(detail.chatMessageID)", sentDate: posixToDate(posixDate: detail.dateSend), kind: .text(detail.message), sender: user!, statusList: [ChatMessageStatus(id: chatID, accontID: userAccountID, delivered: true, read: true), ChatMessageStatus(id: chatID, accontID: partnersAccountID, delivered: false, read: false)] )
+            messages.append(newMessage)
+            messagesCollectionView.reloadData()
+            messagesCollectionView.scrollToBottom(animated: true)
+        } else {
+            SocketManager.current.sendDeliveryStatus(chatMessageId: detail.chatMessageID)
+            SocketManager.current.sendReadStatus(chatMessageId: detail.chatMessageID)
+            let newMessage = Message(
+                text: detail.message,
+                messageId: "\(detail.chatMessageID)", sentDate: posixToDate(posixDate: detail.dateSend), kind: .text(detail.message), sender: partner!, statusList: detail.chatMessageStatusList)
+            
+            messages.append(newMessage)
+            messagesCollectionView.reloadData()
+            messagesCollectionView.scrollToBottom(animated: true)
+        }
     }
     
     func didReceiveOldMessages(messages: [SocketMessage]) {
@@ -298,18 +364,52 @@ extension MessagingVC: SocketManagerDelegate {
     }
     
     func didReceiveMessageDelivery(accountID: Int, chatMessageID: Int, chatID: Int) {
-        let message = messages.first(where: {Int($0.messageId) == chatMessageID})
-        let index = messages.firstIndex(where: {Int($0.messageId) == chatMessageID})
-        var partnerStatus = message?.statusList.first(where: {$0.accontID == partnersAccountID})
-        partnerStatus?.delivered = true
-        messagesCollectionView.reloadItems(at: [IndexPath(row: 0, section: index ?? messages.count-1)])
+        let index = messages.firstIndex(where: {Int($0.messageId) == chatMessageID}) ?? messages.count-1
+        let statusIndex = messages[index].statusList.firstIndex(where: {$0.accontID == partnersAccountID})
+        messages[index].statusList[statusIndex ?? 0].delivered = true
+        if index > 0 {
+            messagesCollectionView.reloadItems(at: [IndexPath(row: 0, section: (index - 1))])
+        }
+        messagesCollectionView.reloadItems(at: [IndexPath(row: 0, section: index)])
     }
     
     func didReceiveMessageRead(accountID: Int, chatMessageID: Int, chatID: Int) {
-        let message = messages.first(where: {Int($0.messageId) == chatMessageID})
         let index = messages.firstIndex(where: {Int($0.messageId) == chatMessageID})
-        var partnerStatus = message?.statusList.first(where: {$0.accontID == partnersAccountID})
-        partnerStatus?.read = true
+        let statusIndex = messages[index ?? (messages.count-1)].statusList.firstIndex(where: {$0.accontID == partnersAccountID})
+        messages[index ?? (messages.count-1)].statusList[statusIndex ?? 0].read = true
         messagesCollectionView.reloadItems(at: [IndexPath(row: 0, section: index ?? messages.count-1)])
+    }
+    
+    func didReceiveMessageReadAll(accountID: Int, chatID: Int) {
+        for index in stride(from: messages.count-1, through: 0, by: -1){
+            let statusIndex = messages[index].statusList.firstIndex(where: {$0.accontID == partnersAccountID}) ?? 0
+            if !messages[index].statusList[statusIndex].read {
+                messages[index].statusList[statusIndex].read = true
+            } else {
+                messagesCollectionView.reloadData()
+                break
+            }
+        }
+    }
+}
+
+//MARK: - Photo editor extension
+extension MessagingVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage) else { return }
+        ChatMediaManager.current.sendPhoto(token:token , lang: language, image: image, accountToId: partnersAccountID, name: "photo") { (model, error) in
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            } else {
+//                let newMessage = Message(text: model!.pathURL, messageId: "\(model?.id)", sentDate: Date(), kind: .photo(ImageMediaItem), sender: self.user!, statusList: [ChatMessageStatus(id: self.chatID, accontID: self.userAccountID, delivered: true, read: true), ChatMessageStatus(id: self.chatID, accontID: self.partnersAccountID, delivered: false, read: false)])
+//
+//                self.messages.append(newMessage)
+//                self.messagesCollectionView.reloadData()
+//                self.messagesCollectionView.scrollToBottom(animated: true)
+            }
+        }
+        picker.dismiss(animated: true, completion: nil)
     }
 }

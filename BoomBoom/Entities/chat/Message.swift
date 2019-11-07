@@ -16,5 +16,5 @@ struct Message: MessageType {
     let sentDate: Date
     let kind: MessageKind
     let sender: SenderType
-    let statusList: [ChatMessageStatus]
+    var statusList: [ChatMessageStatus]
 }

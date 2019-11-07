@@ -25,6 +25,7 @@
 		9E29CDAD2336360500AB7D0A /* BLockedUsersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E29CDAC2336360500AB7D0A /* BLockedUsersCell.swift */; };
 		9E29CDAF23364E8300AB7D0A /* DeleteAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E29CDAE23364E8300AB7D0A /* DeleteAccountVC.swift */; };
 		9E29FD7F232FCEC700A119DF /* LikePhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E29FD7E232FCEC700A119DF /* LikePhotoVC.swift */; };
+		9E3FEE782372E3B8006764F2 /* ChatMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3FEE772372E3B8006764F2 /* ChatMediaManager.swift */; };
 		9E45C297235DDC8E00CD9986 /* SocketAnswers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E45C296235DDC8E00CD9986 /* SocketAnswers.swift */; };
 		9E4E228923544F69005FA1FE /* NewsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4E228823544F69005FA1FE /* NewsService.swift */; };
 		9E4F6B62234B25E8000539A1 /* PhotoEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4F6B61234B25E8000539A1 /* PhotoEditVC.swift */; };
@@ -142,6 +143,7 @@
 		9E29CDAC2336360500AB7D0A /* BLockedUsersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLockedUsersCell.swift; sourceTree = "<group>"; };
 		9E29CDAE23364E8300AB7D0A /* DeleteAccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountVC.swift; sourceTree = "<group>"; };
 		9E29FD7E232FCEC700A119DF /* LikePhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePhotoVC.swift; sourceTree = "<group>"; };
+		9E3FEE772372E3B8006764F2 /* ChatMediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMediaManager.swift; sourceTree = "<group>"; };
 		9E45C296235DDC8E00CD9986 /* SocketAnswers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketAnswers.swift; sourceTree = "<group>"; };
 		9E4E228823544F69005FA1FE /* NewsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsService.swift; sourceTree = "<group>"; };
 		9E4F6B61234B25E8000539A1 /* PhotoEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditVC.swift; sourceTree = "<group>"; };
@@ -392,6 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				9E841FBF235D756600599CCE /* SocketManager.swift */,
+				9E3FEE772372E3B8006764F2 /* ChatMediaManager.swift */,
 			);
 			path = Sockets;
 			sourceTree = "<group>";
@@ -513,12 +516,7 @@
 			isa = PBXGroup;
 			children = (
 				9E841FBE235D754E00599CCE /* Sockets */,
-				9E5DD399233BCF14006856F2 /* AppNetwork.swift */,
-				9EDF1FFB233B815000AE7DD5 /* AuthorizationService.swift */,
-				9E73101C233DD88B00A19423 /* RegistrationService.swift */,
-				9E731020233E234100A19423 /* UserDetailsService.swift */,
-				9E4E228823544F69005FA1FE /* NewsService.swift */,
-				9EAAAFCC23585CAC00B0A181 /* SearchService.swift */,
+				9EBA6CFD2372DE28002826B9 /* Http requests */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -627,6 +625,19 @@
 				9EB6C45A2338B6C300456C03 /* CheckPhotoVC.swift */,
 			);
 			path = verification;
+			sourceTree = "<group>";
+		};
+		9EBA6CFD2372DE28002826B9 /* Http requests */ = {
+			isa = PBXGroup;
+			children = (
+				9E5DD399233BCF14006856F2 /* AppNetwork.swift */,
+				9E4E228823544F69005FA1FE /* NewsService.swift */,
+				9EAAAFCC23585CAC00B0A181 /* SearchService.swift */,
+				9EDF1FFB233B815000AE7DD5 /* AuthorizationService.swift */,
+				9E73101C233DD88B00A19423 /* RegistrationService.swift */,
+				9E731020233E234100A19423 /* UserDetailsService.swift */,
+			);
+			path = "Http requests";
 			sourceTree = "<group>";
 		};
 		9EC6EE802331163E000F7F9E /* chat */ = {
@@ -960,6 +971,7 @@
 				9E0B7E152338E67600A6FE1A /* PageRateVC.swift in Sources */,
 				9EAAAFCF235864E600B0A181 /* SearchResultVC.swift in Sources */,
 				9E20A513232B7FB8002CFA94 /* Mosaiclayout.swift in Sources */,
+				9E3FEE782372E3B8006764F2 /* ChatMediaManager.swift in Sources */,
 				9EB6C45123389DD700456C03 /* DeletionSuccessVC.swift in Sources */,
 				9EB5D1FA232AC21300D5905D /* NewsPhotoCell.swift in Sources */,
 				9E4E228923544F69005FA1FE /* NewsService.swift in Sources */,

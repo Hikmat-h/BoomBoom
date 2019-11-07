@@ -43,6 +43,21 @@ class RealmChatMessageStatus:Object{
     @objc dynamic var read = false
 }
 
+// MARK: - SentPhotoAnswer when sending photo via REST
+struct SentPhotoAnswer: Codable {
+    let id: Int
+    let pathURL, pathURLPreview: String
+    let accountFrom, accountTo: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case pathURL = "pathUrl"
+        case pathURLPreview = "pathUrlPreview"
+        case accountFrom, accountTo
+    }
+}
+
+
 //MARK: - Socket Answers
 
 struct AuthResult: Codable {

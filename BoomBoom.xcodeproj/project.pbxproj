@@ -93,6 +93,7 @@
 		9EC6EE7F233115DD000F7F9E /* MessagingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC6EE7E233115DD000F7F9E /* MessagingVC.swift */; };
 		9EC6EE8223311654000F7F9E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC6EE8123311654000F7F9E /* Message.swift */; };
 		9EC895782330A3EE00DD4CD3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9EC895772330A3EE00DD4CD3 /* GoogleService-Info.plist */; };
+		9ED210E6237C8163008952AB /* ChatPhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED210E5237C8163008952AB /* ChatPhotoVC.swift */; };
 		9ED5AC642335E88100594245 /* MainEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED5AC632335E88100594245 /* MainEditVC.swift */; };
 		9ED78CC1232D69500083D44D /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED78CC0232D69500083D44D /* TabBarVC.swift */; };
 		9EDF1FF9233B6C9400AE7DD5 /* FirstVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDF1FF8233B6C9400AE7DD5 /* FirstVC.swift */; };
@@ -219,6 +220,7 @@
 		9EC6EE7E233115DD000F7F9E /* MessagingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingVC.swift; sourceTree = "<group>"; };
 		9EC6EE8123311654000F7F9E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		9EC895772330A3EE00DD4CD3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9ED210E5237C8163008952AB /* ChatPhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPhotoVC.swift; sourceTree = "<group>"; };
 		9ED5AC632335E88100594245 /* MainEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainEditVC.swift; sourceTree = "<group>"; };
 		9ED78CC0232D69500083D44D /* TabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
 		9EDF1FF8233B6C9400AE7DD5 /* FirstVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstVC.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 				9E7B0A83232925930082539F /* ChatVC.swift */,
 				9E8C2EFF232988B40004B5A2 /* StarredChatsCollectionVC.swift */,
 				9EC6EE7E233115DD000F7F9E /* MessagingVC.swift */,
+				9ED210E5237C8163008952AB /* ChatPhotoVC.swift */,
 			);
 			path = chat;
 			sourceTree = "<group>";
@@ -991,6 +994,7 @@
 				9E29CD9B2336283F00AB7D0A /* SettingsVC.swift in Sources */,
 				9EB6C4592338B6AF00456C03 /* TakePhotoVC.swift in Sources */,
 				9EB6C44F23389BF000456C03 /* DeletionReasonVC.swift in Sources */,
+				9ED210E6237C8163008952AB /* ChatPhotoVC.swift in Sources */,
 				9E0B7E132338D59B00A6FE1A /* ExtendSubscriptionVC.swift in Sources */,
 				9EAD78CE23261C2000BFFAE7 /* UIViewController.swift in Sources */,
 				9E8C2EFC232986E10004B5A2 /* StarredChatsCell.swift in Sources */,

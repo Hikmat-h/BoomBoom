@@ -21,7 +21,7 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var chats = List<RealmChat>()
     let baseURL = Constants.HTTP.PATH_URL
-    
+    var userAccountID = UserDefaults.standard.value(forKey: "accountID") as? Int ?? 0
     //to load more chats
     var pageNo:CLong=0
     var isLastPage:Bool = false
@@ -64,7 +64,7 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 //            navigationItem.titleView = searchBar
 //            // Fallback on earlier versions
 //        }
-        navigationItem.titleView = searchBar
+//        navigationItem.titleView = searchBar
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
         tapGesture.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGesture)
@@ -112,9 +112,16 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy"
         cell.timeLbl.text = String(formatter.string(from: Date(timeIntervalSince1970: TimeInterval((chat.lastDateAddMessage)/1000))))
-        if (chat.message?.chatMessageStatusList[0].read)! {
+        if ((chat.message?.chatMessageStatusList.first(where: {$0.accountID == userAccountID})!.read)!) && chat.message?.typeMessage == "text" {
+            cell.lastMessageLbl.isHidden = false
+            cell.photoMsg.isHidden = true
             cell.lastMessageLbl.text = chat.message?.message
+        } else if chat.message?.typeMessage == "photo" {
+            cell.lastMessageLbl.isHidden = true
+            cell.photoMsg.isHidden = false
         } else {
+            cell.lastMessageLbl.isHidden = false
+            cell.photoMsg.isHidden = true
             cell.lastMessageLbl.text = "Новое сообщение"
         }
         return cell
@@ -129,6 +136,7 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         vc.partnersAccountID = chats[indexPath.row].accountID
         vc.messageAccountID = chats[indexPath.row].message?.accountID ?? 0
         vc.lastmessage = chats[indexPath.row].message?.message ?? ""
+        vc.lastMessageType = chats[indexPath.row].message?.typeMessage ?? ""
         vc.lastMessageDate = chats[indexPath.row].message?.dateSend ?? 0
         let status1 = chats[indexPath.row].message?.chatMessageStatusList[0]
         let status2 = chats[indexPath.row].message?.chatMessageStatusList[1]
@@ -228,6 +236,7 @@ extension ChatVC: SocketManagerDelegate {
             
             localChat.message?.dateSend = Int64(chat.message!.dateSend)
             localChat.message?.message = chat.message!.message
+            localChat.message?.typeMessage = chat.message!.typeMessage
             localChat.countNewMessages = chat.countNewMessages!
             localChat.favorite = chat.favorite
             localChat.typeAccount = chat.typeAccount!
@@ -255,6 +264,7 @@ extension ChatVC: SocketManagerDelegate {
                 chat.countNewMessages = 1
                 chat.lastDateAddMessage = detail.dateSend
                 chat.message?.message = detail.message
+                chat.message?.typeMessage = detail.typeMessage
                 chat.message?.chatMessageStatusList[0].read = detail.chatMessageStatusList[0].read
                 chat.message?.chatMessageStatusList[0].delivered = detail.chatMessageStatusList[0].delivered
             }
@@ -275,6 +285,7 @@ extension ChatVC: SocketManagerDelegate {
         localChat.message?.accountID = chatDetail.message!.accountID
         localChat.message?.chatID = chatDetail.message!.chatID
         localChat.message?.chatMessageID = chatDetail.message!.chatMessageID
+        localChat.message?.typeMessage = chatDetail.message!.typeMessage
 
         localChat.message?.chatMessageStatusList.append(RealmChatMessageStatus())
         localChat.message?.chatMessageStatusList.append(RealmChatMessageStatus())

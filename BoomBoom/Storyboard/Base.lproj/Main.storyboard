@@ -1896,14 +1896,23 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star_filled" translatesAutoresizingMaskIntoConstraints="NO" id="Hea-JG-Idf">
                                                     <rect key="frame" x="367" y="59.5" width="16" height="15"/>
                                                 </imageView>
+                                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="picture" translatesAutoresizingMaskIntoConstraints="NO" id="7FX-02-PPT">
+                                                    <rect key="frame" x="84" y="54.5" width="25" height="25"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="25" id="FNH-sN-jXd"/>
+                                                        <constraint firstAttribute="height" constant="25" id="ezw-Se-Fuc"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="NKu-RP-PoW" secondAttribute="trailing" constant="16" id="1Ut-1r-7Ne"/>
                                                 <constraint firstItem="MXk-6W-17u" firstAttribute="leading" secondItem="c6y-EO-Hkb" secondAttribute="trailing" constant="19" id="8Mu-kJ-4Qo"/>
                                                 <constraint firstItem="Hea-JG-Idf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Znr-ya-K2C" secondAttribute="trailing" constant="16" id="90w-aJ-vDe"/>
+                                                <constraint firstItem="7FX-02-PPT" firstAttribute="centerY" secondItem="Hea-JG-Idf" secondAttribute="centerY" id="Caf-RW-MX8"/>
                                                 <constraint firstAttribute="trailing" secondItem="Hea-JG-Idf" secondAttribute="trailing" constant="31" id="Ckk-8M-ZIM"/>
                                                 <constraint firstItem="c6y-EO-Hkb" firstAttribute="centerY" secondItem="Pca-cx-X1w" secondAttribute="centerY" id="D0n-lU-7Ux"/>
+                                                <constraint firstItem="7FX-02-PPT" firstAttribute="leading" secondItem="Znr-ya-K2C" secondAttribute="leading" id="JWR-Sn-dfo"/>
                                                 <constraint firstItem="Znr-ya-K2C" firstAttribute="firstBaseline" secondItem="c6y-EO-Hkb" secondAttribute="bottom" id="KVk-bi-uzx"/>
                                                 <constraint firstItem="Hea-JG-Idf" firstAttribute="centerY" secondItem="Znr-ya-K2C" secondAttribute="centerY" id="SXp-xs-YQ0"/>
                                                 <constraint firstItem="NKu-RP-PoW" firstAttribute="centerY" secondItem="MXk-6W-17u" secondAttribute="centerY" id="itB-d8-u98"/>
@@ -1915,6 +1924,7 @@
                                         <connections>
                                             <outlet property="lastMessageLbl" destination="Znr-ya-K2C" id="fU8-Xd-3h8"/>
                                             <outlet property="nameLbl" destination="MXk-6W-17u" id="uDP-KD-lbH"/>
+                                            <outlet property="photoMsg" destination="7FX-02-PPT" id="8Ea-aw-DVA"/>
                                             <outlet property="starImgView" destination="Hea-JG-Idf" id="F0u-yS-JEN"/>
                                             <outlet property="timeLbl" destination="NKu-RP-PoW" id="LSf-2U-H2r"/>
                                             <outlet property="userImgView" destination="c6y-EO-Hkb" id="CZn-rk-0TQ"/>
@@ -1960,6 +1970,30 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u8C-LL-xie" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6718.840579710145" y="231.69642857142856"/>
+        </scene>
+        <!--Chat PhotoVC-->
+        <scene sceneID="J8p-f7-UGG">
+            <objects>
+                <viewController storyboardIdentifier="ChatPhotoVC" id="Yea-0Z-dlZ" customClass="ChatPhotoVC" customModule="BoomBoom" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7kG-hl-JjD">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XeB-5J-v2n">
+                                <rect key="frame" x="20" y="44" width="374" height="818"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="lZ5-Pu-hGs"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="XeB-5J-v2n" id="n5k-pq-tOC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bDS-33-dmp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7602.898550724638" y="231.69642857142856"/>
         </scene>
         <!--ProfileVC-->
         <scene sceneID="UWu-VJ-Xzx">
@@ -5676,7 +5710,7 @@ Cg
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Annie Hall" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Vc-q4-H9U">
-                                                    <rect key="frame" x="84" y="27" width="90" height="21"/>
+                                                    <rect key="frame" x="84" y="26" width="90" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -6378,6 +6412,7 @@ Cg
         <image name="menu_4" width="18" height="20.5"/>
         <image name="messageTick" width="20" height="20"/>
         <image name="none" width="42" height="31.5"/>
+        <image name="picture" width="170.5" height="170.5"/>
         <image name="profile_like" width="14" height="14"/>
         <image name="settings" width="53" height="53"/>
         <image name="star_filled" width="15.5" height="14.5"/>
@@ -6394,7 +6429,7 @@ Cg
         <segue reference="4zp-Wt-GxQ"/>
         <segue reference="d66-of-T6v"/>
         <segue reference="Lzu-fb-Hp6"/>
-        <segue reference="bY8-Eo-37y"/>
+        <segue reference="w6T-Xm-Baw"/>
         <segue reference="Cp5-CE-0Dx"/>
     </inferredMetricsTieBreakers>
 </document>

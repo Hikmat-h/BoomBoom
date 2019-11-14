@@ -33,6 +33,7 @@ class RealmMessage:Object{
     @objc dynamic var dateSend: Int64 = 0
     @objc dynamic var chatMessageID = -1
     @objc dynamic var chatID = -1
+    @objc dynamic var typeMessage = ""
     dynamic var chatMessageStatusList = List<RealmChatMessageStatus>()
 }
 

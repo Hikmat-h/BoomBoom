@@ -11,10 +11,31 @@ import UIKit
 import MessageKit
 
 struct Message: MessageType {
-    let text: String
+    let url: String?
+    let text: String?
     let messageId: String
     let sentDate: Date
     let kind: MessageKind
     let sender: SenderType
     var statusList: [ChatMessageStatus]
+}
+
+struct PhotoMessage: MessageType {
+    var sender: SenderType
+    
+    var messageId: String
+    
+    var sentDate: Date
+
+    var kind: MessageKind
+}
+
+struct MessageKindOf: MediaItem {
+    var url: URL?
+    
+    var image: UIImage?
+    
+    var placeholderImage: UIImage
+    
+    var size: CGSize
 }

@@ -254,7 +254,7 @@ class MainEditVC: UIViewController, UITextFieldDelegate {
     
     func searchCity (language:String, searchString:String, countryId:Int, page:Int, token:String) {
         self.countryField.showLoadingIndicator()
-        UserDetailsSerice.current.searchCity(token: token, lang: language, countryId: countryId, title: title ?? "", page: page) { (arrayModel, error) in
+        UserDetailsSerice.current.searchCity(token: token, lang: language, countryId: countryId, title: searchString, page: page) { (arrayModel, error) in
             DispatchQueue.main.async {
                 self.cityField.stopLoadingIndicator()
                 if (error != nil) {

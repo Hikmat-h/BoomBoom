@@ -241,7 +241,7 @@ class RegistrationDetailVC: UIViewController, UITextFieldDelegate {
     // MARK: - APi call methods
     func searchCity (language:String, searchString:String, countryId:Int, page:Int, token:String) {
         self.country.showLoadingIndicator()
-        UserDetailsSerice.current.searchCity(token: token, lang: language, countryId: countryId, title: title ?? "", page: page) { (arrayModel, error) in
+        UserDetailsSerice.current.searchCity(token: token, lang: language, countryId: countryId, title: searchString, page: page) { (arrayModel, error) in
             DispatchQueue.main.async {
                 self.city.stopLoadingIndicator()
                 if (error != nil) {

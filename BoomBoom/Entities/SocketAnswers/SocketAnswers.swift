@@ -58,6 +58,18 @@ struct SentPhotoAnswer: Codable {
     }
 }
 
+struct SentVideoAnswer: Codable {
+    let id: Int
+    let pathURL: String
+    let accountFrom, accountTo: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case pathURL = "pathUrl"
+        case accountFrom, accountTo
+    }
+}
+
 
 //MARK: - Socket Answers
 

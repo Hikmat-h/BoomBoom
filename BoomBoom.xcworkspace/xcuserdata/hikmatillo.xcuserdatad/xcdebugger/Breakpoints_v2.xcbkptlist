@@ -190,57 +190,10 @@
             filePath = "BoomBoom/Controllers/Main/chat/MessagingVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "385"
-            endingLineNumber = "385"
-            landmarkName = "didReceiveMessage(detail:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "729F60E7-1C0A-44DB-AA69-E22C3418BB3B - f140190f01f2c930"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BoomBoom.MessagingVC.didReceiveMessage(detail: BoomBoom.SendMessageAnswer) -&gt; ()"
-                  moduleName = "BoomBoom"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Controllers/Main/chat/MessagingVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "385"
-                  endingLineNumber = "385"
-                  offsetFromSymbolStart = "524">
-               </Location>
-               <Location
-                  uuid = "729F60E7-1C0A-44DB-AA69-E22C3418BB3B - f140190f01f2c930"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BoomBoom.MessagingVC.didReceiveMessage(detail: BoomBoom.SendMessageAnswer) -&gt; ()"
-                  moduleName = "BoomBoom"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Controllers/Main/chat/MessagingVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "385"
-                  endingLineNumber = "385"
-                  offsetFromSymbolStart = "556">
-               </Location>
-               <Location
-                  uuid = "729F60E7-1C0A-44DB-AA69-E22C3418BB3B - f140190f01f2c930"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BoomBoom.MessagingVC.didReceiveMessage(detail: BoomBoom.SendMessageAnswer) -&gt; ()"
-                  moduleName = "BoomBoom"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Controllers/Main/chat/MessagingVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "385"
-                  endingLineNumber = "385"
-                  offsetFromSymbolStart = "2248">
-               </Location>
-            </Locations>
+            startingLineNumber = "400"
+            endingLineNumber = "400"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -253,9 +206,9 @@
             filePath = "BoomBoom/Controllers/Main/chat/MessagingVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "517"
-            endingLineNumber = "517"
-            landmarkName = "imagePickerController(_:didFinishPickingMediaWithInfo:)"
+            startingLineNumber = "539"
+            endingLineNumber = "539"
+            landmarkName = "didReceiveMessageRead(accountID:chatMessageID:chatID:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -320,6 +273,134 @@
             startingLineNumber = "38"
             endingLineNumber = "38"
             landmarkName = "searchCity(token:lang:countryId:title:page:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "193A0D7B-DDD3-4337-B642-96F3EA6AFB42"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Controllers/Main/chat/MessagingVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "567"
+            endingLineNumber = "567"
+            landmarkName = "imagePickerController(_:didFinishPickingMediaWithInfo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B6E7F717-B640-4545-85FC-E89CF5CE5270"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Network/Sockets/ChatMediaManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "sendVideo(token:lang:videoData:accountToId:name:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B6E7F717-B640-4545-85FC-E89CF5CE5270 - 98bd0e5b1f0f69e0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BoomBoom.ChatMediaManager.sendVideo(token: Swift.String, lang: Swift.String, videoData: Foundation.Data, accountToId: Swift.Int, name: Swift.String, completion: (Swift.Optional&lt;BoomBoom.SentVideoAnswer&gt;, Swift.Optional&lt;__C.NSError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "BoomBoom"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Network/Sockets/ChatMediaManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "1744">
+               </Location>
+               <Location
+                  uuid = "B6E7F717-B640-4545-85FC-E89CF5CE5270 - b899f0ad7421cad0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.MultipartFormData) -&gt; () in BoomBoom.ChatMediaManager.sendVideo(token: Swift.String, lang: Swift.String, videoData: Foundation.Data, accountToId: Swift.Int, name: Swift.String, completion: (Swift.Optional&lt;BoomBoom.SentVideoAnswer&gt;, Swift.Optional&lt;__C.NSError&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "BoomBoom"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hikmatillo/Xcode%20projects/BoomBoom/BoomBoom/Network/Sockets/ChatMediaManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "56"
+                  endingLineNumber = "56"
+                  offsetFromSymbolStart = "168">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3175EA36-23BC-452D-9065-E9F646775EAD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Network/Sockets/ChatMediaManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "sendVideo(token:lang:videoData:accountToId:name:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "593DC0D4-79CE-4019-9550-DB3033A5B2DC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Network/Sockets/ChatMediaManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "sendVideo(token:lang:videoData:accountToId:name:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "965275CA-E49B-48DE-BA68-4AC48B80AD2E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Controllers/Main/chat/MessagingVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "363"
+            endingLineNumber = "363"
+            landmarkName = "configureMediaMessageImageView(_:for:at:in:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FB488D10-A138-49D9-BC03-AA4C3C008B2B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BoomBoom/Controllers/Main/chat/MessagingVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "340"
+            endingLineNumber = "340"
+            landmarkName = "configureMediaMessageImageView(_:for:at:in:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import MessageKit
 
-struct Message: MessageType {
+internal struct Message: MessageType {
     let url: String?
     let text: String?
     let messageId: String
@@ -18,19 +18,34 @@ struct Message: MessageType {
     let kind: MessageKind
     let sender: SenderType
     var statusList: [ChatMessageStatus]
+    
+    private init(url: String?, text: String?, messageId:String, sentDate:Date, kind: MessageKind, sender:SenderType, statusList: [ChatMessageStatus]) {
+        self.url = url
+        self.text = text
+        self.messageId = messageId
+        self.sentDate = sentDate
+        self.kind = kind
+        self.sender = sender
+        self.statusList = statusList
+        
+    }
+    
+    init(text:String, messageId:String, date:Date, sender:SenderType, statusList: [ChatMessageStatus]) {
+        self.init(url: nil, text: text, messageId: messageId, sentDate: date, kind: .text(text), sender: sender, statusList: statusList)
+    }
+    
+    init(imageURL: String, messageId: String, date: Date, sender: SenderType, statusList: [ChatMessageStatus]) {
+        let mediaItem = ImageMediaItem(url: URL(string: imageURL))
+        self.init(url: imageURL, text: nil, messageId: messageId, sentDate: date, kind: .photo(mediaItem), sender: sender, statusList: statusList)
+    }
+    
+    init(thumbnailURL: String, messageId: String, date: Date, sender: SenderType, statusList: [ChatMessageStatus]) {
+        let mediaItem = ImageMediaItem(url: URL(string: thumbnailURL))
+        self.init(url: thumbnailURL, text: nil, messageId: messageId, sentDate: date, kind: .video(mediaItem), sender: sender, statusList: statusList)
+    }
 }
 
-struct PhotoMessage: MessageType {
-    var sender: SenderType
-    
-    var messageId: String
-    
-    var sentDate: Date
-
-    var kind: MessageKind
-}
-
-struct MessageKindOf: MediaItem {
+struct ImageMediaItem: MediaItem {
     var url: URL?
     
     var image: UIImage?
@@ -38,4 +53,10 @@ struct MessageKindOf: MediaItem {
     var placeholderImage: UIImage
     
     var size: CGSize
+    
+    init(url: URL?) {
+       self.url = url
+       self.placeholderImage = UIImage()
+        self.size = CGSize(width: 150, height: 200)
+   }
 }

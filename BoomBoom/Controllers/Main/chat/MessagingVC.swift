@@ -12,6 +12,7 @@ import InputBarAccessoryView
 import IQKeyboardManagerSwift
 import MobileCoreServices
 import SDWebImage
+import AVFoundation
 
 class MessagingVC: MessagesViewController{
 
@@ -85,14 +86,16 @@ class MessagingVC: MessagesViewController{
         
         if !newChat {
             if lastMessageType == "text" {
-                let lastM = Message(url: nil, text: lastmessage, messageId: "\(chatMessageID)", sentDate: posixToDate(posixDate: lastMessageDate), kind: .text(lastmessage), sender: currentSender, statusList: lastMessageStatusList)
+                let lastM = Message(text: lastmessage, messageId: "\(chatMessageID)", date: posixToDate(posixDate: lastMessageDate), sender: currentSender, statusList: lastMessageStatusList)
                 messages.append(lastM)
             } else if lastMessageType == "photo" {
                 let url = self.baseURL + "/" + lastmessage + "&type=preview"
-                let lastM = Message(url: url, text: nil, messageId: "\(chatMessageID)", sentDate: posixToDate(posixDate: lastMessageDate), kind: .photo(MessageKindOf(url: URL(string: url), placeholderImage: UIImage(named: "test4")!, size: CGSize(width: 150, height: 200))), sender: currentSender, statusList: lastMessageStatusList)
+                let lastM = Message(imageURL: url, messageId: "\(chatMessageID)", date: posixToDate(posixDate: lastMessageDate), sender: currentSender, statusList: lastMessageStatusList)
                 messages.append(lastM)
-            } else {
-                
+            } else if lastMessageType == "video" {
+                let url = self.baseURL + "/" + lastmessage
+                let lastM = Message(thumbnailURL: url, messageId: "\(chatMessageID)", date: posixToDate(posixDate: lastMessageDate), sender: currentSender, statusList: lastMessageStatusList)
+                messages.append(lastM)
             }
         }
         
@@ -106,30 +109,45 @@ class MessagingVC: MessagesViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         IQKeyboardManager.shared.enable = false
-        
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShowNotification), name: UIResponder.keyboardDidShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHideNotification), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         IQKeyboardManager.shared.enable = true
-//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-
-//    @objc func keyboardWillShowNotification(notification: NSNotification) {
-//        self.navigationController?.isNavigationBarHidden = true
-//    }
-//
-//    @objc func keyboardWillHideNotification(notification: NSNotification) {
-//        self.navigationController?.isNavigationBarHidden = true
-//    }
     
+    func getFilePath(withName:String)->String?{
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let url = NSURL(fileURLWithPath: path)
+        if let pathComponent = url.appendingPathComponent("\(withName).mp4") {
+            let filePath = pathComponent.path
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: filePath) {
+                return filePath
+            } else {
+                return nil
+            }
+        } else {
+            return nil
+        }
+    }
     
-    
-    
+    func getVideoThumbnail(url: String, completion: @escaping (UIImage?)->Void) {
+        let headers = ["Authorization": "Bearer \(token)"]
+        let asset = AVURLAsset(url: URL(fileURLWithPath: url), options: ["AVURLAssetHTTPHeaderFieldsKey":headers])
+        var time = asset.duration
+        time.value = min(time.value, 500)
+        let imgGenerator = AVAssetImageGenerator(asset: asset)
+        imgGenerator.appliesPreferredTrackTransform = true
+        imgGenerator.generateCGImagesAsynchronously(forTimes: [NSValue(time: time)]) { (_, image, _, _, _) in
+            if let image = image {
+                completion(UIImage(cgImage: image))
+            } else {
+                completion(nil)
+            }
+        }
+    }
     
     @objc func onVideo() {
         print("wanna video call??")
@@ -191,13 +209,13 @@ extension MessagingVC: MessagesDataSource {
                     let paragraph = NSMutableParagraphStyle()
                                    paragraph.alignment = .right
                                    return NSAttributedString(
-                                   string: "read",
+                                   string: "прочитано",
                                    attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.paragraphStyle: paragraph])
                 } else if partnerStatus.delivered && !nextmessage!.delivered{
                     let paragraph = NSMutableParagraphStyle()
                                        paragraph.alignment = .right
                                        return NSAttributedString(
-                                       string: "delivered",
+                                       string: "доставлено",
                                        attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.paragraphStyle: paragraph])
                 } else {
                     return nil
@@ -208,13 +226,13 @@ extension MessagingVC: MessagesDataSource {
                     let paragraph = NSMutableParagraphStyle()
                     paragraph.alignment = .right
                     return NSAttributedString(
-                    string: "read",
+                    string: "прочитано",
                     attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.paragraphStyle: paragraph])
                 } else if partnerStatus.delivered {
                     let paragraph = NSMutableParagraphStyle()
                     paragraph.alignment = .right
                     return NSAttributedString(
-                    string: "delivered",
+                    string: "доставлено",
                     attributes: [NSAttributedString.Key.font: UIFont(name: "Roboto", size: 10) as Any, NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.paragraphStyle: paragraph])
                 } else {
                     return nil
@@ -275,9 +293,6 @@ extension MessagingVC: MessagesDataSource {
         for message: MessageType,
         at indexPath: IndexPath) -> NSAttributedString? {
         return nil
-//        return NSAttributedString(
-//            string: message.sender.displayName,
-//            attributes: [.font: UIFont.systemFont(ofSize: 12)])
     }
 }
 
@@ -318,29 +333,59 @@ extension MessagingVC: MessagesDisplayDelegate {
                                         for message: MessageType,
                                         at indexPath: IndexPath,
                                         in messagesCollectionView: MessagesCollectionView) {
-        /*acquire url for the image in my case i had a
-        custom type Message which stored  the image url */
-//        message.kind
         guard
             let msg = message as? Message
         else { return }
-        if let url = URL(string: msg.url ?? ""){
-            imageView.viewWithTag(11)?.removeFromSuperview()
-            imageView.viewWithTag(21)?.removeFromSuperview()
-            imageView.sd_setImage(with: url, placeholderImage: nil, options: .refreshCached)
+        let temp = msg.url?.components(separatedBy: "&")
+        if temp!.count>1 {
+            //photo
+            if let url = URL(string: msg.url ?? ""){
+                imageView.viewWithTag(11)?.removeFromSuperview()
+                imageView.viewWithTag(21)?.removeFromSuperview()
+                imageView.sd_setImage(with: url, placeholderImage: nil)
+            } else {
+                let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
+                let blurEffectView = UIVisualEffectView(effect: blurEffect)
+                blurEffectView.tag = 11
+                blurEffectView.frame = imageView.bounds
+                blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                imageView.addSubview(blurEffectView)
+                
+                let spinner = UIActivityIndicatorView(style: .gray)
+                spinner.center = CGPoint(x:75, y:100)
+                spinner.tag = 21
+                imageView.addSubview(spinner)
+                spinner.startAnimating()
+            }
         } else {
-            let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            blurEffectView.tag = 11
-            blurEffectView.frame = imageView.bounds
-            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            imageView.addSubview(blurEffectView)
-            
-            let spinner = UIActivityIndicatorView(style: .gray)
-            spinner.center = CGPoint(x:75, y:100)
-            spinner.tag = 21
-            imageView.addSubview(spinner)
-            spinner.startAnimating()
+            //video
+            if URL(string: msg.url ?? "") != nil{
+                imageView.viewWithTag(11)?.removeFromSuperview()
+                imageView.viewWithTag(21)?.removeFromSuperview()
+                let temp = msg.url?.components(separatedBy: "id=")
+                if let path = getFilePath(withName: temp?[1] ?? "") {
+                    getVideoThumbnail(url: path) { (image) in
+                        DispatchQueue.main.async {
+                            imageView.image = image
+                        }
+                    }
+                } else {
+                    imageView.image = UIImage()
+                }
+            } else {
+                let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
+                let blurEffectView = UIVisualEffectView(effect: blurEffect)
+                blurEffectView.tag = 11
+                blurEffectView.frame = imageView.bounds
+                blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                imageView.addSubview(blurEffectView)
+
+                let spinner = UIActivityIndicatorView(style: .gray)
+                spinner.center = CGPoint(x:75, y:100)
+                spinner.tag = 21
+                imageView.addSubview(spinner)
+                spinner.startAnimating()
+            }
         }
     }
     
@@ -368,10 +413,18 @@ extension MessagingVC: MessageCellDelegate {
             let message = messages[index.section]
             if let url = message.url{
                 let temp = url.components(separatedBy: "&")
-                
-                let vc = storyboard?.instantiateViewController(withIdentifier: "ChatPhotoVC") as? ChatPhotoVC
-                vc?.url = temp[0] + "&type=general"
-                self.show(vc!, sender: self)
+                if temp.count>1{
+                    //photo
+                    let vc = storyboard?.instantiateViewController(withIdentifier: "ChatPhotoVC") as? ChatPhotoVC
+                    vc?.url = temp[0] + "&type=general"
+                    self.show(vc!, sender: self)
+                } else {
+                    //video
+                    let vc = storyboard?.instantiateViewController(withIdentifier: "ChatPhotoVC") as? ChatPhotoVC
+                    vc?.url = temp[0]
+                    vc?.isVideo = true
+                    self.show(vc!, sender: self)
+                }
             }
         }
     }
@@ -384,20 +437,23 @@ extension MessagingVC: SocketManagerDelegate {
         if detail.accountID == userAccountID {
             switch detail.typeMessage {
             case "text":
-                let newMessage = Message(
-                    url: nil, text: detail.message,
-                    messageId: "\(detail.chatMessageID)", sentDate: posixToDate(posixDate: detail.dateSend), kind: .text(detail.message), sender: user!, statusList: [ChatMessageStatus(id: chatID, accontID: userAccountID, delivered: true, read: true), ChatMessageStatus(id: chatID, accontID: partnersAccountID, delivered: false, read: false)] )
+                let newMessage = Message(text: detail.message, messageId: "\(detail.chatMessageID)", date: posixToDate(posixDate: detail.dateSend), sender: user!, statusList: [ChatMessageStatus(id: chatID, accontID: userAccountID, delivered: true, read: true), ChatMessageStatus(id: chatID, accontID: partnersAccountID, delivered: false, read: false)])
                 messages.append(newMessage)
                 messagesCollectionView.reloadData()
                 messagesCollectionView.scrollToBottom(animated: true)
             case "photo":
                 let url = self.baseURL + "/" + detail.message + "&type=preview"
-                let newMessage = Message(
-                    url: url, text: nil,
-                    messageId: "\(detail.chatMessageID)", sentDate: posixToDate(posixDate: detail.dateSend), kind: .photo(MessageKindOf(url: URL(string: url), placeholderImage: UIImage(named: "test4")!, size: CGSize(width: 150, height: 200))), sender: user!, statusList: [ChatMessageStatus(id: chatID, accontID: userAccountID, delivered: true, read: true), ChatMessageStatus(id: chatID, accontID: partnersAccountID, delivered: false, read: false)] )
+                let newMessage = Message(imageURL: url, messageId: "\(detail.chatMessageID)", date: posixToDate(posixDate: detail.dateSend), sender: user!, statusList: [ChatMessageStatus(id: chatID, accontID: userAccountID, delivered: true, read: true), ChatMessageStatus(id: chatID, accontID: partnersAccountID, delivered: false, read: false)])
                 messages[messages.count-1] = newMessage
                 messagesCollectionView.reloadData()
                 messagesCollectionView.scrollToBottom(animated: true)
+            case "video":
+                let url = self.baseURL + "/" + detail.message
+                let newMessage = Message(thumbnailURL: url, messageId: "\(detail.chatMessageID)", date: posixToDate(posixDate: detail.dateSend), sender: user!, statusList: [ChatMessageStatus(id: chatID, accontID: userAccountID, delivered: true, read: true), ChatMessageStatus(id: chatID, accontID: partnersAccountID, delivered: false, read: false)])
+                messages[messages.count-1] = newMessage
+                messagesCollectionView.reloadData()
+                messagesCollectionView.scrollToBottom(animated: true)
+                break
             default:
                 return
             }
@@ -407,23 +463,22 @@ extension MessagingVC: SocketManagerDelegate {
             SocketManager.current.sendReadStatus(chatMessageId: detail.chatMessageID)
             switch detail.typeMessage {
             case "text":
-                let newMessage = Message(
-                    url: nil, text: detail.message,
-                    messageId: "\(detail.chatMessageID)", sentDate: posixToDate(posixDate: detail.dateSend), kind: .text(detail.message), sender: partner!, statusList: detail.chatMessageStatusList)
-                
+                let newMessage = Message(text: detail.message, messageId: "\(detail.chatMessageID)", date: posixToDate(posixDate: detail.dateSend), sender: partner!, statusList: detail.chatMessageStatusList)
                 messages.append(newMessage)
                 messagesCollectionView.reloadData()
                 messagesCollectionView.scrollToBottom(animated: true)
             case"photo":
                 let url = self.baseURL + "/" + detail.message + "&type=preview"
-                let newMessage = Message(
-                    url: url, text: nil,
-                    messageId: "\(detail.chatMessageID)", sentDate: posixToDate(posixDate: detail.dateSend), kind: .photo(MessageKindOf(url: URL(string: detail.message + "&type=preview"), placeholderImage: UIImage(named: "test4")!, size: CGSize(width: 150, height: 200))), sender: partner!, statusList: detail.chatMessageStatusList)
-                
+                let newMessage = Message(imageURL: url, messageId: "\(detail.chatMessageID)", date: posixToDate(posixDate: detail.dateSend), sender: partner!, statusList: detail.chatMessageStatusList)
                 messages.append(newMessage)
                 messagesCollectionView.reloadData()
                 messagesCollectionView.scrollToBottom(animated: true)
             case "video":
+                let url = self.baseURL + "/"
+                let newMessage = Message(thumbnailURL: url, messageId: "\(detail.chatMessageID)", date: posixToDate(posixDate: detail.dateSend), sender: partner!, statusList: detail.chatMessageStatusList)
+                messages.append(newMessage)
+                messagesCollectionView.reloadData()
+                messagesCollectionView.scrollToBottom(animated: true)
                 break
             default:
                 return
@@ -442,29 +497,26 @@ extension MessagingVC: SocketManagerDelegate {
                 }
                 switch mess.typeMessage {
                 case "text":
-                    let oldMess = Message(
-                        url: nil,
-                        text: mess.message,
-                        messageId: "\(mess.chatMessageID)", sentDate: posixToDate(posixDate: Int64(mess.dateSend)), kind: .text(mess.message), sender: currentSender, statusList: mess.chatMessageStatusList)
+                    let oldMess =  Message(text: mess.message, messageId: "\(mess.chatMessageID)", date: posixToDate(posixDate: mess.dateSend), sender: currentSender, statusList: mess.chatMessageStatusList)
                     self.messages.insert(oldMess, at: 0)
                 case "photo":
                     let url = self.baseURL + "/" + mess.message + "&type=preview"
-                    let oldMess = Message(
-                        url: url,
-                        text: nil,
-                        messageId: "\(mess.chatMessageID)", sentDate: posixToDate(posixDate: Int64(mess.dateSend)), kind: .photo(MessageKindOf(url: URL(string: mess.message + "&type=preview"), placeholderImage: UIImage(named: "test4")!, size: CGSize(width: 150, height: 200))), sender: currentSender, statusList: mess.chatMessageStatusList)
+                    let oldMess = Message(imageURL: url, messageId: "\(mess.chatMessageID)", date: posixToDate(posixDate: mess.dateSend), sender: currentSender, statusList: mess.chatMessageStatusList)
                     self.messages.insert(oldMess, at: 0)
+                case "video":
+                    let url = self.baseURL + "/" + mess.message
+                    let oldMess = Message(thumbnailURL: url, messageId: "\(mess.chatMessageID)", date: posixToDate(posixDate: mess.dateSend), sender: currentSender, statusList: mess.chatMessageStatusList)
+                    self.messages.insert(oldMess, at: 0)
+                    break
                 default:
-                    let oldMess = Message(
-                        url: nil, text: mess.message,
-                    messageId: "\(mess.chatMessageID)", sentDate: posixToDate(posixDate: Int64(mess.dateSend)), kind: .text(mess.message), sender: currentSender, statusList: mess.chatMessageStatusList)
+                    let url = self.baseURL + "/" + mess.message
+                    let oldMess = Message(thumbnailURL: url, messageId: "\(mess.chatMessageID)", date: posixToDate(posixDate: mess.dateSend), sender: currentSender, statusList: mess.chatMessageStatusList)
                     self.messages.insert(oldMess, at: 0)
                 }
             }
             SocketManager.current.getOldMessages(chatId: messages.last!.chatID, chatMessageId: messages.last!.chatMessageID)
         } else {
             //to avoid flickering
-//            messagesCollectionView.setContentOffset(CGPoint(x: 0, y: CGFloat.greatestFiniteMagnitude), animated: false)
             messagesCollectionView.reloadData()
             messagesCollectionView.scrollToBottom(animated: true)
             SocketManager.current.readAll(chatid: chatID)
@@ -516,7 +568,7 @@ extension MessagingVC: UIImagePickerControllerDelegate, UINavigationControllerDe
             
             let image = UIImage(cgImage: tempImg.cgImage!, scale: tempImg.scale, orientation: .up)
             
-            let newMessage = Message( url: nil, text: nil, messageId: "", sentDate: Date(), kind: .photo(MessageKindOf(url: URL(string: ""), placeholderImage: image, size: CGSize(width: 150, height: 200))), sender: self.user!, statusList: [ChatMessageStatus(id: self.chatID, accontID: self.userAccountID, delivered: true, read: true), ChatMessageStatus(id: self.chatID, accontID: self.partnersAccountID, delivered: false, read: false)])
+            let newMessage = Message(imageURL: "", messageId: "", date: Date(), sender: self.user!, statusList: [ChatMessageStatus(id: self.chatID, accontID: self.userAccountID, delivered: true, read: true), ChatMessageStatus(id: self.chatID, accontID: self.partnersAccountID, delivered: false, read: false)])
             self.messages.append(newMessage)
             self.messagesCollectionView.reloadData()
             self.messagesCollectionView.scrollToBottom(animated: true)
@@ -528,20 +580,30 @@ extension MessagingVC: UIImagePickerControllerDelegate, UINavigationControllerDe
                             }
                         } else {
                             let temp = model?.pathURL.components(separatedBy: "&")
-                            let url = self.baseURL + "/" + (temp?[0] ?? "") + "&type=preview"
                             SocketManager.current.sendMessage(accountID: self.partnersAccountID, message: temp?[0] ?? "", typeMessage: "photo")
-//                            let newMessage = Message( url: url, text: nil, messageId: "\(model?.id ?? 0)", sentDate: Date(), kind: .photo(MessageKindOf(url: URL(string: model!.pathURL), placeholderImage: image, size: CGSize(width: 150, height: 200))), sender: self.user!, statusList: [ChatMessageStatus(id: self.chatID, accontID: self.userAccountID, delivered: true, read: true), ChatMessageStatus(id: self.chatID, accontID: self.partnersAccountID, delivered: false, read: false)])
-            //                let newMess = PhotoMessage(sender: self.user!, messageId: "\(model?.id ?? 0)", sentDate: Date(), kind: .photo(MessageKindOf(url: URL(string: model!.pathURL), placeholderImage: UIImage(named: "test4")!, size: CGSize(width: 60, height: 80))))
-
-//                            self.messages[self.messages.count-1] = newMessage
-//                            self.messagesCollectionView.reloadData()
-//                            self.messagesCollectionView.scrollToBottom(animated: true)
                         }
                     }
         case kUTTypeMovie:
+            guard let videoPath = info[UIImagePickerController.InfoKey.mediaURL] as? URL else {return}
+            let newMessage = Message(thumbnailURL: videoPath.absoluteString, messageId: "", date: Date(), sender: self.user!, statusList: [ChatMessageStatus(id: self.chatID, accontID: self.userAccountID, delivered: true, read: true), ChatMessageStatus(id: self.chatID, accontID: self.partnersAccountID, delivered: false, read: false)])
+            self.messages.append(newMessage)
+            self.messagesCollectionView.reloadData()
+            self.messagesCollectionView.scrollToBottom(animated: true)
+            do {
+                let videoData = try Data(contentsOf: videoPath, options: .mappedIfSafe)
+                ChatMediaManager.current.sendVideo(token: token, lang: language, videoData: videoData, accountToId: self.partnersAccountID, name: "video") { (model, error) in
+                    if error != nil {
+                        DispatchQueue.main.async {
+                            self.showErrorWindow(errorMessage: error?.domain ?? "")
+                        }
+                    } else {
+                        SocketManager.current.sendMessage(accountID: self.partnersAccountID, message: model?.pathURL ?? "", typeMessage: "video")
+                    }
+                }
+            } catch{}
+            
             break
         case kUTTypeLivePhoto:
-
             break
         default:
             break

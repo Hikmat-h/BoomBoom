@@ -126,7 +126,7 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy"
         cell.timeLbl.text = String(formatter.string(from: Date(timeIntervalSince1970: TimeInterval((chat.lastDateAddMessage)/1000))))
-        if ((chat.message?.chatMessageStatusList.first(where: {$0.accountID == userAccountID})!.read)!) && chat.message?.typeMessage == "text" {
+        if ((chat.message?.chatMessageStatusList.first(where: {$0.accountID == userAccountID})?.read ?? true)) && chat.message?.typeMessage == "text" {
             cell.lastMessageLbl.isHidden = false
             cell.photoMsg.isHidden = true
             cell.lastMessageLbl.text = chat.message?.message

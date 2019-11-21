@@ -364,14 +364,18 @@ extension MessagingVC: MessagesDisplayDelegate {
                 imageView.viewWithTag(11)?.removeFromSuperview()
                 imageView.viewWithTag(21)?.removeFromSuperview()
                 let temp = msg.url?.components(separatedBy: "id=")
-                if let path = getFilePath(withName: temp?[1] ?? "") {
-                    getVideoThumbnail(url: path) { (image) in
-                        DispatchQueue.main.async {
-                            imageView.image = image
-                        }
-                    }
+                if (temp?.count == 1) {
+                     imageView.image = UIImage()
                 } else {
-                    imageView.image = UIImage()
+                    if let path = getFilePath(withName: temp?[1] ?? "") {
+                        getVideoThumbnail(url: path) { (image) in
+                            DispatchQueue.main.async {
+                                imageView.image = image
+                            }
+                        }
+                    } else {
+                        imageView.image = UIImage()
+                    }
                 }
             } else {
                 let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)

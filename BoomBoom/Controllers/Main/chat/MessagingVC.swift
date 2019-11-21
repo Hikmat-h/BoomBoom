@@ -108,6 +108,7 @@ class MessagingVC: MessagesViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        messagesCollectionView.reloadItems(at: [IndexPath(row: 0, section: messages.count-1)])
         IQKeyboardManager.shared.enable = false
     }
 
@@ -420,10 +421,12 @@ extension MessagingVC: MessageCellDelegate {
                     self.show(vc!, sender: self)
                 } else {
                     //video
-                    let vc = storyboard?.instantiateViewController(withIdentifier: "ChatPhotoVC") as? ChatPhotoVC
-                    vc?.url = temp[0]
-                    vc?.isVideo = true
-                    self.show(vc!, sender: self)
+                    if !temp[0].isEmpty {
+                        let vc = storyboard?.instantiateViewController(withIdentifier: "ChatPhotoVC") as? ChatPhotoVC
+                        vc?.url = temp[0]
+                        vc?.isVideo = true
+                        self.show(vc!, sender: self)
+                    }
                 }
             }
         }
@@ -585,9 +588,14 @@ extension MessagingVC: UIImagePickerControllerDelegate, UINavigationControllerDe
                     }
         case kUTTypeMovie:
             guard let videoPath = info[UIImagePickerController.InfoKey.mediaURL] as? URL else {return}
-            let newMessage = Message(thumbnailURL: videoPath.absoluteString, messageId: "", date: Date(), sender: self.user!, statusList: [ChatMessageStatus(id: self.chatID, accontID: self.userAccountID, delivered: true, read: true), ChatMessageStatus(id: self.chatID, accontID: self.partnersAccountID, delivered: false, read: false)])
+//            let newMessage = Message(thumbnailURL: "", messageId: "", date: Date(), sender: self.user!, statusList: [ChatMessageStatus(id: self.chatID, accontID: self.userAccountID, delivered: true, read: true), ChatMessageStatus(id: self.chatID, accontID: self.partnersAccountID, delivered: false, read: false)])
+//            self.messages.append(newMessage)
+//            self.messagesCollectionView.reloadData()
+            
+            let newMessage = Message(imageURL: "", messageId: "", date: Date(), sender: self.user!, statusList: [ChatMessageStatus(id: self.chatID, accontID: self.userAccountID, delivered: true, read: true), ChatMessageStatus(id: self.chatID, accontID: self.partnersAccountID, delivered: false, read: false)])
             self.messages.append(newMessage)
             self.messagesCollectionView.reloadData()
+            
             self.messagesCollectionView.scrollToBottom(animated: true)
             do {
                 let videoData = try Data(contentsOf: videoPath, options: .mappedIfSafe)

@@ -160,10 +160,9 @@ extension PhotosCell: SocketManagerDelegate{
             vc.newChat = false
             vc.chatID = message.chatID
             vc.chatMessageID = message.chatMessageID
-            vc.partnersName = detail.name
-            vc.partnersAccountID = detail.accountID
             vc.messageAccountID = message.accountID
             vc.lastmessage = message.message
+            vc.lastMessageType = message.typeMessage
             vc.lastMessageDate = Int64(message.dateSend)
             let status1 = message.chatMessageStatusList[0]
             let status2 = message.chatMessageStatusList[1]

@@ -20,8 +20,13 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     private var searchController: UISearchController!
     
     var chats = List<RealmChat>()
+    var topPaidList = NewAccountListAnswer()
+    
     let baseURL = Constants.HTTP.PATH_URL
-    var userAccountID = UserDefaults.standard.value(forKey: "accountID") as? Int ?? 0
+    let token:String = UserDefaults.standard.value(forKey: "token") as! String
+    let language:String = UserDefaults.standard.value(forKey: "language") as? String ?? "en"
+    var userAccountID = 0
+    let screenWidth = UIScreen.main.bounds.width
     //to load more chats
     var pageNo:CLong=0
     var isLastPage:Bool = false
@@ -48,6 +53,10 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         searchBar?.setTextColor(color: .white)
         searchBar?.setPlaceholderTextColor(color: .red)
         
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        self.getTop(token: token, lang: language)
 //        searchController.title = "Поиск"
 //        if #available(iOS 11.0, *) {
 //            searchController.delegate = self
@@ -98,6 +107,11 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.NAME_CELL.CHAT_LIST_CELL) as! ChatListCell
         let chat = chats[indexPath.row]
         cell.nameLbl.text = chat.name
+        if chat.online {
+            cell.onlineImg.isHidden = false
+        } else {
+            cell.onlineImg.isHidden = true
+        }
         if chat.favorite {
             cell.starImgView.image = UIImage(named: "star_filled")
         } else {
@@ -118,6 +132,11 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             cell.lastMessageLbl.text = chat.message?.message
         } else if chat.message?.typeMessage == "photo" {
             cell.lastMessageLbl.isHidden = true
+            cell.photoMsg.image = UIImage(named: "picture")
+            cell.photoMsg.isHidden = false
+        } else if chat.message?.typeMessage == "video"{
+            cell.lastMessageLbl.isHidden = true
+            cell.photoMsg.image = UIImage(named: "video")
             cell.photoMsg.isHidden = false
         } else {
             cell.lastMessageLbl.isHidden = false
@@ -185,6 +204,24 @@ class ChatVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         }
     }
 
+    func getTop(token:String, lang:String){
+        NewsService.current.getTopPaid(token: token, lang: lang) { (accountsList, error) in
+            DispatchQueue.main.async {
+                if error == nil {
+                    self.topPaidList = accountsList ?? []
+                    self.collectionView.reloadData()
+                } else if error?.code == 401 {
+                    let domain = Bundle.main.bundleIdentifier!
+                    UserDefaults.standard.removePersistentDomain(forName: domain)
+                    UserDefaults.standard.synchronize()
+                   // self.performSegue(withIdentifier: "showAuth", sender: self)
+                    self.setNewRootController(nameController: "AuthorizationVC")
+                } else {
+                    self.showErrorWindow(errorMessage: error?.domain ?? "")
+                }
+            }
+        }
+    }
 }
 
 //MARK: - Extensions
@@ -194,9 +231,74 @@ extension ChatVC: UISearchControllerDelegate, UISearchBarDelegate {
     }
 }
 
+extension ChatVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: screenWidth/5, height: 120.0)
+    }
+}
+
+extension ChatVC: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return topPaidList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "starredChatsCell", for: indexPath) as! StarredChatsCell
+        let acc = topPaidList[indexPath.row]
+        if acc.online {
+            cell.onlineImg.isHidden = false
+        } else {
+            cell.onlineImg.isHidden = true
+        }
+        cell.placeLbl.text = topPaidList[indexPath.row].cities.title
+        cell.dateLbl.text = "\(topPaidList[indexPath.row].name), \(Utils.current.comuteAge(topPaidList[indexPath.row].dateBirth ))"
+        if (topPaidList[indexPath.row].photos.count>0){
+            let url = baseURL + "/" + topPaidList[indexPath.row].photos[0].pathURLPreview
+            cell.userImgView?.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .refreshCached)
+        } else {
+            cell.userImgView?.image = UIImage(named: "default_ava")
+        }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if userAccountID != topPaidList[indexPath.row].id {
+            SocketManager.current.initializeChats(accountId: topPaidList[indexPath.row].id)
+        }
+    }
+}
+
 extension ChatVC: SocketManagerDelegate {
     
+    func didReceiveChatInitAnswer(detail: Chat) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = (storyboard.instantiateViewController(withIdentifier: "MessagingVC") as? MessagingVC) else { return }
+        if let message = detail.message {
+            vc.newChat = false
+            vc.chatID = message.chatID
+            vc.chatMessageID = message.chatMessageID
+            vc.messageAccountID = message.accountID
+            vc.lastmessage = message.message
+            vc.lastMessageType = message.typeMessage
+            vc.lastMessageDate = Int64(message.dateSend)
+            let status1 = message.chatMessageStatusList[0]
+            let status2 = message.chatMessageStatusList[1]
+            vc.lastMessageStatusList = [status1, status2]
+            let backItem = UIBarButtonItem()
+            backItem.title = ""
+            self.navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
+        } else {
+            vc.newChat = true
+        }
+        vc.partnersName = detail.name
+        vc.partnersAccountID = detail.accountID
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func didReceiveChatList(socketChats: GetChatListAnswer) {
+        userAccountID = UserDefaults.standard.value(forKey: "accountID") as? Int ?? 0
         let chats = socketChats.chats
         let localChats = List<RealmChat>()
         for chat in chats {
@@ -254,6 +356,7 @@ extension ChatVC: SocketManagerDelegate {
             self.isLastPage = true
         }
         tableView.reloadData()
+        collectionView.reloadData()
     }
     
     func didReceiveMessage(detail: SendMessageAnswer) {

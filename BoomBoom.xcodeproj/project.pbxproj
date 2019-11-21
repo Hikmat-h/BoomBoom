@@ -336,6 +336,7 @@
 		9E7B0A7E23291A0C0082539F /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				9EAD78D6232620D900BFFAE7 /* Authentication */,
 				9E29FD7B232FCE1400A119DF /* personalNews */,
 				9EE599F2232A871600AB56EF /* News */,
 				9E7B0A8F23293A3D0082539F /* chat */,
@@ -575,7 +576,6 @@
 			isa = PBXGroup;
 			children = (
 				9E7B0A7E23291A0C0082539F /* Main */,
-				9EAD78D6232620D900BFFAE7 /* Authentication */,
 				9EDF1FF8233B6C9400AE7DD5 /* FirstVC.swift */,
 			);
 			path = Controllers;

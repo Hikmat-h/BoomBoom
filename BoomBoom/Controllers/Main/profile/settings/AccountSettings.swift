@@ -22,7 +22,11 @@ class AccountSettings: UIViewController {
         
         alert.addAction(UIAlertAction(title: "ОК", style: .default, handler: {
             (action) in
-            self.navigationController?.popToRootViewController(animated: true)
+            SocketManager.current.close()
+            let domain = Bundle.main.bundleIdentifier!
+            UserDefaults.standard.removePersistentDomain(forName: domain)
+            UserDefaults.standard.synchronize()
+            self.setNewRootController(nameController: "AuthorizationVC")
             }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)

@@ -492,7 +492,15 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
                             self.photos = model ?? []
                             self.collectionView.reloadData()
                         } else {
-                            self.showErrorWindow(errorMessage: error?.domain ?? "")
+                            if error?.code == 401 {
+                                let domain = Bundle.main.bundleIdentifier!
+                                UserDefaults.standard.removePersistentDomain(forName: domain)
+                                UserDefaults.standard.synchronize()
+                                //self.performSegue(withIdentifier: "showAuth", sender: self)
+                                self.setNewRootController(nameController: "AuthorizationVC")
+                            } else {
+                                self.showErrorWindow(errorMessage: error?.domain ?? "")
+                            }
                         }
                     }
                 }
@@ -503,7 +511,15 @@ class EditProfileVC: UIViewController, UICollectionViewDelegate, UICollectionVie
                     DispatchQueue.main.async {
                         self.hideActivityIndicator(loadingView: self.loadingView, spinner: self.spinner)
                         if error != nil {
-                            self.showErrorWindow(errorMessage: error?.domain ?? "")
+                            if error?.code == 401 {
+                                let domain = Bundle.main.bundleIdentifier!
+                                UserDefaults.standard.removePersistentDomain(forName: domain)
+                                UserDefaults.standard.synchronize()
+                                //self.performSegue(withIdentifier: "showAuth", sender: self)
+                                self.setNewRootController(nameController: "AuthorizationVC")
+                            } else {
+                                self.showErrorWindow(errorMessage: error?.domain ?? "")
+                            }
                         }
                     }
                 }

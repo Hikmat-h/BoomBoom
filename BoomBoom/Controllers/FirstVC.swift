@@ -14,9 +14,8 @@ class FirstVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard (UserDefaults.standard.value(forKey: "language") as? String) != nil else {
+        if (UserDefaults.standard.value(forKey: "language") as? String) == nil {
             UserDefaults.standard.setValue(NSLocale.current.languageCode ?? "en", forKey: "language")
-            return
         }
         if let isLoggedIn = UserDefaults.standard.value(forKey: "auth") as? Bool {
             if isLoggedIn {

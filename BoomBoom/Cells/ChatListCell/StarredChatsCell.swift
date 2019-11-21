@@ -12,6 +12,7 @@ class StarredChatsCell: UICollectionViewCell {
     @IBOutlet weak var userImgView: UIImageView!
     @IBOutlet weak var dateLbl: UILabel!
     @IBOutlet weak var placeLbl: UILabel!
+    @IBOutlet weak var onlineImg: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

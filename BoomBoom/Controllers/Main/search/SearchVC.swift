@@ -143,16 +143,22 @@ class SearchVC: UIViewController, UITextFieldDelegate {
         if !(countryField.text?.isEmpty ?? true) {
             resultVC.countryID = self.countryID
         }
-        if cityField.text?.isEmpty ?? true {
+        if !(cityField.text?.isEmpty ?? true) {
             resultVC.cityID = self.cityID
         }
         resultVC.sex = self.sex
-        resultVC.minAge = self.minAge
-        resultVC.maxAge = self.maxAge
-        resultVC.minWeight = self.minWeight
-        resultVC.maxWeight = self.maxWeight
-        resultVC.minHeight = self.minHeight
-        resultVC.maxHeight = self.maxHeight
+        if(ageCheckBox.image(for: .normal) == UIImage(named: "checked")?.withRenderingMode(.alwaysTemplate)) {
+            resultVC.minAge = self.minAge
+            resultVC.maxAge = self.maxAge
+        }
+        if(heightCheckBox.image(for: .normal) == UIImage(named: "checked")?.withRenderingMode(.alwaysTemplate)) {
+            resultVC.minHeight = self.minHeight
+            resultVC.maxHeight = self.maxHeight
+        }
+        if(weightCheckBox.image(for: .normal) == UIImage(named: "checked")?.withRenderingMode(.alwaysTemplate)) {
+            resultVC.minWeight = self.minWeight
+            resultVC.maxWeight = self.maxWeight
+        }
         resultVC.travel = self.travelSw.isOn
         resultVC.friendShip = self.friendshipSw.isOn
         resultVC.dating = self.datingSw.isOn

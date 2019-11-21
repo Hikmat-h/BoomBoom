@@ -190,15 +190,9 @@ extension SocketManager: WebSocketDelegate {
         //take action
         switch answerDict["action"] as? String {
         case "auth":
-            do {
-                let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)
-                let detail = try? JSONDecoder().decode(AuthResult.self, from: data)
-                selfID = detail?.accountID ?? 0
-                UserDefaults.standard.set(detail?.accountID, forKey: "accountID")
-                getChatListByPage(0)
-            } catch let error as NSError {
-                print(error)
-            }
+            selfID = answerDict["result"]?.value(forKey: "accountId") as? Int ?? 0
+            UserDefaults.standard.set(selfID, forKey: "accountID")
+            getChatListByPage(0)
         case "sendmessage":
             do {
                 let data = try JSONSerialization.data(withJSONObject: answerDict["result"] as Any, options: .fragmentsAllowed)

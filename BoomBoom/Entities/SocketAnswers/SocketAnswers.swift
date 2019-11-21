@@ -74,12 +74,12 @@ struct SentVideoAnswer: Codable {
 //MARK: - Socket Answers
 
 struct AuthResult: Codable {
-    let accountID: Int
     let status: String
+    let accountID: Int
 
     enum CodingKeys: String, CodingKey {
-        case accountID = "accountId"
         case status
+        case accountID = "accountId"
     }
 }
 

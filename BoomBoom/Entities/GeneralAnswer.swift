@@ -186,6 +186,7 @@ struct NewAccount: Codable {
     let dateBirth: String
     let cities: City
     let typeAccount: String
+    let online: Bool
 }
 
 // MARK: - Photo
